@@ -7,49 +7,50 @@ import { PageTransition } from "@/components/layout/page-transition";
 
 const skills = {
   design: [
-    "UI/UX Design",
     "Design Systems",
-    "Prototyping",
-    "User Research",
-    "Figma",
-    "Adobe Creative Suite",
+    "User Experience Design",
+    "User Interface Development",
+    "Wireframing & Prototyping",
+    "User Research & Testing",
+    "Information Architecture",
   ],
   development: [
-    "React",
-    "Next.js",
-    "TypeScript",
+    "HTML/CSS/JavaScript",
+    "React & Next.js",
     "Node.js",
     "Tailwind CSS",
+    "Vue & Nuxt",
     "GraphQL",
   ],
   other: [
-    "Project Management",
-    "Team Leadership",
-    "Agile Methodologies",
-    "Technical Writing",
+    "Product Strategy",
+    "Agile Development Methodology",
+    "Design Leadership",
+    "Teaching",
   ],
 };
 
 const experiences = [
   {
-    role: "Senior Product Designer",
-    company: "Tech Company",
-    period: "2020 - Present",
+    role: "Senior Design Manager, UX Design Lead",
+    company: "Arrow Digital: Arrow Electronics, Inc.",
+    period: "January 2016 - Present",
     description:
-      "Leading design initiatives for enterprise software solutions.",
+      "Lead UX design initiatives for Arrow Electronics' eCommerce platforms, establishing and optimizing UX processes while delivering comprehensive design systems.",
   },
   {
-    role: "UI/UX Designer",
-    company: "Design Agency",
-    period: "2018 - 2020",
+    role: "Senior Front End Developer",
+    company: "ideapark (now Ingredient/wgdt)",
+    period: "September 2013 - January 2015",
     description:
-      "Crafted digital experiences for various clients across industries.",
+      "Led front-end development projects for clients like Target and Betty Crocker, delivering standards-compliant code for websites and email campaigns.",
   },
   {
-    role: "Frontend Developer",
-    company: "Startup",
-    period: "2016 - 2018",
-    description: "Built and maintained responsive web applications.",
+    role: "Front End Developer",
+    company: "The Lacek Group",
+    period: "September 2010 - February 2013",
+    description:
+      "Created responsive microsites and dynamic email campaigns for loyalty marketing efforts, pioneering the agency's inaugural responsive website.",
   },
 ];
 
@@ -57,7 +58,7 @@ export default function AboutPage() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,7 +68,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
+                  src="/images/profile-img.jpg"
                   alt="Profile"
                   fill
                   className="object-cover"
@@ -76,8 +77,9 @@ export default function AboutPage() {
               <div className="space-y-4">
                 <h2 className="font-nohemi text-2xl font-bold">Contact</h2>
                 <div className="space-y-2 text-muted-foreground">
-                  <p>hello@example.com</p>
-                  <p>@username</p>
+                  <p>hello@travishall.design</p>
+                  <p>715.456.5159</p>
+                  <p>www.travishall.design</p>
                 </div>
               </div>
             </div>
@@ -98,10 +100,12 @@ export default function AboutPage() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-xl text-muted-foreground"
                 >
-                  A designer and developer focused on creating thoughtful
-                  digital experiences. With over 8 years of experience in the
-                  industry, I combine design thinking with technical expertise
-                  to build solutions that are both beautiful and functional.
+                  Results-driven designer and developer with expertise in
+                  crafting user-centered interfaces for eCommerce platforms and
+                  marketing initiatives. With an MFA in Interactive Media and
+                  extensive experience in design systems and front-end
+                  development, I combine creative vision with technical
+                  expertise to build engaging digital experiences.
                 </motion.p>
               </div>
 

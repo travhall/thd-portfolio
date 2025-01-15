@@ -28,7 +28,7 @@ export function CaseStudies() {
         viewport={{ once: false, amount: 0.5, margin: "-100px" }}
         className="overflow-hidden mt-[18vh]"
       >
-        <h2 className="font-nohemi text-5xl sm:text-7xl md:text-7xl lg:text-8xl leading-[.8] font-bold mb-16 flex flex-col">
+        <h2 className="font-nohemi text-5xl sm:text-7xl md:text-7xl lg:text-8xl leading-[.8] font-extralight mb-16 flex flex-col">
           <motion.div
             variants={{
               hidden: {},
@@ -41,7 +41,7 @@ export function CaseStudies() {
             }}
             className="flex flex-col"
           >
-            {["Featured", "Projects"].map((word, i) => (
+            {["Featured", "Work"].map((word, i) => (
               <div key={i} className="overflow-hidden">
                 <motion.span
                   variants={{
