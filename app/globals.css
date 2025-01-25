@@ -151,7 +151,7 @@ body {
 }
 
 p {
-  @apply max-w-[60ch] text-balance;
+  @apply text-balance;
 }
 
 ::selection {

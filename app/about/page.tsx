@@ -136,7 +136,7 @@ export default function AboutPage() {
               </Link>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 xl:grid-cols-[1.5fr_1.5fr_.75fr] gap-8">
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
