@@ -83,7 +83,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="sticky bottom-4 right-2 p-4 xl:p-8 -mt-20 flex flex-row place-content-end gap-1"
+      className="sticky bottom-4 right-2 p-4 xl:p-8 -mt-28 flex flex-row place-content-end gap-1"
     >
       {isDesktop && (
         <div className="preview-container w-full relative">

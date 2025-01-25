@@ -41,6 +41,11 @@ export function CaseStudyContent({
         transition={{ duration: 0.3 }}
         className="min-h-screen relative"
       >
+        {/* Hero Blur Block */}
+        <motion.div
+          className="absolute backdrop-blur-lg h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
+          style={{ opacity: blurOpacity }}
+        />
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -48,11 +53,6 @@ export function CaseStudyContent({
           transition={{ delay: 0.2 }}
           className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 z-0"
         >
-          {/* Hero Blur Block */}
-          <motion.div
-            className="absolute backdrop-blur-lg h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
-            style={{ opacity: blurOpacity }}
-          />
           <div className="space-y-6">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -102,7 +102,7 @@ export function CaseStudyContent({
         </motion.div>
 
         {/* Content Sections */}
-        <div className="mt-24 bg-background/80 backdrop-blur-xl z-20">
+        <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20">
           {study.sections?.map((section, index) => {
             if (section.type === "text") {
               return <TextBlock key={index} section={section} />;
@@ -112,10 +112,9 @@ export function CaseStudyContent({
             }
             return null;
           })}
+          {/* Navigation */}
+          <CaseStudyNavigation prevStudy={prevStudy} nextStudy={nextStudy} />
         </div>
-
-        {/* Navigation */}
-        <CaseStudyNavigation prevStudy={prevStudy} nextStudy={nextStudy} />
       </motion.div>
     </PageTransition>
   );
