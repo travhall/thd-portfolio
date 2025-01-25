@@ -19,7 +19,7 @@ export function ImageTextBlock({ section }: { section: ImageTextSection }) {
           {/* Image */}
           <div
             className={cn(
-              "relative aspect-[4/3] rounded-lg overflow-hidden",
+              "relative aspect-[4/3] rounded overflow-hidden",
               section.imagePosition === "right" ? "md:order-2" : "md:order-1"
             )}
           >

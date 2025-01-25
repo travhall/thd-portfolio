@@ -10,11 +10,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function CaseStudy({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function CaseStudy(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const study = await getCaseStudy(params.id);
 
   if (!study) {

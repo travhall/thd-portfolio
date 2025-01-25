@@ -120,8 +120,8 @@ export function SiteNav() {
           href={href}
           onClick={() => setIsOpen(false)}
           className={cn(
-            "block py-1 px-2 rounded relative z-10 transition-colors duration-200",
-            isActive ? "text-primary" : "text-foreground"
+            "block py-1 px-2 rounded-sm text-background hover:text-foreground relative z-10 transition-colors duration-200",
+            isActive ? "font-bold" : ""
           )}
         >
           {children}
@@ -132,7 +132,7 @@ export function SiteNav() {
             scale: isHovered ? 1 : 0.8,
             opacity: isHovered ? 1 : 0,
           }}
-          className="absolute inset-0 bg-accent/30 backdrop-blur-xl mix-blend-multiply rounded-sm"
+          className="absolute inset-0 bg-background rounded-sm"
           style={{ originX: 0 }}
           transition={{ duration: 0.2 }}
         />
@@ -141,10 +141,10 @@ export function SiteNav() {
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50">
+    <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
         onClick={handleToggle}
-        className="px-4 py-2 rounded-md bg-secondary backdrop-blur-xl mix-blend-multiply text-foreground hover:bg-secondary/80 transition-colors relative"
+        className="px-4 py-2 rounded-sm bg-brand-3-950/80 dark:bg-brand-3-300/80 text-background hover:bg-brand-3-950/60 dark:hover:bg-brand-3-300/60 backdrop-blur-xl transition-colors relative"
       >
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
@@ -169,13 +169,13 @@ export function SiteNav() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-10 right-0 w-[240px] rounded-lg bg-secondary/95 backdrop-blur-sm overflow-hidden"
+            className="absolute top-9 right-0 w-[260px] rounded-sm bg-brand-3-950/80 dark:bg-brand-3-300/80 backdrop-blur-xl overflow-hidden"
           >
             <motion.div className="p-4 space-y-1">
               <div className="overflow-hidden">
                 <motion.div variants={itemVariants}>
                   <MenuItem href="/" isActive={pathname === "/"}>
-                    Home
+                    Index
                   </MenuItem>
                 </motion.div>
               </div>
@@ -183,11 +183,13 @@ export function SiteNav() {
               <div className="space-y-1">
                 <div className="overflow-hidden">
                   <motion.div variants={itemVariants}>
-                    <span className="block font-medium mx-2 text-sm">Work</span>
+                    <span className="block mx-2 text-sm text-background">
+                      work
+                    </span>
                   </motion.div>
                 </div>
                 <div className="space-y-1">
-                  {studies.map((study) => (
+                  {studies.slice(0, 4).map((study) => (
                     <div key={study.id} className="overflow-hidden px-2">
                       <motion.div variants={itemVariants}>
                         <MenuItem
@@ -199,6 +201,15 @@ export function SiteNav() {
                       </motion.div>
                     </div>
                   ))}
+                  {studies.length > 4 && (
+                    <div className="overflow-hidden px-2">
+                      <motion.div variants={itemVariants}>
+                        <MenuItem href="/work" isActive={pathname === "/work"}>
+                          View all
+                        </MenuItem>
+                      </motion.div>
+                    </div>
+                  )}
                 </div>
               </div>
 

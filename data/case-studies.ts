@@ -3,7 +3,7 @@ import type { CaseStudy as CaseStudyType } from "@/types/case-study";
 const caseStudies: CaseStudyType[] = [
   {
     id: "1",
-    title: "Digital Product Design",
+    title: "El Camino Skate Shop",
     slug: "digital-product-design",
     description: "User-centered design process for a fintech application",
     fullDescription:
@@ -45,7 +45,7 @@ const caseStudies: CaseStudyType[] = [
   },
   {
     id: "2",
-    title: "Brand Development",
+    title: "Moxie Beauty Studio",
     slug: "brand-development",
     description: "Complete brand identity system for a tech startup",
     fullDescription:
@@ -81,7 +81,7 @@ const caseStudies: CaseStudyType[] = [
   },
   {
     id: "3",
-    title: "Web Application",
+    title: "Buddyhead",
     slug: "web-application",
     description: "Full-stack development of a SaaS platform",
     fullDescription:
@@ -117,7 +117,7 @@ const caseStudies: CaseStudyType[] = [
   },
   {
     id: "4",
-    title: "E-commerce Platform",
+    title: "Denver Digital Agency",
     slug: "ecommerce-platform",
     description: "Modern e-commerce solution with headless architecture",
     fullDescription:
@@ -150,7 +150,7 @@ const caseStudies: CaseStudyType[] = [
   },
   {
     id: "5",
-    title: "Mobile App Design",
+    title: "Project Wylie Dog",
     slug: "mobile-app-design",
     description: "Health and wellness tracking application",
     fullDescription:
@@ -183,7 +183,304 @@ const caseStudies: CaseStudyType[] = [
   },
   {
     id: "6",
-    title: "AI-Powered Analytics",
+    title: "Not-a-Robot",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "7",
+    title: "Meep 1",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "8",
+    title: "Meep 2",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "9",
+    title: "Meep 3",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "10",
+    title: "Meep 4",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "11",
+    title: "Meep 5",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "12",
+    title: "Meep 6",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "13",
+    title: "Meep 7",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "14",
+    title: "Meep 8",
+    slug: "ai-analytics",
+    description: "Enterprise analytics platform with AI capabilities",
+    fullDescription:
+      "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
+    coverImage: "/images/placeholder-2.jpg",
+    year: "2024",
+    tags: ["AI/ML", "Data Visualization", "Enterprise"],
+    sections: [
+      {
+        type: "text",
+        content:
+          "We needed to create an intuitive interface for complex AI-driven analytics that makes advanced insights accessible to non-technical users.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-3.jpg",
+          alt: "Analytics dashboard",
+          caption: "AI-powered insights dashboard",
+        },
+        content:
+          "The solution was a modular design system with progressive disclosure of complexity, making advanced analytics accessible while maintaining depth.",
+        imagePosition: "left",
+      },
+    ],
+    nextProject: "1",
+    prevProject: "5",
+    featured: false,
+  },
+  {
+    id: "15",
+    title: "Meep 9",
     slug: "ai-analytics",
     description: "Enterprise analytics platform with AI capabilities",
     fullDescription:

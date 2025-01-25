@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Footer } from "@/components/layout/site-footer";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SiteNav } from "@/components/layout/site-nav";
+// import Link from "next/link";
 
 const manropeSans = Manrope({
   variable: "--font-manrope",
