@@ -5,7 +5,7 @@ import type { TextSection } from "@/types/case-study";
 
 export function TextBlock({ section }: { section: TextSection }) {
   return (
-    <div className="py-12 md:py-16">
+    <div>
       <div
         className={cn(
           "max-w-prose mx-auto px-4",

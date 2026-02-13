@@ -81,7 +81,7 @@ export function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: MOTION_TOKENS.duration.slow }}
         style={{ y }}
-        className="sticky top-2 z-0 aspect-[3/4] md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
+        className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
       >
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0 rounded border-2 border-border overflow-hidden">

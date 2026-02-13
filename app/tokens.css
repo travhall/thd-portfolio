@@ -57,5 +57,19 @@
     /* --- Layout & Spacing --- */
     --spacing-container-p: 1rem;
     --spacing-container-p-xl: 2rem;
+    --spacing-section-py: 3rem;
+    --spacing-section-py-md: 4rem;
+    --spacing-section-gap: 2rem;
+    --spacing-section-gap-md: 3rem;
+
+    /* --- Typography --- */
+    --typography-leading-display: 1.1;
+    --typography-leading-body: 1.6;
+
+    /* --- Extra Component Tokens --- */
+    --case-nav-bg: color-mix(in oklch, var(--foreground), transparent 5%);
+    --case-nav-text: var(--background);
+    --case-tag-bg: color-mix(in oklch, var(--foreground), transparent 95%);
+    --case-tag-text: var(--foreground);
   }
 }

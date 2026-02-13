@@ -290,6 +290,40 @@
     font-family: var(--font-nohemi);
     @apply text-3xl font-light;
   }
+
+  /* --- Layout & Section Patterns --- */
+  .section-container {
+    padding-top: var(--spacing-section-py);
+    padding-bottom: var(--spacing-section-py);
+    @apply px-4 xl:px-8 max-w-7xl mx-auto;
+  }
+
+  @media (min-width: 768px) {
+    .section-container {
+      padding-top: var(--spacing-section-py-md);
+      padding-bottom: var(--spacing-section-py-md);
+    }
+  }
+
+  /* --- Case Study Elements --- */
+  .case-hero-heading {
+    font-family: var(--font-nohemi);
+    line-height: var(--typography-leading-display);
+    @apply text-5xl md:text-6xl font-bold text-balance;
+  }
+
+  .case-tag {
+    background-color: var(--case-tag-bg);
+    color: var(--case-tag-text);
+    @apply px-3 py-1 rounded text-sm;
+  }
+
+  .case-preview-card {
+    background-color: var(--surface-glass);
+    backdrop-filter: blur(var(--blur-xl));
+    border: 1px solid var(--border);
+    @apply rounded p-4;
+  }
 }
 
 @layer base {

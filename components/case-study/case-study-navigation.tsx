@@ -20,9 +20,9 @@ const PreviewContent = ({ study }: PreviewProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="absolute bottom-16 -right-32 bg-background/60 backdrop-blur-xl border border-muted rounded w-full max-w-[20rem] p-4 transition-opacity"
+      className="case-preview-card absolute bottom-16 -right-32 w-full max-w-[20rem]"
     >
-      <div className="relative aspect-[16/9] max-w-[20rem] rounded overflow-hidden mb-4 z-40">
+      <div className="relative aspect-video max-w-[20rem] rounded overflow-hidden mb-4 z-40">
         <Image
           src={study.coverImage}
           alt={study.title}
@@ -52,7 +52,11 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     href={`/work/${study.id}`}
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
-    className="group relative flex flex-col bg-brand-3-950/80 dark:bg-brand-3-300/80 text-background hover:bg-brand-3-950/60 dark:hover:bg-brand-3-300/60 p-4 rounded backdrop-blur text-2xl transition-colors"
+    className="group relative flex flex-col p-4 rounded backdrop-blur text-2xl transition-colors"
+    style={{ 
+      backgroundColor: "var(--case-nav-bg)",
+      color: "var(--case-nav-text)"
+    }}
   >
     {direction === "prev" ? <IoChevronBack /> : <IoChevronForward />}
   </Link>

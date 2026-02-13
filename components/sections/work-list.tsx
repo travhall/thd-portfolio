@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { CaseStudy } from "@/data/case-studies";
+import { CaseStudy } from "@/data/case-studies";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight } from "lucide-react";
 import { PageTransition } from "@/components/layout/page-transition";
+import { MOTION_TOKENS } from "@/lib/tokens";
 
 export function WorkList({ studies }: { studies: CaseStudy[] }) {
   return (
@@ -19,24 +20,14 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.05,
+                staggerChildren: MOTION_TOKENS.duration.stagger,
               },
             },
           }}
         >
           <div className="overflow-hidden my-3">
             <motion.h1
-              variants={{
-                hidden: { y: "100%" },
-                visible: {
-                  y: 0,
-                  transition: {
-                    duration: 0.5,
-                    ease: [0.33, 1, 0.68, 1],
-                  },
-                },
-              }}
-              className="font-nohemi text-sm font-semibold"
+              className="hero-label pb-2"
             >
               My work
             </motion.h1>
@@ -53,13 +44,13 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                 className="w-full"
               >
                 <Link href={`/work/${study.id}`} className="block h-full">
-                  <article className="group relative w-full h-full rounded border-2 border-border overflow-hidden bg-primary">
+                  <article className="group card-case-study w-full h-full">
                     <Image
                       src={study.coverImage}
                       alt={study.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105 mix-blend-luminosity"
+                      className="card-image mix-blend-luminosity"
                       priority={index === 0}
                     />
                     <div className="absolute inset-0 bg-background/95 backdrop-blur transition-opacity group-hover:opacity-90" />
@@ -92,7 +83,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                                 delay: index * 0.1 + tagIndex * 0.1,
                               }}
                             >
-                              <Badge variant="secondary" className="text-sm">
+                              <Badge variant="secondary" className="case-tag">
                                 {tag}
                               </Badge>
                             </motion.div>

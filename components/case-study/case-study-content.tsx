@@ -51,14 +51,14 @@ export function CaseStudyContent({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 z-0"
+          className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 xl:p-8 z-0"
         >
           <div className="space-y-6">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-nohemi text-5xl md:text-6xl font-bold text-balance"
+              className="case-hero-heading"
             >
               {study.title}
             </motion.h1>
@@ -77,7 +77,7 @@ export function CaseStudyContent({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className="px-3 py-1 bg-secondary rounded text-sm"
+                  className="case-tag"
                 >
                   {tag}
                 </motion.span>
@@ -88,7 +88,7 @@ export function CaseStudyContent({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/3] rounded overflow-hidden row-start-1"
+            className="relative aspect-4/5 md:aspect-3/4 lg:aspect-4/3 rounded overflow-hidden row-start-1"
           >
             <Image
               src={study.coverImage}
@@ -102,15 +102,16 @@ export function CaseStudyContent({
         </motion.div>
 
         {/* Content Sections */}
-        <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20">
+        <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20 space-y-0">
           {study.sections?.map((section, index) => {
-            if (section.type === "text") {
-              return <TextBlock key={index} section={section} />;
-            }
-            if (section.type === "image-text") {
-              return <ImageTextBlock key={index} section={section} />;
-            }
-            return null;
+            return (
+              <div key={index} className="section-container border-b border-border/5 last:border-none">
+                {section.type === "text" && <TextBlock section={section} />}
+                {section.type === "image-text" && (
+                  <ImageTextBlock section={section} />
+                )}
+              </div>
+            );
           })}
           {/* Navigation */}
           <CaseStudyNavigation prevStudy={prevStudy} nextStudy={nextStudy} />

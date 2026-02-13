@@ -6,7 +6,7 @@ import type { ImageTextSection } from "@/types/case-study";
 
 export function ImageTextBlock({ section }: { section: ImageTextSection }) {
   return (
-    <div className="py-12 md:py-16">
+    <div>
       <div className="max-w-7xl mx-auto px-4">
         <div
           className={cn(
@@ -19,7 +19,7 @@ export function ImageTextBlock({ section }: { section: ImageTextSection }) {
           {/* Image */}
           <div
             className={cn(
-              "relative aspect-[4/3] rounded overflow-hidden",
+              "relative aspect-4/3 rounded overflow-hidden",
               section.imagePosition === "right" ? "md:order-2" : "md:order-1"
             )}
           >
