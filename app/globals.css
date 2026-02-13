@@ -4,6 +4,7 @@
 
 @theme {
   --font-manrope: var(--font-manrope);
+  --font-nohemi: var(--font-nohemi);
   --dark-mode: selector;
 
   --color-background: var(--background);
@@ -219,12 +220,84 @@
 
 }
 
+@layer components {
+  /* --- Shared Semantic Classes --- */
+  .glass-panel {
+    @apply backdrop-blur-md;
+    background-color: var(--surface-glass);
+  }
+
+  .dark .glass-panel {
+    background-color: var(--surface-glass-dark);
+  }
+
+  /* --- Navigation --- */
+  .nav-trigger {
+    background-color: var(--nav-trigger-bg);
+    color: var(--nav-trigger-text);
+    @apply backdrop-blur-lg;
+    transition: background-color var(--duration-fast) var(--ease-in-out);
+  }
+
+  .nav-trigger:hover {
+    background-color: var(--foreground);
+  }
+
+  .nav-menu {
+    background-color: var(--nav-menu-bg);
+    color: var(--background);
+    backdrop-filter: blur(var(--nav-menu-blur));
+    @apply shadow-2xl ring-1 ring-white/10;
+  }
+
+  /* --- Hero --- */
+  .hero-label {
+    font-family: var(--font-nohemi);
+    @apply text-sm font-medium text-balance;
+  }
+
+  .hero-heading {
+    @apply text-3xl lg:text-4xl text-balance;
+  }
+
+  /* --- Cards --- */
+  .card-case-study {
+    @apply relative rounded-2xl overflow-hidden backdrop-blur-sm;
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg);
+    transition: border-color var(--duration-base) var(--ease-expo);
+  }
+
+  .card-case-study:hover {
+    border-color: var(--card-border-hover);
+  }
+
+  .card-badge {
+    @apply bg-white/5 border-white/10 text-[10px] uppercase tracking-widest py-1 px-3;
+  }
+
+  .card-image {
+    @apply object-cover grayscale opacity-40 transition-all duration-1000;
+  }
+
+  /* --- About Section --- */
+  .about-heading {
+    font-family: var(--font-nohemi);
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-balance leading-[1.2];
+  }
+
+  .about-subheading {
+    font-family: var(--font-nohemi);
+    @apply text-3xl font-light;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground underline-offset-4;
   }
 
   p {

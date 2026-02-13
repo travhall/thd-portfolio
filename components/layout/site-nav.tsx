@@ -145,7 +145,7 @@ export function SiteNav() {
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
         onClick={handleToggle}
-        className="px-4 py-2 rounded bg-foreground/90 text-background hover:bg-foreground backdrop-blur-lg transition-colors relative"
+        className="px-4 py-2 rounded nav-trigger relative"
       >
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
@@ -170,7 +170,7 @@ export function SiteNav() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-12 right-0 w-[280px] rounded bg-foreground/95 text-background backdrop-blur-xl shadow-2xl ring-1 ring-white/10 overflow-hidden"
+            className="absolute top-12 right-0 w-[280px] rounded nav-menu overflow-hidden"
           >
             <motion.div className="p-6 space-y-6">
               <div className="space-y-4">

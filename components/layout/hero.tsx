@@ -36,7 +36,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: MOTION_TOKENS.duration.base, delay: MOTION_TOKENS.duration.fast }}
-            className="font-nohemi text-sm font-medium text-balance"
+            className="hero-label"
           >
             travishall.design
           </motion.h1>
@@ -52,7 +52,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.25 }}
-          className="text-3xl lg:text-4xl text-balance mt-1"
+          className="hero-heading mt-1"
         >
           Creating thoughtful digital experiences through design &amp; code
         </motion.p>

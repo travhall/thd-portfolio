@@ -90,7 +90,7 @@ export function AboutContent() {
                     },
                   },
                 }}
-                className="font-nohemi text-sm font-semibold"
+                className="hero-label pb-2"
               >
                 About me
               </motion.h1>
@@ -99,7 +99,7 @@ export function AboutContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.2 }}
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-nohemi text-balance leading-[1.1]"
+              className="about-heading"
             >
               Hi I&rsquo;m Travis, and I make things people use. In other words,
               I specialize in creating inclusive, human-centered digital
@@ -163,7 +163,7 @@ export function AboutContent() {
                 transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.4 }}
                 className="space-y-12"
               >
-                <h2 className="font-nohemi text-3xl font-light">Skills & Technologies</h2>
+                <h2 className="about-subheading">Skills & Technologies</h2>
                 <div className="space-y-10">
                   {Object.entries(skills).map(([category, items], index) => (
                     <div key={category} className="space-y-4">
@@ -188,7 +188,7 @@ export function AboutContent() {
                 transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.5 }}
                 className="space-y-12"
               >
-                <h2 className="font-nohemi text-3xl font-light">Experience</h2>
+                <h2 className="about-subheading">Experience</h2>
                 <div className="space-y-12">
                   {experiences.map((exp) => (
                     <div key={exp.role} className="space-y-3 group">

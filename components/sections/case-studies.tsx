@@ -73,7 +73,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
               delay: index * 0.1 
             }}
             className={cn(
-              "group relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-white/5 bg-foreground/5 backdrop-blur-sm transition-colors duration-500 hover:border-white/10",
+              "group card-case-study h-[500px] md:h-[600px]",
               index === 0 ? "lg:col-span-8 lg:row-span-1" : "lg:col-span-4",
               index === 2 ? "lg:col-span-5" : "",
               index === 1 ? "lg:col-span-4" : "",
@@ -88,14 +88,14 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                     alt={study.title}
                     fill
                     sizes={index === 0 ? "70vw" : "33vw"}
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-40 group-hover:opacity-60 grayscale group-hover:grayscale-0"
+                    className="card-image"
                     priority={index < 2}
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
                 </div>
 
                 <div className="relative z-10 flex justify-between items-start">
-                  <Badge variant="outline" className="bg-white/5 border-white/10 text-[10px] uppercase tracking-widest py-1 px-3">
+                  <Badge variant="outline" className="card-badge">
                     {study.year}
                   </Badge>
                   <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">

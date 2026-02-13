@@ -29,6 +29,31 @@
     --blur-xl: 32px;
     --blur-2xl: 40px;
 
+    /* --- Semantic Surface Tokens --- */
+    --surface-glass: rgba(var(--brand-3-100), var(--glass-opacity-high));
+    --surface-glass-dark: rgba(var(--brand-3-950), var(--glass-opacity-ultra));
+    
+    --surface-card: var(--brand-1-50);
+    --surface-card-dark: var(--brand-1-950);
+
+    /* --- Component Tokens --- */
+
+    /* Navigation */
+    --nav-trigger-bg: color-mix(in oklch, var(--foreground), transparent 5%);
+    --nav-trigger-text: var(--background);
+    --nav-menu-bg: color-mix(in oklch, var(--foreground), transparent 2%);
+    --nav-menu-blur: var(--blur-xl);
+    
+    /* Hero */
+    --hero-recede-scale: 0.6;
+    --hero-title-font: var(--font-nohemi);
+    
+    /* Case Study Cards */
+    --card-border: color-mix(in oklch, var(--foreground), transparent 95%);
+    --card-border-hover: color-mix(in oklch, var(--foreground), transparent 90%);
+    --card-bg: color-mix(in oklch, var(--foreground), transparent 95%);
+    --card-radius: 1rem;
+
     /* --- Layout & Spacing --- */
     --spacing-container-p: 1rem;
     --spacing-container-p-xl: 2rem;
