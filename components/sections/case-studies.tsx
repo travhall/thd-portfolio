@@ -1,28 +1,21 @@
-// components/sections/case-studies.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getFeaturedCaseStudies, type CaseStudy } from "@/data/case-studies";
+import type { CaseStudy } from "@/data/case-studies";
+import { cn } from "@/lib/utils";
 
-export function CaseStudies() {
-  const [studies, setStudies] = useState<CaseStudy[]>([]);
+interface CaseStudiesProps {
+  studies: CaseStudy[];
+}
 
-  useEffect(() => {
-    async function loadStudies() {
-      const data = await getFeaturedCaseStudies();
-      setStudies(data);
-    }
-    loadStudies();
-  }, []);
-
+export function CaseStudies({ studies }: CaseStudiesProps) {
   return (
     <section className="relative z-10 bg-background/80 backdrop-blur-lg p-4 xl:p-8 flex flex-col">
-      {/* Title animation remains the same */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -66,81 +59,65 @@ export function CaseStudies() {
         </h2>
       </motion.div>
 
-      {/* Card Grid */}
-      <div className="grid gap-4 auto-rows-[400px] grid-cols-1 md:grid-cols-2 lg:grid-cols-12 2xl:grid-cols-16 w-full max-w-6xl self-end">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full max-w-[1800px] mx-auto">
         {studies.map((study, index) => (
           <motion.div
             key={study.id}
             initial={{ opacity: 0, y: 48 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.2 }}
-            className={`
-              ${
-                index === 0
-                  ? "md:col-span-2 lg:col-span-8 lg:row-span-2"
-                  : "lg:col-span-4"
-              }
-              ${index === 1 && "lg:col-start-9"}
-              ${index === 2 && "lg:col-start-9"}
-              h-full
-            `}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ 
+              duration: 0.8, 
+              ease: [0.16, 1, 0.3, 1],
+              delay: index * 0.1 
+            }}
+            className={cn(
+              "group relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-white/5 bg-foreground/5 backdrop-blur-sm transition-all duration-500 hover:border-white/10",
+              index === 0 ? "lg:col-span-8 lg:row-span-1" : "lg:col-span-4",
+              index === 2 ? "lg:col-span-5" : "",
+              index === 1 ? "lg:col-span-4" : "",
+              index === 3 ? "lg:col-span-7" : ""
+            )}
           >
-            <Link href={`/work/${study.id}`}>
-              <article className="group relative w-full h-full">
-                <div className="relative w-full h-full rounded border-2 border-border overflow-hidden bg-primary">
+            <Link href={`/work/${study.id}`} className="block h-full w-full">
+              <article className="relative w-full h-full p-8 flex flex-col justify-between">
+                <div className="absolute inset-0 z-0">
                   <Image
                     src={study.coverImage}
                     alt={study.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, (max-width: 1600px) 33vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105 mix-blend-luminosity"
-                    priority={index === 0}
+                    sizes={index === 0 ? "70vw" : "33vw"}
+                    className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-40 group-hover:opacity-60 grayscale group-hover:grayscale-0"
+                    priority={index < 2}
                   />
-                  <div className="absolute inset-0 bg-background/95 backdrop-blur transition-opacity group-hover:opacity-90" />
+                  <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
+                </div>
 
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <div className="space-y-4">
-                      <motion.div
-                        initial={{ y: 24, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        <h3 className="text-2xl md:text-3xl font-bold">
-                          {study.title}
-                        </h3>
-                        <p className="text-lg text-accent-foreground mt-2">
-                          {study.description}
-                        </p>
-                      </motion.div>
+                <div className="relative z-10 flex justify-between items-start">
+                  <Badge variant="outline" className="bg-white/5 border-white/10 text-[10px] uppercase tracking-widest py-1 px-3">
+                    {study.year}
+                  </Badge>
+                  <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <ArrowUpRight className="h-5 w-5 text-white" />
+                  </div>
+                </div>
 
-                      <div className="flex gap-2 flex-wrap">
-                        {study.tags.map((tag: string, tagIndex: number) => (
-                          <motion.div
-                            key={tag}
-                            initial={{ opacity: 0, y: 12 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 0.3,
-                              delay: index * 0.1 + tagIndex * 0.1,
-                            }}
-                          >
-                            <Badge variant="secondary" className="text-sm">
-                              {tag}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                      </div>
+                <div className="relative z-10 space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-3xl md:text-4xl font-nohemi font-semibold tracking-tight">
+                      {study.title}
+                    </h3>
+                    <p className="text-muted-foreground text-lg max-w-md line-clamp-2">
+                      {study.description}
+                    </p>
+                  </div>
 
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm text-muted-foreground">
-                          {study.year}
-                        </p>
-                        <ArrowUpRight className="h-6 w-6 text-muted-foreground group-hover:text-foreground transition-colors" />
-                      </div>
-                    </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {study.tags.map((tag: string) => (
+                      <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </article>

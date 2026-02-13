@@ -111,6 +111,10 @@ const ChartTooltipContent = React.forwardRef<
       indicator?: "line" | "dot" | "dashed"
       nameKey?: string
       labelKey?: string
+      payload?: any[]
+      label?: React.ReactNode
+      labelFormatter?: (value: any, payload: any[]) => React.ReactNode
+      formatter?: (value: any, name: any, item: any, index: number, payload: any[]) => React.ReactNode
     }
 >(
   (
@@ -132,12 +136,12 @@ const ChartTooltipContent = React.forwardRef<
     ref
   ) => {
     const { config } = useChart()
-
+ 
     const tooltipLabel = React.useMemo(() => {
       if (hideLabel || !payload?.length) {
         return null
       }
-
+ 
       const [item] = payload
       const key = `${labelKey || item.dataKey || item.name || "value"}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -145,7 +149,7 @@ const ChartTooltipContent = React.forwardRef<
         !labelKey && typeof label === "string"
           ? config[label as keyof typeof config]?.label || label
           : itemConfig?.label
-
+ 
       if (labelFormatter) {
         return (
           <div className={cn("font-medium", labelClassName)}>
@@ -153,11 +157,11 @@ const ChartTooltipContent = React.forwardRef<
           </div>
         )
       }
-
+ 
       if (!value) {
         return null
       }
-
+ 
       return <div className={cn("font-medium", labelClassName)}>{value}</div>
     }, [
       label,
@@ -168,18 +172,18 @@ const ChartTooltipContent = React.forwardRef<
       config,
       labelKey,
     ])
-
+ 
     if (!active || !payload?.length) {
       return null
     }
-
+ 
     const nestLabel = payload.length === 1 && indicator !== "dot"
-
+ 
     return (
       <div
         ref={ref}
         className={cn(
-          "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+          "grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
           className
         )}
       >
@@ -260,11 +264,12 @@ const ChartLegend = RechartsPrimitive.Legend
 
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean
-      nameKey?: string
-    }
+  React.ComponentProps<"div"> & {
+    payload?: any[]
+    verticalAlign?: "top" | "bottom"
+    hideIcon?: boolean
+    nameKey?: string
+  }
 >(
   (
     { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },

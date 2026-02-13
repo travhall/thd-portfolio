@@ -2,18 +2,18 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
+ 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [studies, setStudies] = useState<Array<{ id: string; title: string }>>(
     []
   );
   const pathname = usePathname();
-
+ 
   // Load case studies when menu opens
   const loadStudies = async () => {
     if (studies.length === 0) {
@@ -21,15 +21,15 @@ export function SiteNav() {
       setStudies(data.map((study) => ({ id: study.id, title: study.title })));
     }
   };
-
+ 
   const handleToggle = async () => {
     if (!isOpen) {
       await loadStudies();
     }
     setIsOpen(!isOpen);
   };
-
-  const menuVariants = {
+ 
+  const menuVariants: Variants = {
     closed: {
       height: 0,
       opacity: 0,
@@ -59,8 +59,8 @@ export function SiteNav() {
       },
     },
   };
-
-  const itemVariants = {
+ 
+  const itemVariants: Variants = {
     closed: {
       opacity: 0,
       y: 20,
@@ -78,8 +78,8 @@ export function SiteNav() {
       },
     },
   };
-
-  const buttonTextVariants = {
+ 
+  const buttonTextVariants: Variants = {
     initial: { y: 20, opacity: 0 },
     animate: {
       y: 0,
@@ -120,8 +120,8 @@ export function SiteNav() {
           href={href}
           onClick={() => setIsOpen(false)}
           className={cn(
-            "block py-1 px-2 rounded-sm text-background hover:text-foreground relative z-10 transition-colors duration-200",
-            isActive ? "font-bold" : ""
+            "block py-1 px-2 rounded text-background hover:text-foreground relative z-10 transition-colors duration-200",
+            isActive ? "font-bold underline decoration-2 underline-offset-4" : ""
           )}
         >
           {children}
@@ -132,7 +132,7 @@ export function SiteNav() {
             scale: isHovered ? 1 : 0.8,
             opacity: isHovered ? 1 : 0,
           }}
-          className="absolute inset-0 bg-background rounded-sm"
+          className="absolute inset-0 bg-background rounded"
           style={{ originX: 0 }}
           transition={{ duration: 0.2 }}
         />
@@ -144,7 +144,7 @@ export function SiteNav() {
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
         onClick={handleToggle}
-        className="px-4 py-2 rounded-sm bg-brand-3-950/80 dark:bg-brand-3-300/80 text-background hover:bg-brand-3-950/60 dark:hover:bg-brand-3-300/60 backdrop-blur-xl transition-colors relative"
+        className="px-4 py-2 rounded bg-foreground/90 text-background hover:bg-foreground backdrop-blur-xl transition-colors relative"
       >
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
@@ -154,7 +154,7 @@ export function SiteNav() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="block text-xs"
+              className="block text-xs font-medium uppercase tracking-wider"
             >
               {isOpen ? "Close" : "Menu"}
             </motion.span>
@@ -169,56 +169,60 @@ export function SiteNav() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-9 right-0 w-[260px] rounded-sm bg-brand-3-950/80 dark:bg-brand-3-300/80 backdrop-blur-xl overflow-hidden"
+            className="absolute top-12 right-0 w-[280px] rounded bg-foreground/95 text-background backdrop-blur-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden"
           >
-            <motion.div className="p-4 space-y-1">
-              <div className="overflow-hidden">
-                <motion.div variants={itemVariants}>
-                  <MenuItem href="/" isActive={pathname === "/"}>
-                    Index
-                  </MenuItem>
-                </motion.div>
-              </div>
-
-              <div className="space-y-1">
+            <motion.div className="p-6 space-y-6">
+              <div className="space-y-4">
                 <div className="overflow-hidden">
                   <motion.div variants={itemVariants}>
-                    <span className="block mx-2 text-sm text-background">
-                      work
-                    </span>
+                    <MenuItem href="/" isActive={pathname === "/"}>
+                      Index
+                    </MenuItem>
                   </motion.div>
                 </div>
-                <div className="space-y-1">
-                  {studies.slice(0, 4).map((study) => (
-                    <div key={study.id} className="overflow-hidden px-2">
-                      <motion.div variants={itemVariants}>
-                        <MenuItem
-                          href={`/work/${study.id}`}
-                          isActive={pathname === `/work/${study.id}`}
-                        >
-                          {study.title}
-                        </MenuItem>
-                      </motion.div>
-                    </div>
-                  ))}
-                  {studies.length > 4 && (
-                    <div className="overflow-hidden px-2">
-                      <motion.div variants={itemVariants}>
-                        <MenuItem href="/work" isActive={pathname === "/work"}>
-                          View all
-                        </MenuItem>
-                      </motion.div>
-                    </div>
-                  )}
+ 
+                <div className="space-y-3">
+                  <div className="overflow-hidden px-2">
+                    <motion.div variants={itemVariants}>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-background/50">
+                        Work
+                      </span>
+                    </motion.div>
+                  </div>
+                  <div className="space-y-1">
+                    {studies.slice(0, 5).map((study) => (
+                      <div key={study.id} className="overflow-hidden">
+                        <motion.div variants={itemVariants}>
+                          <MenuItem
+                            href={`/work/${study.id}`}
+                            isActive={pathname === `/work/${study.id}`}
+                          >
+                            {study.title}
+                          </MenuItem>
+                        </motion.div>
+                      </div>
+                    ))}
+                    {studies.length > 5 && (
+                      <div className="overflow-hidden">
+                        <motion.div variants={itemVariants}>
+                          <MenuItem href="/work" isActive={pathname === "/work"}>
+                            All Case Studies
+                          </MenuItem>
+                        </motion.div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-
-              <div className="overflow-hidden">
-                <motion.div variants={itemVariants}>
-                  <MenuItem href="/about" isActive={pathname === "/about"}>
-                    About
-                  </MenuItem>
-                </motion.div>
+ 
+              <div className="pt-4 border-t border-background/10">
+                <div className="overflow-hidden">
+                  <motion.div variants={itemVariants}>
+                    <MenuItem href="/about" isActive={pathname === "/about"}>
+                      About
+                    </MenuItem>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           </motion.nav>

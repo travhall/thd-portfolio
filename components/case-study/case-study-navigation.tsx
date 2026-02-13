@@ -52,7 +52,7 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     href={`/work/${study.id}`}
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
-    className="group relative flex flex-col bg-brand-3-950/80 dark:bg-brand-3-300/80 text-background hover:bg-brand-3-950/60 dark:hover:bg-brand-3-300/60 p-4 rounded-sm backdrop-blur text-2xl transition-colors"
+    className="group relative flex flex-col bg-brand-3-950/80 dark:bg-brand-3-300/80 text-background hover:bg-brand-3-950/60 dark:hover:bg-brand-3-300/60 p-4 rounded backdrop-blur text-2xl transition-colors"
   >
     {direction === "prev" ? <IoChevronBack /> : <IoChevronForward />}
   </Link>

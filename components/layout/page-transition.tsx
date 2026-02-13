@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const pageVariants = {
+import { motion, Variants } from "framer-motion";
+ 
+const pageVariants: Variants = {
   initial: {
     opacity: 0,
     y: 24,

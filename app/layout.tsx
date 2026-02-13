@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -6,32 +6,53 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Footer } from "@/components/layout/site-footer";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SiteNav } from "@/components/layout/site-nav";
-// import Link from "next/link";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { cn } from "@/lib/utils";
 
 const manropeSans = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const nohemi = localFont({
-  src: [
-    {
-      path: "../public/fonts/Nohemi-VF.woff2",
-      weight: "100 900",
-      style: "normal",
-    },
-  ],
+  src: "../public/fonts/Nohemi-VF.woff2",
   variable: "--font-nohemi",
+  display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "travishall.design",
-  description: "selected design and development work by Travis Hall",
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "dark light",
 };
 
-const darkMode = {
-  colorScheme: "dark light",
-  themeColor: "dark",
+export const metadata: Metadata = {
+  title: {
+    default: "travishall.design",
+    template: "%s | travishall.design",
+  },
+  description: "Selected design and development work by Travis Hall",
+  metadataBase: new URL("https://travishall.design"),
+  openGraph: {
+    title: "travishall.design",
+    description: "Selected design and development work by Travis Hall",
+    url: "https://travishall.design",
+    siteName: "travishall.design",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "travishall.design",
+    description: "Selected design and development work by Travis Hall",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -40,19 +61,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="color-scheme" content={darkMode.colorScheme} />
-        <meta name="theme-color" content={darkMode.themeColor} />
-      </head>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${manropeSans.variable} ${nohemi.variable} antialiased relative`}
+        className={cn(
+          manropeSans.variable,
+          nohemi.variable,
+          "antialiased relative min-h-screen bg-background font-sans selection:bg-primary selection:text-primary-foreground"
+        )}
       >
         <ThemeProvider>
-          <ScrollToTop />
-          <SiteNav />
-          <main className="relative">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <ScrollToTop />
+            <SiteNav />
+            <main className="relative">{children}</main>
+            <Footer />
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

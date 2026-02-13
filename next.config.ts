@@ -1,10 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Remove output: "export" to enable server-side features
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   trailingSlash: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -15,6 +12,10 @@ const nextConfig = {
       },
     ],
   },
+  // Disable chunk splitting optimization for development
+  experimental: {
+    optimizePackageImports: ["framer-motion"],
+  },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

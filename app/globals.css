@@ -1,51 +1,115 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-body {
-  font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
+@theme {
+  --font-manrope: var(--font-manrope);
+  --dark-mode: selector;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --color-brand-1-50: var(--brand-1-50);
+  --color-brand-1-100: var(--brand-1-100);
+  --color-brand-1-200: var(--brand-1-200);
+  --color-brand-1-300: var(--brand-1-300);
+  --color-brand-1-400: var(--brand-1-400);
+  --color-brand-1-500: var(--brand-1-500);
+  --color-brand-1-600: var(--brand-1-600);
+  --color-brand-1-700: var(--brand-1-700);
+  --color-brand-1-800: var(--brand-1-800);
+  --color-brand-1-900: var(--brand-1-900);
+  --color-brand-1-950: var(--brand-1-950);
+
+  --color-brand-2-50: var(--brand-2-50);
+  --color-brand-2-100: var(--brand-2-100);
+  --color-brand-2-200: var(--brand-2-200);
+  --color-brand-2-300: var(--brand-2-300);
+  --color-brand-2-400: var(--brand-2-400);
+  --color-brand-2-500: var(--brand-2-500);
+  --color-brand-2-600: var(--brand-2-600);
+  --color-brand-2-700: var(--brand-2-700);
+  --color-brand-2-800: var(--brand-2-800);
+  --color-brand-2-900: var(--brand-2-900);
+  --color-brand-2-950: var(--brand-2-950);
+
+  --color-brand-3-50: var(--brand-3-50);
+  --color-brand-3-100: var(--brand-3-100);
+  --color-brand-3-200: var(--brand-3-200);
+  --color-brand-3-300: var(--brand-3-300);
+  --color-brand-3-400: var(--brand-3-400);
+  --color-brand-3-500: var(--brand-3-500);
+  --color-brand-3-600: var(--brand-3-600);
+  --color-brand-3-700: var(--brand-3-700);
+  --color-brand-3-800: var(--brand-3-800);
+  --color-brand-3-900: var(--brand-3-900);
+  --color-brand-3-950: var(--brand-3-950);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius: 0.5rem;
 }
 
 @layer base {
   :root {
-    /* Brand Color 1 - A vibrant teal */
-    --brand-1-50: 177 54% 98%;
-    --brand-1-100: 177 54% 95%;
-    --brand-1-200: 177 54% 90%;
-    --brand-1-300: 177 54% 80%;
-    --brand-1-400: 177 54% 65%;
-    --brand-1-500: 177 54% 50%;
-    --brand-1-600: 177 54% 40%;
-    --brand-1-700: 177 54% 30%;
-    --brand-1-800: 177 54% 20%;
-    --brand-1-900: 177 54% 15%;
-    --brand-1-950: 177 54% 10%;
+    --brand-1-50: oklch(0.99 0.01 195.9);
+    --brand-1-100: oklch(0.97 0.02 195.9);
+    --brand-1-200: oklch(0.92 0.04 195.9);
+    --brand-1-300: oklch(0.83 0.07 195.9);
+    --brand-1-400: oklch(0.69 0.10 195.9);
+    --brand-1-500: oklch(0.57 0.11 195.9);
+    --brand-1-600: oklch(0.48 0.09 195.9);
+    --brand-1-700: oklch(0.38 0.07 195.9);
+    --brand-1-800: oklch(0.29 0.05 195.9);
+    --brand-1-900: oklch(0.23 0.04 195.9);
+    --brand-1-950: oklch(0.18 0.03 195.9);
 
-    /* Brand Color 2 - A warm yellow */
-    --brand-2-50: 48 80% 98%;
-    --brand-2-100: 48 80% 95%;
-    --brand-2-200: 48 80% 90%;
-    --brand-2-300: 48 80% 80%;
-    --brand-2-400: 48 80% 65%;
-    --brand-2-500: 48 80% 50%;
-    --brand-2-600: 48 80% 40%;
-    --brand-2-700: 48 80% 30%;
-    --brand-2-800: 48 80% 20%;
-    --brand-2-900: 48 80% 15%;
-    --brand-2-950: 48 80% 10%;
+    --brand-2-50: oklch(0.99 0.01 80);
+    --brand-2-100: oklch(0.97 0.03 80);
+    --brand-2-200: oklch(0.93 0.06 80);
+    --brand-2-300: oklch(0.86 0.11 80);
+    --brand-2-400: oklch(0.77 0.15 80);
+    --brand-2-500: oklch(0.76 0.20 80);
+    --brand-2-600: oklch(0.62 0.16 80);
+    --brand-2-700: oklch(0.49 0.12 80);
+    --brand-2-800: oklch(0.36 0.09 80);
+    --brand-2-900: oklch(0.28 0.07 80);
+    --brand-2-950: oklch(0.21 0.05 80);
 
-    /* Accent Color - A muted green */
-    --brand-3-50: 103 12% 98%;
-    --brand-3-100: 103 12% 95%;
-    --brand-3-200: 103 12% 90%;
-    --brand-3-300: 103 12% 80%;
-    --brand-3-400: 103 12% 65%;
-    --brand-3-500: 103 12% 50%;
-    --brand-3-600: 103 12% 40%;
-    --brand-3-700: 103 12% 30%;
-    --brand-3-800: 103 12% 20%;
-    --brand-3-900: 103 12% 15%;
-    --brand-3-950: 103 12% 10%;
+    --brand-3-50: oklch(0.99 0.005 127);
+    --brand-3-100: oklch(0.97 0.01 127);
+    --brand-3-200: oklch(0.92 0.015 127);
+    --brand-3-300: oklch(0.84 0.02 127);
+    --brand-3-400: oklch(0.71 0.03 127);
+    --brand-3-500: oklch(0.53 0.03 127);
+    --brand-3-600: oklch(0.44 0.025 127);
+    --brand-3-700: oklch(0.35 0.02 127);
+    --brand-3-800: oklch(0.27 0.015 127);
+    --brand-3-900: oklch(0.22 0.01 127);
+    --brand-3-950: oklch(0.17 0.01 127);
 
     --background: var(--brand-3-100);
     --foreground: var(--brand-1-950);
@@ -61,60 +125,57 @@ body {
     --muted-foreground: var(--brand-3-700);
     --accent: var(--brand-2-500);
     --accent-foreground: var(--foreground);
-    --destructive: 0 84% 32%;
+    --destructive: oklch(0.40 0.17 25);
     --destructive-foreground: var(--background);
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --border: oklch(0.92 0.005 0);
+    --input: oklch(0.92 0.005 0);
+    --ring: oklch(0.18 0.03 0);
+    --chart-1: oklch(0.65 0.16 25);
+    --chart-2: oklch(0.52 0.11 173);
+    --chart-3: oklch(0.35 0.05 197);
+    --chart-4: oklch(0.80 0.15 85);
+    --chart-5: oklch(0.75 0.18 45);
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Brand Color 1 - A vibrant teal */
-    --brand-1-50: 177 40% 98%;
-    --brand-1-100: 177 40% 95%;
-    --brand-1-200: 177 40% 90%;
-    --brand-1-300: 177 40% 80%;
-    --brand-1-400: 177 40% 65%;
-    --brand-1-500: 177 40% 50%;
-    --brand-1-600: 177 40% 40%;
-    --brand-1-700: 177 40% 30%;
-    --brand-1-800: 177 40% 20%;
-    --brand-1-900: 177 40% 15%;
-    --brand-1-950: 177 40% 10%;
+    --brand-1-50: oklch(0.99 0.005 195.9);
+    --brand-1-100: oklch(0.97 0.01 195.9);
+    --brand-1-200: oklch(0.92 0.02 195.9);
+    --brand-1-300: oklch(0.83 0.03 195.9);
+    --brand-1-400: oklch(0.69 0.05 195.9);
+    --brand-1-500: oklch(0.57 0.06 195.9);
+    --brand-1-600: oklch(0.48 0.05 195.9);
+    --brand-1-700: oklch(0.38 0.04 195.9);
+    --brand-1-800: oklch(0.29 0.03 195.9);
+    --brand-1-900: oklch(0.23 0.02 195.9);
+    --brand-1-950: oklch(0.18 0.01 195.9);
 
-    /* Brand Color 2 - A warm yellow */
-    --brand-2-50: 48 64% 98%;
-    --brand-2-100: 48 64% 95%;
-    --brand-2-200: 48 64% 90%;
-    --brand-2-300: 48 64% 80%;
-    --brand-2-400: 48 64% 65%;
-    --brand-2-500: 48 64% 50%;
-    --brand-2-600: 48 64% 40%;
-    --brand-2-700: 48 64% 30%;
-    --brand-2-800: 48 64% 20%;
-    --brand-2-900: 48 64% 15%;
-    --brand-2-950: 48 64% 10%;
+    --brand-2-50: oklch(0.99 0.005 80);
+    --brand-2-100: oklch(0.97 0.01 80);
+    --brand-2-200: oklch(0.93 0.02 80);
+    --brand-2-300: oklch(0.86 0.05 80);
+    --brand-2-400: oklch(0.77 0.08 80);
+    --brand-2-500: oklch(0.65 0.09 80);
+    --brand-2-600: oklch(0.52 0.07 80);
+    --brand-2-700: oklch(0.42 0.06 80);
+    --brand-2-800: oklch(0.32 0.04 80);
+    --brand-2-900: oklch(0.25 0.03 80);
+    --brand-2-950: oklch(0.19 0.02 80);
 
-    /* Accent Color - A muted green */
-    --brand-3-50: 103 12% 98%;
-    --brand-3-100: 103 12% 95%;
-    --brand-3-200: 103 12% 90%;
-    --brand-3-300: 103 12% 80%;
-    --brand-3-400: 103 12% 65%;
-    --brand-3-500: 103 12% 50%;
-    --brand-3-600: 103 12% 40%;
-    --brand-3-700: 103 12% 30%;
-    --brand-3-800: 103 12% 20%;
-    --brand-3-900: 103 12% 15%;
-    --brand-3-950: 103 12% 10%;
+    --brand-3-50: oklch(0.99 0.005 127);
+    --brand-3-100: oklch(0.97 0.01 127);
+    --brand-3-200: oklch(0.92 0.015 127);
+    --brand-3-300: oklch(0.84 0.02 127);
+    --brand-3-400: oklch(0.71 0.03 127);
+    --brand-3-500: oklch(0.53 0.03 127);
+    --brand-3-600: oklch(0.44 0.025 127);
+    --brand-3-700: oklch(0.35 0.02 127);
+    --brand-3-800: oklch(0.27 0.015 127);
+    --brand-3-900: oklch(0.22 0.01 127);
+    --brand-3-950: oklch(0.17 0.01 127);
 
-    --background: 103 12% 8%;
+    --background: oklch(0.15 0.01 127);
     --foreground: var(--brand-1-50);
     --card: var(--brand-1-950);
     --card-foreground: var(--foreground);
@@ -128,17 +189,18 @@ body {
     --muted-foreground: var(--brand-3-400);
     --accent: var(--brand-2-700);
     --accent-foreground: var(--foreground);
-    --destructive: 0 64% 32%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --destructive: oklch(0.35 0.12 25);
+    --destructive-foreground: oklch(0.98 0.01 0);
+    --border: oklch(0.25 0.01 0);
+    --input: oklch(0.25 0.01 0);
+    --ring: oklch(0.85 0.02 0);
+    --chart-1: oklch(0.60 0.15 250);
+    --chart-2: oklch(0.55 0.12 160);
+    --chart-3: oklch(0.65 0.18 60);
+    --chart-4: oklch(0.70 0.15 280);
+    --chart-5: oklch(0.65 0.20 340);
   }
+
 }
 
 @layer base {
@@ -148,13 +210,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
 
-p {
-  @apply text-balance;
-}
+  p {
+    @apply text-balance;
+  }
 
-::selection {
-  background-color: hsl(var(--foreground));
-  color: hsl(var(--background));
+  ::selection {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
 }
