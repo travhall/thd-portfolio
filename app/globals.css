@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./tokens.css";
 @plugin "tailwindcss-animate";
 
 @theme {
@@ -71,6 +72,21 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius: 0.5rem;
+
+  /* Animation Tokens */
+  --animate-duration-fast: var(--duration-fast);
+  --animate-duration-base: var(--duration-base);
+  --animate-duration-slow: var(--duration-slow);
+  
+  --ease-expo: var(--ease-expo);
+  --ease-quart: var(--ease-quart);
+  
+  /* Glass Tokens */
+  --blur-xs: var(--blur-sm);
+  --blur-sm: var(--blur-md);
+  --blur-md: var(--blur-lg);
+  --blur-lg: var(--blur-xl);
+  --blur-xl: var(--blur-2xl);
 }
 
 @layer base {

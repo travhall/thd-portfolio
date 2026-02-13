@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { MOTION_TOKENS } from "@/lib/tokens";
 // import { IoArrowDownCircleOutline } from "react-icons/io5";
 
 export function Hero() {
@@ -34,7 +35,7 @@ export function Hero() {
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: MOTION_TOKENS.duration.base, delay: MOTION_TOKENS.duration.fast }}
             className="font-nohemi text-sm font-medium text-balance"
           >
             travishall.design
@@ -50,7 +51,7 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.25 }}
+          transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.25 }}
           className="text-3xl lg:text-4xl text-balance mt-1"
         >
           Creating thoughtful digital experiences through design &amp; code
@@ -72,13 +73,13 @@ export function Hero() {
       </motion.div>
       {/* Hero Blur Block */}
       <motion.div
-        className="absolute backdrop-blur-lg h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
+        className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
         style={{ opacity: blurOpacity }}
       />
       <motion.div
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: MOTION_TOKENS.duration.slow }}
         style={{ y }}
         className="sticky top-2 z-0 aspect-[3/4] md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
       >

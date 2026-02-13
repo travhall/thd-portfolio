@@ -6,6 +6,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { MOTION_TOKENS } from "@/lib/tokens";
  
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +36,8 @@ export function SiteNav() {
       opacity: 0,
       transition: {
         height: {
-          duration: 0.4,
-          ease: [0.04, 0.62, 0.23, 0.98],
+          duration: MOTION_TOKENS.duration.base,
+          ease: MOTION_TOKENS.ease.quart,
         },
         opacity: {
           duration: 0.3,
@@ -48,8 +49,8 @@ export function SiteNav() {
       opacity: 1,
       transition: {
         height: {
-          duration: 0.6,
-          ease: [0.04, 0.62, 0.23, 0.98],
+          duration: MOTION_TOKENS.duration.slow,
+          ease: MOTION_TOKENS.ease.quart,
         },
         opacity: {
           duration: 0.5,
@@ -73,8 +74,8 @@ export function SiteNav() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
-        ease: [0.04, 0.62, 0.23, 0.98],
+        duration: MOTION_TOKENS.duration.menu,
+        ease: MOTION_TOKENS.ease.quart,
       },
     },
   };
@@ -85,8 +86,8 @@ export function SiteNav() {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5,
-        ease: [0.04, 0.62, 0.23, 0.98],
+        duration: MOTION_TOKENS.duration.menu,
+        ease: MOTION_TOKENS.ease.quart,
       },
     },
     exit: {
@@ -94,7 +95,7 @@ export function SiteNav() {
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: [0.04, 0.62, 0.23, 0.98],
+        ease: MOTION_TOKENS.ease.quart,
       },
     },
   };
@@ -144,7 +145,7 @@ export function SiteNav() {
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
         onClick={handleToggle}
-        className="px-4 py-2 rounded bg-foreground/90 text-background hover:bg-foreground backdrop-blur-xl transition-colors relative"
+        className="px-4 py-2 rounded bg-foreground/90 text-background hover:bg-foreground backdrop-blur-lg transition-colors relative"
       >
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
@@ -169,7 +170,7 @@ export function SiteNav() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-12 right-0 w-[280px] rounded bg-foreground/95 text-background backdrop-blur-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden"
+            className="absolute top-12 right-0 w-[280px] rounded bg-foreground/95 text-background backdrop-blur-xl shadow-2xl ring-1 ring-white/10 overflow-hidden"
           >
             <motion.div className="p-6 space-y-6">
               <div className="space-y-4">

@@ -8,6 +8,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { CaseStudy } from "@/data/case-studies";
 import { cn } from "@/lib/utils";
+import { MOTION_TOKENS } from "@/lib/tokens";
 
 interface CaseStudiesProps {
   studies: CaseStudy[];
@@ -19,7 +20,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.5, margin: "100px" }}
+        viewport={{ once: true, amount: 0.5, margin: "100px" }}
         className="overflow-hidden mt-[10vh]"
       >
         <h2 className="font-nohemi text-xl md:text-2xl lg:text-3xl font-light mb-2">
@@ -44,8 +45,8 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                     visible: {
                       y: 0,
                       transition: {
-                        duration: 0.2,
-                        ease: [0.33, 1, 0.68, 1],
+                        duration: MOTION_TOKENS.duration.fast,
+                        ease: MOTION_TOKENS.ease.expo,
                       },
                     },
                   }}
@@ -65,14 +66,14 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             key={study.id}
             initial={{ opacity: 0, y: 48 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-50px" }}
             transition={{ 
-              duration: 0.8, 
-              ease: [0.16, 1, 0.3, 1],
+              duration: MOTION_TOKENS.duration.slow, 
+              ease: MOTION_TOKENS.ease.expo,
               delay: index * 0.1 
             }}
             className={cn(
-              "group relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-white/5 bg-foreground/5 backdrop-blur-sm transition-all duration-500 hover:border-white/10",
+              "group relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-white/5 bg-foreground/5 backdrop-blur-sm transition-colors duration-500 hover:border-white/10",
               index === 0 ? "lg:col-span-8 lg:row-span-1" : "lg:col-span-4",
               index === 2 ? "lg:col-span-5" : "",
               index === 1 ? "lg:col-span-4" : "",

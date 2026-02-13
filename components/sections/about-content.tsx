@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { MOTION_TOKENS } from "@/lib/tokens";
 import {
   IoDownloadOutline,
   IoLogoGithub,
@@ -71,7 +72,7 @@ export function AboutContent() {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.05,
+                staggerChildren: MOTION_TOKENS.duration.stagger,
               },
             },
           }}
@@ -84,8 +85,8 @@ export function AboutContent() {
                   visible: {
                     y: 0,
                     transition: {
-                      duration: 0.5,
-                      ease: [0.33, 1, 0.68, 1],
+                      duration: MOTION_TOKENS.duration.base,
+                      ease: MOTION_TOKENS.ease.expo,
                     },
                   },
                 }}
@@ -97,7 +98,7 @@ export function AboutContent() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.2 }}
               className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-nohemi text-balance leading-[1.1]"
             >
               Hi I&rsquo;m Travis, and I make things people use. In other words,
@@ -111,7 +112,7 @@ export function AboutContent() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.3 }}
               className="flex flex-row flex-wrap gap-3"
             >
               <Link href="https://github.com/travhall" target="_blank">
@@ -135,7 +136,7 @@ export function AboutContent() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.3 }}
                 className="col-span-1 lg:col-span-2 space-y-6 text-lg text-muted-foreground"
               >
                 <p>
@@ -159,7 +160,7 @@ export function AboutContent() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.4 }}
                 className="space-y-12"
               >
                 <h2 className="font-nohemi text-3xl font-light">Skills & Technologies</h2>
@@ -184,7 +185,7 @@ export function AboutContent() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
+                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.5 }}
                 className="space-y-12"
               >
                 <h2 className="font-nohemi text-3xl font-light">Experience</h2>
