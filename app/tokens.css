@@ -13,6 +13,7 @@
     --duration-base: 0.4s;
     --duration-slow: 0.6s;
     --duration-stagger: 0.05s;
+    --duration-menu: 0.5s;
 
     /* --- Glass & Transparency --- */
     
@@ -30,8 +31,8 @@
     --blur-2xl: 40px;
 
     /* --- Semantic Surface Tokens --- */
-    --surface-glass: rgba(var(--brand-3-100), var(--glass-opacity-high));
-    --surface-glass-dark: rgba(var(--brand-3-950), var(--glass-opacity-ultra));
+    --surface-glass: color-mix(in oklch, var(--brand-3-100), transparent calc((1 - var(--glass-opacity-high)) * 100%));
+    --surface-glass-dark: color-mix(in oklch, var(--brand-3-950), transparent calc((1 - var(--glass-opacity-ultra)) * 100%));
     
     --surface-card: var(--brand-1-50);
     --surface-card-dark: var(--brand-1-950);

@@ -121,7 +121,7 @@ export function SiteNav() {
           href={href}
           onClick={() => setIsOpen(false)}
           className={cn(
-            "block py-1 px-2 rounded text-background hover:text-foreground relative z-10 transition-colors duration-200",
+            "block py-1 px-2 rounded-sm text-background hover:text-foreground relative z-10 transition-colors duration-200",
             isActive ? "font-bold underline decoration-2 underline-offset-4" : ""
           )}
         >
@@ -133,7 +133,7 @@ export function SiteNav() {
             scale: isHovered ? 1 : 0.8,
             opacity: isHovered ? 1 : 0,
           }}
-          className="absolute inset-0 bg-background rounded"
+          className="absolute inset-0 bg-background rounded-sm"
           style={{ originX: 0 }}
           transition={{ duration: 0.2 }}
         />
@@ -145,7 +145,10 @@ export function SiteNav() {
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
         onClick={handleToggle}
-        className="px-4 py-2 rounded nav-trigger relative"
+        aria-expanded={isOpen}
+        aria-controls="site-nav-menu"
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        className="px-4 py-2 rounded-sm nav-trigger relative"
       >
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
@@ -166,13 +169,15 @@ export function SiteNav() {
       <AnimatePresence>
         {isOpen && (
           <motion.nav
+            id="site-nav-menu"
             initial="closed"
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-12 right-0 w-[280px] rounded nav-menu overflow-hidden"
+            aria-label="Site navigation"
+            className="absolute top-10 right-0 w-[280px] rounded-sm nav-menu overflow-hidden"
           >
-            <motion.div className="p-6 space-y-6">
+            <motion.div className="p-4 space-y-3">
               <div className="space-y-4">
                 <div className="overflow-hidden">
                   <motion.div variants={itemVariants}>

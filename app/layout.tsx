@@ -4,7 +4,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Footer } from "@/components/layout/site-footer";
-import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { cn } from "@/lib/utils";
@@ -74,7 +73,6 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <SmoothScroll>
-            <ScrollToTop />
             <SiteNav />
             <main className="relative">{children}</main>
             <Footer />

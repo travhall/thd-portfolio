@@ -339,7 +339,18 @@
   }
 
   ::selection {
-    background-color: hsl(var(--foreground));
-    color: hsl(var(--background));
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

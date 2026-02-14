@@ -52,13 +52,14 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     href={`/work/${study.id}`}
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
+    aria-label={`${direction === "prev" ? "Previous" : "Next"} case study: ${study.title}`}
     className="group relative flex flex-col p-4 rounded backdrop-blur text-2xl transition-colors"
-    style={{ 
+    style={{
       backgroundColor: "var(--case-nav-bg)",
       color: "var(--case-nav-text)"
     }}
   >
-    {direction === "prev" ? <IoChevronBack /> : <IoChevronForward />}
+    {direction === "prev" ? <IoChevronBack aria-hidden="true" /> : <IoChevronForward aria-hidden="true" />}
   </Link>
 );
 
@@ -87,7 +88,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="sticky bottom-4 right-2 p-4 xl:p-8 -mt-28 flex flex-row place-content-end gap-1"
+      className="p-4 xl:p-8 -mt-28 flex flex-row place-content-end gap-1"
     >
       {isDesktop && (
         <div className="preview-container w-full relative">

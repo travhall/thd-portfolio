@@ -115,19 +115,22 @@ export function AboutContent() {
               transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.3 }}
               className="flex flex-row flex-wrap gap-3"
             >
-              <Link href="https://github.com/travhall" target="_blank">
+              <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
                 <Button variant="secondary" className="rounded-full">
-                  Check out my code <IoLogoGithub className="ml-2" />
+                  Check out my code <IoLogoGithub className="ml-2" aria-hidden="true" />
+                  <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
-              <Link href="https://www.linkedin.com/in/travhall/" target="_blank">
+              <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
                 <Button variant="secondary" className="rounded-full">
-                  Find me on Linkedin <IoLogoLinkedin className="ml-2" />
+                  Find me on LinkedIn <IoLogoLinkedin className="ml-2" aria-hidden="true" />
+                  <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
-              <Link href="/Travis-Hall_CV.pdf" target="_blank" download>
+              <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
                 <Button variant="secondary" className="rounded-full">
-                  Download my CV <IoDownloadOutline className="ml-2" />
+                  Download my CV <IoDownloadOutline className="ml-2" aria-hidden="true" />
+                  <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
             </motion.div>

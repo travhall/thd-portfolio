@@ -62,15 +62,15 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
 
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full max-w-[1800px] mx-auto">
         {studies.map((study, index) => (
-          <motion.div
+          <motion.article
             key={study.id}
             initial={{ opacity: 0, y: 48 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ 
-              duration: MOTION_TOKENS.duration.slow, 
+            transition={{
+              duration: MOTION_TOKENS.duration.slow,
               ease: MOTION_TOKENS.ease.expo,
-              delay: index * 0.1 
+              delay: index * 0.1
             }}
             className={cn(
               "group card-case-study h-[500px] md:h-[600px]",
@@ -80,50 +80,52 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
               index === 3 ? "lg:col-span-7" : ""
             )}
           >
-            <Link href={`/work/${study.id}`} className="block h-full w-full">
-              <article className="relative w-full h-full p-8 flex flex-col justify-between">
-                <div className="absolute inset-0 z-0">
-                  <Image
-                    src={study.coverImage}
-                    alt={study.title}
-                    fill
-                    sizes={index === 0 ? "70vw" : "33vw"}
-                    className="card-image"
-                    priority={index < 2}
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
+            <Link
+              href={`/work/${study.id}`}
+              aria-label={`View case study: ${study.title}`}
+              className="relative block w-full h-full p-8 flex flex-col justify-between"
+            >
+              <div className="absolute inset-0 z-0" aria-hidden="true">
+                <Image
+                  src={study.coverImage}
+                  alt=""
+                  fill
+                  sizes={index === 0 ? "70vw" : "33vw"}
+                  className="card-image"
+                  priority={index < 2}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
+              </div>
+
+              <div className="relative z-10 flex justify-between items-start">
+                <Badge variant="outline" className="card-badge" aria-hidden="true">
+                  {study.year}
+                </Badge>
+                <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true">
+                  <ArrowUpRight className="h-5 w-5 text-white" />
+                </div>
+              </div>
+
+              <div className="relative z-10 space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-3xl md:text-4xl font-nohemi font-semibold tracking-tight">
+                    {study.title}
+                  </h3>
+                  <p className="text-muted-foreground text-lg max-w-md line-clamp-2">
+                    {study.description}
+                  </p>
                 </div>
 
-                <div className="relative z-10 flex justify-between items-start">
-                  <Badge variant="outline" className="card-badge">
-                    {study.year}
-                  </Badge>
-                  <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowUpRight className="h-5 w-5 text-white" />
-                  </div>
+                <div className="flex gap-2 flex-wrap" aria-hidden="true">
+                  {study.tags.map((tag: string) => (
+                    <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-
-                <div className="relative z-10 space-y-4">
-                  <div className="space-y-2">
-                    <h3 className="text-3xl md:text-4xl font-nohemi font-semibold tracking-tight">
-                      {study.title}
-                    </h3>
-                    <p className="text-muted-foreground text-lg max-w-md line-clamp-2">
-                      {study.description}
-                    </p>
-                  </div>
-
-                  <div className="flex gap-2 flex-wrap">
-                    {study.tags.map((tag: string) => (
-                      <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
+              </div>
             </Link>
-          </motion.div>
+          </motion.article>
         ))}
       </div>
     </section>

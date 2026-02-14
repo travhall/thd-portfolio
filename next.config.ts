@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -12,7 +11,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Disable chunk splitting optimization for development
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },

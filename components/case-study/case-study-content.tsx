@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
 import { TextBlock } from "./sections/text-section";
 import { ImageTextBlock } from "./sections/image-text-section";
 import { CaseStudyNavigation } from "./case-study-navigation";
-import { PageTransition } from "@/components/layout/page-transition";
 
 interface CaseStudyContentProps {
   study: CaseStudy;
@@ -19,28 +18,14 @@ export function CaseStudyContent({
   prevStudy,
   nextStudy,
 }: CaseStudyContentProps) {
+  const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
 
-  // Separate blur overlay opacity transform
-  const blurOpacity = useTransform(scrollY, [100, 600], [0, 1]);
-
-  if (!study) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Case study not found</p>
-      </div>
-    );
-  }
+  // Separate blur overlay opacity transform — disabled when reduced motion is preferred
+  const blurOpacity = useTransform(scrollY, [100, 600], shouldReduceMotion ? [0, 0] : [0, 1]);
 
   return (
-    <PageTransition>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="min-h-screen relative"
-      >
+    <div className="min-h-screen relative">
         {/* Hero Blur Block */}
         <motion.div
           className="absolute backdrop-blur-lg h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
@@ -48,16 +33,16 @@ export function CaseStudyContent({
         />
         {/* Hero Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: shouldReduceMotion ? 0 : 0.2 }}
           className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 xl:p-8 z-0"
         >
           <div className="space-y-6">
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: shouldReduceMotion ? 0 : 0.3 }}
               className="case-hero-heading"
             >
               {study.title}
@@ -65,7 +50,7 @@ export function CaseStudyContent({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: shouldReduceMotion ? 0 : 0.4 }}
               className="text-xl text-muted-foreground text-balance"
             >
               {study.description}
@@ -74,9 +59,9 @@ export function CaseStudyContent({
               {study.tags.map((tag, index) => (
                 <motion.span
                   key={tag}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
+                  transition={{ delay: shouldReduceMotion ? 0 : 0.5 + index * 0.1 }}
                   className="case-tag"
                 >
                   {tag}
@@ -85,9 +70,9 @@ export function CaseStudyContent({
             </div>
           </div>
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: shouldReduceMotion ? 0 : 0.3 }}
             className="relative aspect-4/5 md:aspect-3/4 lg:aspect-4/3 rounded overflow-hidden row-start-1"
           >
             <Image
@@ -116,7 +101,6 @@ export function CaseStudyContent({
           {/* Navigation */}
           <CaseStudyNavigation prevStudy={prevStudy} nextStudy={nextStudy} />
         </div>
-      </motion.div>
-    </PageTransition>
+    </div>
   );
 }
