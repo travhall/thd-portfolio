@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Footer } from "@/components/layout/site-footer";
 import { SiteNav } from "@/components/layout/site-nav";
+import { Logo } from "@/components/layout/logo";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { cn } from "@/lib/utils";
 
@@ -73,6 +74,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <SmoothScroll>
+            <Logo />
             <SiteNav />
             <main className="relative">{children}</main>
             <Footer />

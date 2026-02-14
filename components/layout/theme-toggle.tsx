@@ -32,16 +32,17 @@ export function ModeToggle() {
       type="single"
       value={theme}
       onValueChange={handleValueChange}
+      size="sm"
       className="gap-1"
     >
       <ToggleGroupItem value="light" aria-label="Light mode">
-        <IoSunnyOutline className="h-[1.2rem] w-[1.2rem]" />
+        <IoSunnyOutline />
       </ToggleGroupItem>
       <ToggleGroupItem value="dark" aria-label="Dark mode">
-        <IoMoonOutline className="h-[1.2rem] w-[1.2rem]" />
+        <IoMoonOutline />
       </ToggleGroupItem>
       <ToggleGroupItem value="system" aria-label="System theme">
-        <IoDesktopOutline className="h-[1.2rem] w-[1.2rem]" />
+        <IoDesktopOutline />
       </ToggleGroupItem>
     </ToggleGroup>
   );

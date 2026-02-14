@@ -75,7 +75,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
   useEffect(() => {
     const checkDesktop = () => {
       const width = window.innerWidth;
-      setIsDesktop(width >= 1280); // xl breakpoint
+      setIsDesktop(width >= 1024); // lg breakpoint
     };
 
     checkDesktop();

@@ -30,19 +30,6 @@ export function Hero() {
 
   return (
     <>
-      <div className="p-4 xl:p-8">
-        <div className="overflow-hidden my-3">
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: MOTION_TOKENS.duration.base, delay: MOTION_TOKENS.duration.fast }}
-            className="hero-label"
-          >
-            travishall.design
-          </motion.h1>
-        </div>
-      </div>
-
       {/* Content */}
       <motion.div
         className="relative z-10 max-w-2xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh]"
