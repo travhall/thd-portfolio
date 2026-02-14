@@ -73,7 +73,7 @@ export function CaseStudyContent({
             initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: shouldReduceMotion ? 0 : 0.3 }}
-            className="relative aspect-4/5 md:aspect-3/4 lg:aspect-4/3 rounded overflow-hidden row-start-1"
+            className="relative aspect-4/5 md:aspect-3/4 lg:aspect-4/3 rounded-sm overflow-hidden row-start-1"
           >
             <Image
               src={study.coverImage}

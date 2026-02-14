@@ -25,7 +25,7 @@ export function ModeToggle() {
     }
   };
 
-  if (!mounted) return null;
+  if (!mounted) return <div className="h-9" />;
 
   return (
     <ToggleGroup

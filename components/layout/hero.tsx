@@ -84,7 +84,7 @@ export function Hero() {
         className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
       >
         {/* Background Image Container — decorative, no semantic content */}
-        <div className="absolute inset-0 z-0 rounded border-2 border-border overflow-hidden" role="presentation">
+        <div className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden" role="presentation">
           {mounted && (
             <Image
               src={

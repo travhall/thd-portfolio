@@ -22,7 +22,7 @@ const PreviewContent = ({ study }: PreviewProps) => {
       transition={{ duration: 0.2 }}
       className="case-preview-card absolute bottom-16 -right-32 w-full max-w-[20rem]"
     >
-      <div className="relative aspect-video max-w-[20rem] rounded overflow-hidden mb-4 z-40">
+      <div className="relative aspect-video max-w-[20rem] rounded-sm overflow-hidden mb-4 z-40">
         <Image
           src={study.coverImage}
           alt={study.title}
@@ -53,7 +53,7 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
     aria-label={`${direction === "prev" ? "Previous" : "Next"} case study: ${study.title}`}
-    className="group relative flex flex-col p-4 rounded backdrop-blur text-2xl transition-colors"
+    className="group relative flex flex-col p-4 rounded-sm backdrop-blur text-2xl transition-colors"
     style={{
       backgroundColor: "var(--case-nav-bg)",
       color: "var(--case-nav-text)"
@@ -88,7 +88,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="p-4 xl:p-8 -mt-28 flex flex-row place-content-end gap-1"
+      className="p-4 xl:p-8 mt-28 flex flex-row place-content-end gap-1"
     >
       {isDesktop && (
         <div className="preview-container w-full relative">

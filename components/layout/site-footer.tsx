@@ -2,7 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ModeToggle } from "./theme-toggle";
+// import { ModeToggle } from "./theme-toggle";
 
 export function Footer() {
   return (
@@ -14,7 +14,7 @@ export function Footer() {
     >
       <div className="text-sm text-muted-foreground flex gap-2 items-center justify-between">
         &copy; {new Date().getFullYear()} Travis Hall. All rights reserved.
-        <ModeToggle />
+        {/* <ModeToggle /> */}
       </div>
     </motion.footer>
   );

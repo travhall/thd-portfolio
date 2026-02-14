@@ -46,7 +46,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                 <Link
                   href={`/work/${study.id}`}
                   aria-label={`View case study: ${study.title}`}
-                  className="block h-full"
+                  className="relative block h-full"
                 >
                   <Image
                     src={study.coverImage}

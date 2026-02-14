@@ -19,7 +19,7 @@ export function ImageTextBlock({ section }: { section: ImageTextSection }) {
           {/* Image */}
           <div
             className={cn(
-              "relative aspect-4/3 rounded overflow-hidden",
+              "relative aspect-4/3 rounded-sm overflow-hidden",
               section.imagePosition === "right" ? "md:order-2" : "md:order-1"
             )}
           >
@@ -27,6 +27,7 @@ export function ImageTextBlock({ section }: { section: ImageTextSection }) {
               src={section.image.url}
               alt={section.image.alt}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
             {section.image.caption && (

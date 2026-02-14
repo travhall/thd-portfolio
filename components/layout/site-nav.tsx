@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ModeToggle } from "./theme-toggle";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { usePathname } from "next/navigation";
@@ -13,7 +14,8 @@ export function SiteNav() {
   const [studies, setStudies] = useState<Array<{ id: string; title: string }>>(
     []
   );
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname.replace(/\/$/, "") || "/";
  
   // Load case studies when menu opens
   const loadStudies = async () => {
@@ -122,7 +124,7 @@ export function SiteNav() {
           onClick={() => setIsOpen(false)}
           className={cn(
             "block py-1 px-2 rounded-sm text-background hover:text-foreground relative z-10 transition-colors duration-200",
-            isActive ? "font-bold underline decoration-2 underline-offset-4" : ""
+            isActive ? "font-bold underline decoration underline-offset-4" : ""
           )}
         >
           {children}
@@ -133,7 +135,7 @@ export function SiteNav() {
             scale: isHovered ? 1 : 0.8,
             opacity: isHovered ? 1 : 0,
           }}
-          className="absolute inset-0 bg-background rounded-sm"
+          className="absolute inset-0 bg-background rounded-xs"
           style={{ originX: 0 }}
           transition={{ duration: 0.2 }}
         />
@@ -158,7 +160,7 @@ export function SiteNav() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="block text-xs font-medium uppercase tracking-wider"
+              className="block text-xs font-medium tracking-wider"
             >
               {isOpen ? "Close" : "Menu"}
             </motion.span>
@@ -227,6 +229,13 @@ export function SiteNav() {
                     <MenuItem href="/about" isActive={pathname === "/about"}>
                       About
                     </MenuItem>
+                  </motion.div>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-background/10">
+                <div className="overflow-hidden">
+                  <motion.div variants={itemVariants}>
+                    <ModeToggle />
                   </motion.div>
                 </div>
               </div>
