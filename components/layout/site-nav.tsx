@@ -201,7 +201,7 @@ export function SiteNav({ studies }: SiteNavProps) {
     return (
       <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none">
         <div className="px-4 py-2 rounded-sm nav-trigger opacity-0">
-          <span className="text-xs font-medium tracking-wider">Menu</span>
+          <span className="text-xs font-medium tracking-wider lowercase">Menu</span>
         </div>
       </div>
     );
@@ -234,7 +234,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="block text-xs font-medium tracking-wider"
+                className="block text-xs font-medium tracking-wider lowercase"
               >
                 {isOpen ? "Close" : "Menu"}
               </motion.span>
