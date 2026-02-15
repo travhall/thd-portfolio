@@ -3,27 +3,33 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MOTION_TOKENS } from "@/lib/tokens";
+
+// Named constants for scroll transform ranges
+const HERO_SCROLL_RANGE = [0, 400];
+const HERO_OPACITY_OUTPUT = [1, 0.2];
+const HERO_Y_OUTPUT = [0, 8];
+const BLUR_SCROLL_RANGE = [500, 800];
+const BLUR_OPACITY_OUTPUT = [0, 1];
 
 export function Hero() {
   const { scrollY } = useScroll();
   const { theme, systemTheme } = useTheme();
+  // Track hydration to swap to the correct theme image after mount.
+  // The image renders immediately (light as default) — no blank flash.
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const y = useTransform(scrollY, [0, 400], [0, 8]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0.2]);
+  const y = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_Y_OUTPUT);
+  const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_OPACITY_OUTPUT);
+  const blurOpacity = useTransform(scrollY, BLUR_SCROLL_RANGE, BLUR_OPACITY_OUTPUT);
 
-  // Separate blur overlay opacity transform
-  const blurOpacity = useTransform(scrollY, [500, 800], [0, 1]);
-
-  // Determine if we should show the dark image
   const shouldShowDark =
-    theme === "dark" || (theme === "system" && systemTheme === "dark");
+    mounted && (theme === "dark" || (theme === "system" && systemTheme === "dark"));
 
   return (
     <>
@@ -41,8 +47,9 @@ export function Hero() {
           Creating thoughtful digital experiences through design &amp; code
         </motion.p>
       </motion.div>
-      {/* Hero Blur Block */}
+      {/* Hero Blur Block — decorative overlay */}
       <motion.div
+        aria-hidden="true"
         className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
         style={{ opacity: blurOpacity }}
       />
@@ -54,20 +61,17 @@ export function Hero() {
         className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
       >
         {/* Background Image Container — decorative, no semantic content */}
-        <div className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden bg-muted" role="presentation">
-          {mounted && (
-            <Image
-              src={
-                shouldShowDark
-                  ? "/images/hero-dark.jpg"
-                  : "/images/hero-light.jpg"
-              }
-              alt=""
-              fill
-              className="object-cover"
-              priority
-            />
-          )}
+        <div
+          className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden bg-muted"
+          aria-hidden="true"
+        >
+          <Image
+            src={shouldShowDark ? "/images/hero-dark.jpg" : "/images/hero-light.jpg"}
+            alt=""
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
       </motion.div>
     </>

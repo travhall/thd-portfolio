@@ -8,6 +8,72 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
+const menuVariants: Variants = {
+  closed: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: {
+        duration: MOTION_TOKENS.duration.base,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+      opacity: { duration: 0.3 },
+    },
+  },
+  open: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: {
+        duration: MOTION_TOKENS.duration.slow,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+      opacity: { duration: 0.5 },
+      staggerChildren: 0.07,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  closed: {
+    opacity: 0,
+    y: 20,
+    transition: {
+      duration: 0.3,
+      ease: MOTION_TOKENS.ease.quart,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: MOTION_TOKENS.duration.slow,
+      ease: MOTION_TOKENS.ease.quart,
+    },
+  },
+};
+
+const buttonTextVariants: Variants = {
+  initial: { y: 20, opacity: 0 },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: MOTION_TOKENS.duration.slow,
+      ease: MOTION_TOKENS.ease.quart,
+    },
+  },
+  exit: {
+    y: -20,
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      ease: MOTION_TOKENS.ease.quart,
+    },
+  },
+};
+
 interface SiteNavProps {
   studies: Array<{ id: string; title: string }>;
 }
@@ -84,76 +150,6 @@ export function SiteNav({ studies }: SiteNavProps) {
       return () => clearTimeout(id);
     }
   }, [isOpen]);
- 
-  const menuVariants: Variants = {
-    closed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        height: {
-          duration: MOTION_TOKENS.duration.base,
-          ease: MOTION_TOKENS.ease.quart,
-        },
-        opacity: {
-          duration: 0.3,
-        },
-      },
-    },
-    open: {
-      height: "auto",
-      opacity: 1,
-      transition: {
-        height: {
-          duration: MOTION_TOKENS.duration.slow,
-          ease: MOTION_TOKENS.ease.quart,
-        },
-        opacity: {
-          duration: 0.5,
-        },
-        staggerChildren: 0.07,
-        delayChildren: 0.2,
-      },
-    },
-  };
- 
-  const itemVariants: Variants = {
-    closed: {
-      opacity: 0,
-      y: 20,
-      transition: {
-        duration: 0.3,
-        ease: [0.04, 0.62, 0.23, 0.98],
-      },
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: MOTION_TOKENS.duration.menu,
-        ease: MOTION_TOKENS.ease.quart,
-      },
-    },
-  };
- 
-  const buttonTextVariants: Variants = {
-    initial: { y: 20, opacity: 0 },
-    animate: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: MOTION_TOKENS.duration.menu,
-        ease: MOTION_TOKENS.ease.quart,
-      },
-    },
-    exit: {
-      y: -20,
-      opacity: 0,
-      transition: {
-        duration: 0.3,
-        ease: MOTION_TOKENS.ease.quart,
-      },
-    },
-  };
 
   const MenuItem = ({
     href,

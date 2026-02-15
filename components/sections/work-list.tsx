@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,15 @@ import { ArrowUpRight } from "lucide-react";
 import { PageTransition } from "@/components/layout/page-transition";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
+const listContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: MOTION_TOKENS.duration.stagger,
+    },
+  },
+};
+
 export function WorkList({ studies }: { studies: CaseStudy[] }) {
   return (
     <PageTransition>
@@ -16,21 +25,10 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: MOTION_TOKENS.duration.stagger,
-              },
-            },
-          }}
+          variants={listContainerVariants}
         >
-          <div className="overflow-hidden mb-4 mt-12">
-            <motion.h1
-              className="hero-label pb-2"
-            >
-              My work
-            </motion.h1>
+          <div className="overflow-hidden my-3">
+            <motion.h1 className="hero-label pb-2">Case studies</motion.h1>
           </div>
 
           <div className="grid gap-4 grid-flow-row-dense grid-cols-1 md:grid-cols-3 max-w-[2400px] mx-auto auto-rows-[320px] sm:auto-rows-[400px]">
@@ -40,7 +38,11 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                 initial={{ opacity: 0, y: 48 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{
+                  duration: MOTION_TOKENS.duration.base,
+                  delay: index * MOTION_TOKENS.duration.stagger * 4,
+                  ease: MOTION_TOKENS.ease.expo,
+                }}
                 className="group card-case-study w-full h-full"
               >
                 <Link
@@ -56,7 +58,10 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                     className="card-image mix-blend-luminosity"
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-background/95 backdrop-blur transition-opacity group-hover:opacity-90" aria-hidden="true" />
+                  <div
+                    className="absolute inset-0 bg-background/95 backdrop-blur transition-opacity group-hover:opacity-90"
+                    aria-hidden="true"
+                  />
 
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="space-y-4">
@@ -64,14 +69,14 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                         initial={{ y: 24, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
+                        transition={{
+                          duration: MOTION_TOKENS.duration.base,
+                          delay: 0.2,
+                          ease: MOTION_TOKENS.ease.expo,
+                        }}
                       >
-                        <h3 className="text-2xl md:text-3xl font-bold">
-                          {study.title}
-                        </h3>
-                        <p className="text-lg text-accent-foreground mt-2">
-                          {study.description}
-                        </p>
+                        <h3 className="text-2xl md:text-3xl font-bold">{study.title}</h3>
+                        <p className="text-lg text-accent-foreground mt-2">{study.description}</p>
                       </motion.div>
 
                       <div className="flex gap-2 flex-wrap" aria-label="Tags">
@@ -82,8 +87,9 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{
-                              duration: 0.3,
-                              delay: index * 0.1 + tagIndex * 0.1,
+                              duration: MOTION_TOKENS.duration.fast,
+                              delay: tagIndex * MOTION_TOKENS.duration.stagger,
+                              ease: MOTION_TOKENS.ease.expo,
                             }}
                           >
                             <Badge variant="secondary" className="case-tag">
@@ -94,10 +100,11 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                       </div>
 
                       <div className="flex justify-between items-center">
-                        <p className="text-sm text-muted-foreground">
-                          {study.year}
-                        </p>
-                        <ArrowUpRight className="h-6 w-6 text-muted-foreground group-hover:text-foreground transition-colors" aria-hidden="true" />
+                        <p className="text-sm text-muted-foreground">{study.year}</p>
+                        <ArrowUpRight
+                          className="h-6 w-6 text-muted-foreground group-hover:text-foreground transition-colors"
+                          aria-hidden="true"
+                        />
                       </div>
                     </div>
                   </div>

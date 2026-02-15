@@ -1,240 +1,218 @@
 @import "tailwindcss";
-@import "./tokens.css";
 @plugin "tailwindcss-animate";
 
+/* ============================================================
+   THEME
+   All values declared here become Tailwind utilities and CSS
+   custom properties simultaneously. This is the single source
+   of truth for the design system scale.
+   ============================================================ */
 @theme {
-  --font-manrope: var(--font-manrope);
-  --font-nohemi: var(--font-nohemi);
+  /* --- Fonts --- */
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-nohemi);
+
+  /* --- Dark mode strategy --- */
   --dark-mode: selector;
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  
-  --color-brand-1-50: var(--brand-1-50);
-  --color-brand-1-100: var(--brand-1-100);
-  --color-brand-1-200: var(--brand-1-200);
-  --color-brand-1-300: var(--brand-1-300);
-  --color-brand-1-400: var(--brand-1-400);
-  --color-brand-1-500: var(--brand-1-500);
-  --color-brand-1-600: var(--brand-1-600);
-  --color-brand-1-700: var(--brand-1-700);
-  --color-brand-1-800: var(--brand-1-800);
-  --color-brand-1-900: var(--brand-1-900);
-  --color-brand-1-950: var(--brand-1-950);
+  /* --- Palette: Brand 1 (blue-teal) --- */
+  --color-brand-1-50:  oklch(0.99 0.010 195.9);
+  --color-brand-1-100: oklch(0.97 0.020 195.9);
+  --color-brand-1-200: oklch(0.92 0.040 195.9);
+  --color-brand-1-300: oklch(0.83 0.070 195.9);
+  --color-brand-1-400: oklch(0.69 0.100 195.9);
+  --color-brand-1-500: oklch(0.57 0.110 195.9);
+  --color-brand-1-600: oklch(0.48 0.090 195.9);
+  --color-brand-1-700: oklch(0.38 0.070 195.9);
+  --color-brand-1-800: oklch(0.29 0.050 195.9);
+  --color-brand-1-900: oklch(0.23 0.040 195.9);
+  --color-brand-1-950: oklch(0.18 0.030 195.9);
 
-  --color-brand-2-50: var(--brand-2-50);
-  --color-brand-2-100: var(--brand-2-100);
-  --color-brand-2-200: var(--brand-2-200);
-  --color-brand-2-300: var(--brand-2-300);
-  --color-brand-2-400: var(--brand-2-400);
-  --color-brand-2-500: var(--brand-2-500);
-  --color-brand-2-600: var(--brand-2-600);
-  --color-brand-2-700: var(--brand-2-700);
-  --color-brand-2-800: var(--brand-2-800);
-  --color-brand-2-900: var(--brand-2-900);
-  --color-brand-2-950: var(--brand-2-950);
+  /* --- Palette: Brand 2 (amber) --- */
+  --color-brand-2-50:  oklch(0.99 0.010 80);
+  --color-brand-2-100: oklch(0.97 0.030 80);
+  --color-brand-2-200: oklch(0.93 0.060 80);
+  --color-brand-2-300: oklch(0.86 0.110 80);
+  --color-brand-2-400: oklch(0.77 0.150 80);
+  --color-brand-2-500: oklch(0.76 0.200 80);
+  --color-brand-2-600: oklch(0.62 0.160 80);
+  --color-brand-2-700: oklch(0.49 0.120 80);
+  --color-brand-2-800: oklch(0.36 0.090 80);
+  --color-brand-2-900: oklch(0.28 0.070 80);
+  --color-brand-2-950: oklch(0.21 0.050 80);
 
-  --color-brand-3-50: var(--brand-3-50);
-  --color-brand-3-100: var(--brand-3-100);
-  --color-brand-3-200: var(--brand-3-200);
-  --color-brand-3-300: var(--brand-3-300);
-  --color-brand-3-400: var(--brand-3-400);
-  --color-brand-3-500: var(--brand-3-500);
-  --color-brand-3-600: var(--brand-3-600);
-  --color-brand-3-700: var(--brand-3-700);
-  --color-brand-3-800: var(--brand-3-800);
-  --color-brand-3-900: var(--brand-3-900);
-  --color-brand-3-950: var(--brand-3-950);
+  /* --- Palette: Brand 3 (sage/neutral) --- */
+  --color-brand-3-50:  oklch(0.99 0.005 127);
+  --color-brand-3-100: oklch(0.97 0.010 127);
+  --color-brand-3-200: oklch(0.92 0.015 127);
+  --color-brand-3-300: oklch(0.84 0.020 127);
+  --color-brand-3-400: oklch(0.71 0.030 127);
+  --color-brand-3-500: oklch(0.53 0.030 127);
+  --color-brand-3-600: oklch(0.44 0.025 127);
+  --color-brand-3-700: oklch(0.35 0.020 127);
+  --color-brand-3-800: oklch(0.27 0.015 127);
+  --color-brand-3-900: oklch(0.22 0.010 127);
+  --color-brand-3-950: oklch(0.17 0.010 127);
 
-  /* Border radius */
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius: 0.5rem;
+  /* --- Semantic colors (light mode defaults) --- */
+  --color-background:         var(--color-brand-3-100);
+  --color-foreground:         var(--color-brand-1-950);
+  --color-card:               var(--color-brand-1-50);
+  --color-card-foreground:    var(--color-brand-1-950);
+  --color-popover:            var(--color-brand-3-100);
+  --color-popover-foreground: var(--color-brand-1-950);
+  --color-primary:            var(--color-brand-1-700);
+  --color-primary-foreground: var(--color-brand-3-100);
+  --color-secondary:          var(--color-brand-3-200);
+  --color-secondary-foreground: var(--color-brand-1-950);
+  --color-muted:              var(--color-brand-3-100);
+  --color-muted-foreground:   var(--color-brand-3-700);
+  --color-accent:             var(--color-brand-2-500);
+  --color-accent-foreground:  var(--color-brand-1-950);
+  --color-destructive:        oklch(0.40 0.17 25);
+  --color-destructive-foreground: var(--color-brand-3-100);
+  --color-border:             oklch(0.92 0.005 0);
+  --color-input:              oklch(0.92 0.005 0);
+  --color-ring:               oklch(0.18 0.030 0);
 
-  /* Animation durations */
-  --animate-duration-fast: var(--duration-fast);
-  --animate-duration-base: var(--duration-base);
-  --animate-duration-slow: var(--duration-slow);
+  /* --- Border radius --- */
+  --radius:    0.5rem;
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 
-  /* Blur — maps directly to tokens, no aliasing */
-  --blur-sm: var(--blur-sm);
-  --blur-md: var(--blur-md);
-  --blur-lg: var(--blur-lg);
-  --blur-xl: var(--blur-xl);
-  --blur-2xl: var(--blur-2xl);
+  /* --- Custom blur step (32px — between Tailwind xl/2xl) --- */
+  --blur-3xl: 32px;
+
+  /* --- Easing --- */
+  --ease-expo:  cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-quart: cubic-bezier(0.04, 0.62, 0.23, 0.98);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Duration --- */
+  --duration-fast: 0.2s;
+  --duration-base: 0.4s;
+  --duration-slow: 0.6s;
 }
 
+/* ============================================================
+   BASE
+   Runtime values that live outside @theme: component-specific
+   tokens and dark mode palette/semantic overrides.
+   ============================================================ */
 @layer base {
   :root {
-    --brand-1-50: oklch(0.99 0.01 195.9);
-    --brand-1-100: oklch(0.97 0.02 195.9);
-    --brand-1-200: oklch(0.92 0.04 195.9);
-    --brand-1-300: oklch(0.83 0.07 195.9);
-    --brand-1-400: oklch(0.69 0.10 195.9);
-    --brand-1-500: oklch(0.57 0.11 195.9);
-    --brand-1-600: oklch(0.48 0.09 195.9);
-    --brand-1-700: oklch(0.38 0.07 195.9);
-    --brand-1-800: oklch(0.29 0.05 195.9);
-    --brand-1-900: oklch(0.23 0.04 195.9);
-    --brand-1-950: oklch(0.18 0.03 195.9);
+    /* --- Section spacing (responsive, overridden at md) --- */
+    --spacing-section-py: 3rem;
 
-    --brand-2-50: oklch(0.99 0.01 80);
-    --brand-2-100: oklch(0.97 0.03 80);
-    --brand-2-200: oklch(0.93 0.06 80);
-    --brand-2-300: oklch(0.86 0.11 80);
-    --brand-2-400: oklch(0.77 0.15 80);
-    --brand-2-500: oklch(0.76 0.20 80);
-    --brand-2-600: oklch(0.62 0.16 80);
-    --brand-2-700: oklch(0.49 0.12 80);
-    --brand-2-800: oklch(0.36 0.09 80);
-    --brand-2-900: oklch(0.28 0.07 80);
-    --brand-2-950: oklch(0.21 0.05 80);
+    /* --- Surface --- */
+    --surface-glass: color-mix(in oklch, var(--color-brand-3-100) 85%, transparent);
 
-    --brand-3-50: oklch(0.99 0.005 127);
-    --brand-3-100: oklch(0.97 0.01 127);
-    --brand-3-200: oklch(0.92 0.015 127);
-    --brand-3-300: oklch(0.84 0.02 127);
-    --brand-3-400: oklch(0.71 0.03 127);
-    --brand-3-500: oklch(0.53 0.03 127);
-    --brand-3-600: oklch(0.44 0.025 127);
-    --brand-3-700: oklch(0.35 0.02 127);
-    --brand-3-800: oklch(0.27 0.015 127);
-    --brand-3-900: oklch(0.22 0.01 127);
-    --brand-3-950: oklch(0.17 0.01 127);
+    /* --- Component: Navigation --- */
+    --nav-trigger-bg:   var(--color-brand-1-950);
+    --nav-trigger-text: var(--color-brand-3-100);
+    --nav-menu-bg:      var(--color-brand-1-950);
 
-    --background: var(--brand-3-100);
-    --foreground: var(--brand-1-950);
-    --card: var(--brand-1-50);
-    --card-foreground: var(--foreground);
-    --popover: var(--brand-3-100);
-    --popover-foreground: var(--foreground);
-    --primary: var(--brand-1-700);
-    --primary-foreground: var(--background);
-    --secondary: var(--brand-3-200);
-    --secondary-foreground: var(--brand-1-950);
-    --muted: var(--brand-3-100);
-    --muted-foreground: var(--brand-3-700);
-    --accent: var(--brand-2-500);
-    --accent-foreground: var(--foreground);
-    --destructive: oklch(0.40 0.17 25);
-    --destructive-foreground: var(--background);
-    --border: oklch(0.92 0.005 0);
-    --input: oklch(0.92 0.005 0);
-    --ring: oklch(0.18 0.03 0);
-    --radius: 0.5rem;
+    /* --- Component: Cards --- */
+    --card-border:       var(--color-brand-3-200);
+    --card-border-hover: var(--color-brand-3-300);
+    --card-bg:           var(--color-brand-3-100);
+
+    /* --- Component: Case studies --- */
+    --case-nav-bg:   var(--color-brand-1-950);
+    --case-nav-text: var(--color-brand-3-100);
+    --case-tag-bg:   var(--color-brand-3-200);
+    --case-tag-text: var(--color-brand-1-800);
   }
 
   .dark {
-    --brand-1-50: oklch(0.99 0.005 195.9);
-    --brand-1-100: oklch(0.97 0.01 195.9);
-    --brand-1-200: oklch(0.92 0.02 195.9);
-    --brand-1-300: oklch(0.83 0.03 195.9);
-    --brand-1-400: oklch(0.69 0.05 195.9);
-    --brand-1-500: oklch(0.57 0.06 195.9);
-    --brand-1-600: oklch(0.48 0.05 195.9);
-    --brand-1-700: oklch(0.38 0.04 195.9);
-    --brand-1-800: oklch(0.29 0.03 195.9);
-    --brand-1-900: oklch(0.23 0.02 195.9);
-    --brand-1-950: oklch(0.18 0.01 195.9);
+    /* --- Semantic overrides --- */
+    --color-background:           oklch(0.15 0.010 127);
+    --color-foreground:           var(--color-brand-1-50);
+    --color-card:                 var(--color-brand-1-950);
+    --color-card-foreground:      var(--color-brand-1-50);
+    --color-popover:              var(--color-brand-3-950);
+    --color-popover-foreground:   var(--color-brand-1-50);
+    --color-primary:              var(--color-brand-1-700);
+    --color-primary-foreground:   var(--color-brand-1-50);
+    --color-secondary:            var(--color-brand-3-800);
+    --color-secondary-foreground: var(--color-brand-1-100);
+    --color-muted:                var(--color-brand-3-950);
+    --color-muted-foreground:     var(--color-brand-3-400);
+    --color-accent:               var(--color-brand-2-700);
+    --color-accent-foreground:    var(--color-brand-1-50);
+    --color-destructive:          oklch(0.35 0.12 25);
+    --color-destructive-foreground: oklch(0.98 0.01 0);
+    --color-border:               oklch(0.25 0.01 0);
+    --color-input:                oklch(0.25 0.01 0);
+    --color-ring:                 oklch(0.85 0.02 0);
 
-    --brand-2-50: oklch(0.99 0.005 80);
-    --brand-2-100: oklch(0.97 0.01 80);
-    --brand-2-200: oklch(0.93 0.02 80);
-    --brand-2-300: oklch(0.86 0.05 80);
-    --brand-2-400: oklch(0.77 0.08 80);
-    --brand-2-500: oklch(0.65 0.09 80);
-    --brand-2-600: oklch(0.52 0.07 80);
-    --brand-2-700: oklch(0.42 0.06 80);
-    --brand-2-800: oklch(0.32 0.04 80);
-    --brand-2-900: oklch(0.25 0.03 80);
-    --brand-2-950: oklch(0.19 0.02 80);
+    /* --- Surface --- */
+    --surface-glass: color-mix(in oklch, var(--color-brand-3-950) 95%, transparent);
 
-    --brand-3-50: oklch(0.99 0.005 127);
-    --brand-3-100: oklch(0.97 0.01 127);
-    --brand-3-200: oklch(0.92 0.015 127);
-    --brand-3-300: oklch(0.84 0.02 127);
-    --brand-3-400: oklch(0.71 0.03 127);
-    --brand-3-500: oklch(0.53 0.03 127);
-    --brand-3-600: oklch(0.44 0.025 127);
-    --brand-3-700: oklch(0.35 0.02 127);
-    --brand-3-800: oklch(0.27 0.015 127);
-    --brand-3-900: oklch(0.22 0.01 127);
-    --brand-3-950: oklch(0.17 0.01 127);
+    /* --- Component: Navigation --- */
+    --nav-trigger-bg:   var(--color-brand-1-50);
+    --nav-trigger-text: var(--color-brand-1-950);
+    --nav-menu-bg:      var(--color-brand-1-100);
 
-    --background: oklch(0.15 0.01 127);
-    --foreground: var(--brand-1-50);
-    --card: var(--brand-1-950);
-    --card-foreground: var(--foreground);
-    --popover: var(--brand-3-950);
-    --popover-foreground: var(--foreground);
-    --primary: var(--brand-1-700);
-    --primary-foreground: var(--foreground);
-    --secondary: var(--brand-3-800);
-    --secondary-foreground: var(--brand-1-100);
-    --muted: var(--brand-3-950);
-    --muted-foreground: var(--brand-3-400);
-    --accent: var(--brand-2-700);
-    --accent-foreground: var(--foreground);
-    --destructive: oklch(0.35 0.12 25);
-    --destructive-foreground: oklch(0.98 0.01 0);
-    --border: oklch(0.25 0.01 0);
-    --input: oklch(0.25 0.01 0);
-    --ring: oklch(0.85 0.02 0);
+    /* --- Component: Cards --- */
+    --card-border:       var(--color-brand-3-800);
+    --card-border-hover: var(--color-brand-3-700);
+    --card-bg:           var(--color-brand-3-950);
+
+    /* --- Component: Case studies --- */
+    --case-nav-bg:   var(--color-brand-1-50);
+    --case-nav-text: var(--color-brand-1-950);
+    --case-tag-bg:   var(--color-brand-3-800);
+    --case-tag-text: var(--color-brand-3-200);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground underline-offset-4;
+  }
+
+  ::selection {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
   }
 }
 
+/* ============================================================
+   COMPONENTS
+   Reusable class abstractions over the token system.
+   ============================================================ */
 @layer components {
-  /* --- Surfaces --- */
-  .glass-panel {
-    @apply backdrop-blur-md;
-    background-color: var(--surface-glass);
-  }
-
   /* --- Navigation --- */
   .nav-trigger {
     background-color: var(--nav-trigger-bg);
     color: var(--nav-trigger-text);
-    @apply backdrop-blur-lg;
-    transition: background-color var(--duration-fast) var(--ease-in-out);
+    @apply backdrop-blur-xl;
+    transition: opacity var(--duration-fast) var(--ease-in-out);
   }
 
   .nav-trigger:hover {
-    background-color: var(--foreground);
+    @apply opacity-80;
   }
 
   .nav-trigger:focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
 
   .nav-menu {
     background-color: var(--nav-menu-bg);
-    color: var(--background);
-    backdrop-filter: blur(var(--blur-xl));
-    @apply shadow-2xl ring-1 ring-white/10;
+    color: var(--nav-trigger-text);
+    @apply backdrop-blur-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10;
   }
 
   /* --- Hero --- */
   .hero-label {
-    font-family: var(--font-nohemi);
+    font-family: var(--font-display);
     @apply text-sm font-medium text-balance;
   }
 
@@ -261,42 +239,41 @@
 
   .card-image {
     @apply object-cover grayscale opacity-40;
-    transition: opacity var(--duration-slow) var(--ease-expo),
-                filter var(--duration-slow) var(--ease-expo);
+    transition:
+      opacity var(--duration-slow) var(--ease-expo),
+      filter var(--duration-slow) var(--ease-expo);
   }
 
   .group:hover .card-image {
     @apply opacity-60 grayscale-0;
   }
 
-  /* --- About Section --- */
+  /* --- About --- */
   .about-heading {
-    font-family: var(--font-nohemi);
+    font-family: var(--font-display);
     @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-balance leading-[1.2];
   }
 
   .about-subheading {
-    font-family: var(--font-nohemi);
+    font-family: var(--font-display);
     @apply text-3xl font-light;
   }
 
-  /* --- Layout & Section Patterns --- */
+  /* --- Layout --- */
   .section-container {
-    padding-top: var(--spacing-section-py);
-    padding-bottom: var(--spacing-section-py);
+    padding-block: var(--spacing-section-py);
     @apply px-4 xl:px-8 max-w-7xl mx-auto;
 
-    @screen md {
-      padding-top: var(--spacing-section-py-md);
-      padding-bottom: var(--spacing-section-py-md);
+    @media (width >= 768px) {
+      --spacing-section-py: 4rem;
     }
   }
 
-  /* --- Case Study Elements --- */
+  /* --- Case study --- */
   .case-hero-heading {
-    font-family: var(--font-nohemi);
-    line-height: var(--typography-leading-display);
+    font-family: var(--font-display);
     @apply text-5xl md:text-6xl font-bold text-balance;
+    line-height: 1.1;
   }
 
   .case-tag {
@@ -305,29 +282,34 @@
     @apply px-3 py-1 rounded text-sm;
   }
 
+  .case-section-label {
+    @apply text-[10px] font-bold uppercase tracking-widest;
+    color: var(--case-tag-text);
+  }
+
   .case-preview-card {
     background-color: var(--surface-glass);
-    backdrop-filter: blur(var(--blur-xl));
-    border: 1px solid var(--border);
-    @apply rounded p-4;
+    @apply backdrop-blur-3xl rounded p-4;
+    border: 1px solid var(--color-border);
+  }
+
+  /* --- Skill badges --- */
+  .skill-badge {
+    background-color: var(--card-bg);
+    color: var(--color-foreground);
+    border: 1px solid var(--card-border);
+    @apply px-3 py-1 rounded text-sm;
+    transition: border-color var(--duration-fast) var(--ease-in-out);
+  }
+
+  .skill-badge:hover {
+    border-color: var(--card-border-hover);
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground underline-offset-4;
-  }
-
-  ::selection {
-    background-color: var(--foreground);
-    color: var(--background);
-  }
-}
-
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

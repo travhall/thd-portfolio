@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -9,6 +9,27 @@ import { Badge } from "@/components/ui/badge";
 import type { CaseStudy } from "@/types/case-study";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
+
+const headingContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const headingWordVariants: Variants = {
+  hidden: { y: "100%" },
+  visible: {
+    y: 0,
+    transition: {
+      duration: MOTION_TOKENS.duration.fast,
+      ease: MOTION_TOKENS.ease.expo,
+    },
+  },
+};
 
 interface CaseStudiesProps {
   studies: CaseStudy[];
@@ -25,30 +46,13 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
       >
         <h2 className="font-nohemi text-xl md:text-2xl lg:text-3xl font-light mb-2">
           <motion.div
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.2,
-                  delayChildren: 0.2,
-                },
-              },
-            }}
+            variants={headingContainerVariants}
             className="flex flex-row gap-1 lg:gap-2 pt-4"
           >
             {["Featured", "work"].map((word, i) => (
               <div key={i} className="overflow-hidden">
                 <motion.span
-                  variants={{
-                    hidden: { y: "100%" },
-                    visible: {
-                      y: 0,
-                      transition: {
-                        duration: MOTION_TOKENS.duration.fast,
-                        ease: MOTION_TOKENS.ease.expo,
-                      },
-                    },
-                  }}
+                  variants={headingWordVariants}
                   className="block"
                 >
                   {word}
@@ -93,7 +97,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                   className="card-image"
                   priority={index < 2}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" aria-hidden="true" />
               </div>
 
               <div className="relative z-10 flex justify-between items-start">
@@ -117,7 +121,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
 
                 <div className="flex gap-2 flex-wrap" aria-label="Tags">
                   {study.tags.map((tag: string) => (
-                    <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
+                    <span key={tag} className="case-section-label">
                       {tag}
                     </span>
                   ))}

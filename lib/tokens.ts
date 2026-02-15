@@ -1,7 +1,7 @@
 /**
  * Shared design tokens for motion and animations.
- * These are used in Framer Motion transitions where CSS variables are not supported.
- * They should be kept in sync with app/tokens.css if you use them there as well.
+ * Used in Framer Motion transitions where CSS variables are not supported.
+ * Keep in sync with app/tokens.css for CSS-based transitions.
  */
 
 export const MOTION_TOKENS = {
@@ -10,12 +10,13 @@ export const MOTION_TOKENS = {
     base: 0.4,
     slow: 0.6,
     stagger: 0.05,
-    menu: 0.5,
   },
   ease: {
-    /** [0.16, 1, 0.3, 1] - Great for entrance animations */
+    /** [0.16, 1, 0.3, 1] - Entrance animations */
     expo: [0.16, 1, 0.3, 1],
-    /** [0.04, 0.62, 0.23, 0.98] - The classic site-wide custom easing */
+    /** [0.22, 1, 0.36, 1] - Page-level transitions */
+    page: [0.22, 1, 0.36, 1],
+    /** [0.04, 0.62, 0.23, 0.98] - Site-wide custom easing */
     quart: [0.04, 0.62, 0.23, 0.98],
     /** Standard CSS ease-in-out */
     inOut: [0.4, 0, 0.2, 1],

@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
 export function Logo() {
@@ -20,7 +21,9 @@ export function Logo() {
     return (
       <div className="p-4 xl:p-8 fixed top-0 left-0 z-50">
         <div className="overflow-hidden my-3">
-          <h1 className="hero-label opacity-0">travishall.design</h1>
+          <h1 className="hero-label opacity-0">
+            <Link href="/">travishall.design</Link>
+          </h1>
         </div>
       </div>
     );
@@ -41,7 +44,7 @@ export function Logo() {
           }}
           className="hero-label"
         >
-          travishall.design
+          <Link href="/">travishall.design</Link>
         </motion.h1>
       </div>
     </motion.div>

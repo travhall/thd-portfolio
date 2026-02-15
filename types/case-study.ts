@@ -21,7 +21,6 @@ export interface ImageTextSection {
 export interface CaseStudy {
   id: string;
   title: string;
-  slug: string;
   description: string;
   fullDescription: string;
   coverImage: string;

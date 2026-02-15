@@ -1,12 +1,44 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { Download, Github, Linkedin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: MOTION_TOKENS.duration.stagger,
+    },
+  },
+};
+
+const labelVariants: Variants = {
+  hidden: { y: "100%" },
+  visible: {
+    y: 0,
+    transition: {
+      duration: MOTION_TOKENS.duration.base,
+      ease: MOTION_TOKENS.ease.expo,
+    },
+  },
+};
+
+const fadeUpVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: MOTION_TOKENS.duration.base,
+      ease: MOTION_TOKENS.ease.expo,
+    },
+  },
+};
 
 const skills = {
   design: [
@@ -64,39 +96,16 @@ export function AboutContent() {
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: MOTION_TOKENS.duration.stagger,
-              },
-            },
-          }}
+          variants={containerVariants}
         >
           <div className="space-y-10">
-            <div className="overflow-hidden mb-4 mt-12">
-              <motion.h1
-                variants={{
-                  hidden: { y: "100%" },
-                  visible: {
-                    y: 0,
-                    transition: {
-                      duration: MOTION_TOKENS.duration.base,
-                      ease: MOTION_TOKENS.ease.expo,
-                    },
-                  },
-                }}
-                className="hero-label pb-2"
-              >
-                About me
+            <div className="overflow-hidden my-3">
+              <motion.h1 variants={labelVariants} className="hero-label pb-2">
+                About
               </motion.h1>
             </div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.2 }}
-              className="about-heading"
-            >
+
+            <motion.p variants={fadeUpVariants} className="about-heading">
               Hi I&rsquo;m Travis, and I make things people use. In other words,
               I specialize in creating inclusive, human-centered digital
               experiences.{" "}
@@ -105,10 +114,9 @@ export function AboutContent() {
                 industry jargon, now are you?
               </span>
             </motion.p>
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.3 }}
+              variants={fadeUpVariants}
               className="flex flex-row flex-wrap gap-3"
             >
               <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
@@ -133,9 +141,7 @@ export function AboutContent() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.3 }}
+                variants={fadeUpVariants}
                 className="col-span-1 lg:col-span-2 space-y-6 text-lg text-muted-foreground"
               >
                 <p>
@@ -147,31 +153,26 @@ export function AboutContent() {
                   I bring a unique perspective to every project.
                 </p>
                 <p>
-                  I hold an MFA in Interactive Media and have extensive experience 
-                  in UX/UI design, design systems, and front-end development. I 
-                  combine creative vision with technical expertise to build 
+                  I hold an MFA in Interactive Media and have extensive experience
+                  in UX/UI design, design systems, and front-end development. I
+                  combine creative vision with technical expertise to build
                   engaging digital experiences that are as functional as they are beautiful.
                 </p>
               </motion.div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-16 pt-12">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.4 }}
-                className="space-y-12"
-              >
+              <motion.div variants={fadeUpVariants} className="space-y-12">
                 <h2 className="about-subheading">Skills & Technologies</h2>
                 <div className="space-y-10">
-                  {Object.entries(skills).map(([category, items], index) => (
+                  {Object.entries(skills).map(([category, items]) => (
                     <div key={category} className="space-y-4">
                       <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                         {category}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {items.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="bg-foreground/5 text-foreground hover:bg-foreground/10 border-none px-3 py-1">
+                          <Badge key={skill} variant="secondary" className="skill-badge">
                             {skill}
                           </Badge>
                         ))}
@@ -181,19 +182,12 @@ export function AboutContent() {
                 </div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.5 }}
-                className="space-y-12"
-              >
+              <motion.div variants={fadeUpVariants} className="space-y-12">
                 <h2 className="about-subheading">Experience</h2>
                 <div className="space-y-12">
                   {experiences.map((exp) => (
-                    <div key={exp.role} className="space-y-3 group">
-                      <div className="flex justify-between items-start">
-                        <h3 className="text-xl font-semibold leading-tight">{exp.role}</h3>
-                      </div>
+                    <div key={exp.role} className="space-y-3">
+                      <h3 className="text-xl font-semibold leading-tight">{exp.role}</h3>
                       <p className="text-sm font-medium text-primary uppercase tracking-wider">
                         {exp.company} &bull; {exp.period}
                       </p>

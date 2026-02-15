@@ -4,8 +4,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "1",
     title: "El Camino Skate Shop",
-    slug: "el-camino-skate-shop",
-    description: "User-centered design process for a fintech application",
+description: "User-centered design process for a fintech application",
     fullDescription:
       "A comprehensive exploration of user-centered design principles applied to modern fintech solutions.",
     coverImage: "/images/placeholder-1.jpg",
@@ -46,8 +45,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "2",
     title: "Moxie Beauty Studio",
-    slug: "moxie-beauty-studio",
-    description: "Complete brand identity system for a tech startup",
+description: "Complete brand identity system for a tech startup",
     fullDescription:
       "A strategic brand development project that established a distinctive visual identity for an emerging technology company in the AI space.",
     coverImage: "/images/placeholder-2.jpg",
@@ -82,8 +80,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "3",
     title: "Buddyhead",
-    slug: "buddyhead",
-    description: "Full-stack development of a SaaS platform",
+description: "Full-stack development of a SaaS platform",
     fullDescription:
       "A comprehensive web application development project that transformed a complex business process into an intuitive SaaS solution.",
     coverImage: "/images/placeholder-3.jpg",
@@ -118,8 +115,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "4",
     title: "Denver Digital Agency",
-    slug: "denver-digital-agency",
-    description: "Modern e-commerce solution with headless architecture",
+description: "Modern e-commerce solution with headless architecture",
     fullDescription:
       "A cutting-edge e-commerce platform built with a headless architecture, offering seamless shopping experiences across multiple channels and devices.",
     coverImage: "/images/placeholder-4.jpg",
@@ -151,8 +147,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "5",
     title: "Project Wylie Dog",
-    slug: "project-wylie-dog",
-    description: "Health and wellness tracking application",
+description: "Health and wellness tracking application",
     fullDescription:
       "A comprehensive mobile application designed to help users track their health and wellness goals through an intuitive and engaging interface.",
     coverImage: "/images/placeholder-1.jpg",
@@ -184,8 +179,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "6",
     title: "Not-a-Robot",
-    slug: "not-a-robot",
-    description: "Enterprise analytics platform with AI capabilities",
+description: "Enterprise analytics platform with AI capabilities",
     fullDescription:
       "An advanced analytics platform that leverages artificial intelligence to provide actionable insights from complex business data.",
     coverImage: "/images/placeholder-2.jpg",
