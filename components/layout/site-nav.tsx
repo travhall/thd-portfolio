@@ -79,6 +79,7 @@ interface SiteNavProps {
 }
 
 export function SiteNav({ studies }: SiteNavProps) {
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const rawPathname = usePathname();
   const pathname = rawPathname.replace(/\/$/, "") || "/";
@@ -151,6 +152,10 @@ export function SiteNav({ studies }: SiteNavProps) {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const MenuItem = ({
     href,
     children,
@@ -192,31 +197,51 @@ export function SiteNav({ studies }: SiteNavProps) {
     );
   };
 
+  if (!mounted) {
+    return (
+      <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none">
+        <div className="px-4 py-2 rounded-sm nav-trigger opacity-0">
+          <span className="text-xs font-medium tracking-wider">Menu</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
-      <button
-        ref={triggerRef}
-        onClick={handleToggle}
-        aria-expanded={isOpen}
-        aria-controls="site-nav-menu"
-        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-        className="px-4 py-2 rounded-sm nav-trigger relative"
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: MOTION_TOKENS.duration.base,
+          delay: MOTION_TOKENS.duration.base,
+          ease: MOTION_TOKENS.ease.quart,
+        }}
       >
-        <div className="overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={isOpen ? "close" : "menu"}
-              variants={buttonTextVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="block text-xs font-medium tracking-wider"
-            >
-              {isOpen ? "Close" : "Menu"}
-            </motion.span>
-          </AnimatePresence>
-        </div>
-      </button>
+        <button
+          ref={triggerRef}
+          onClick={handleToggle}
+          aria-expanded={isOpen}
+          aria-controls="site-nav-menu"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+          className="px-4 py-2 rounded-sm nav-trigger relative"
+        >
+          <div className="overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={isOpen ? "close" : "menu"}
+                variants={buttonTextVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="block text-xs font-medium tracking-wider"
+              >
+                {isOpen ? "Close" : "Menu"}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </button>
+      </motion.div>
 
       <AnimatePresence>
         {isOpen && (

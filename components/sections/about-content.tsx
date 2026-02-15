@@ -130,7 +130,7 @@ export function AboutContent() {
                 onMouseLeave={() => setIsHovered(false)}
               >
                 <Link href="/" className="block">
-                  <span className="sr-only">about - return to index</span>
+                  <span className="sr-only">About - Return to index</span>
                   <div className="overflow-hidden relative h-[1.2em]">
                     <AnimatePresence mode="wait">
                       <motion.span
@@ -139,9 +139,9 @@ export function AboutContent() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="block"
+                        className="block lowercase"
                       >
-                        {isHovered ? "return to index" : "about"}
+                        {isHovered ? "Return to index" : "About"}
                       </motion.span>
                     </AnimatePresence>
                   </div>

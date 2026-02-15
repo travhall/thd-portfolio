@@ -57,7 +57,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
               onMouseLeave={() => setIsHovered(false)}
             >
               <Link href="/" className="block">
-                <span className="sr-only">case studies - return to index</span>
+                <span className="sr-only">Case studies - Return to index</span>
                 <div className="overflow-hidden relative h-[1.2em]">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -66,9 +66,9 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      className="block"
+                      className="block lowercase"
                     >
-                      {isHovered ? "return to index" : "case studies"}
+                      {isHovered ? "Return to index" : "Case studies"}
                     </motion.span>
                   </AnimatePresence>
                 </div>
