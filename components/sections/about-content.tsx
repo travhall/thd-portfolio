@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useState } from "react";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
@@ -90,6 +91,28 @@ const experiences = [
 ];
 
 export function AboutContent() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const hoverLabelVariants: Variants = {
+    initial: { y: 20, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: MOTION_TOKENS.duration.base,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+    },
+    exit: {
+      y: -20,
+      opacity: 0,
+      transition: {
+        duration: MOTION_TOKENS.duration.fast,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+    },
+  };
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-background p-4 xl:p-8 max-w-8xl mx-auto">
@@ -100,8 +123,29 @@ export function AboutContent() {
         >
           <div className="space-y-10">
             <div className="overflow-hidden my-3">
-              <motion.h1 variants={labelVariants} className="hero-label pb-2">
-                About
+              <motion.h1 
+                variants={labelVariants} 
+                className="hero-label pb-2 inline-block"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <Link href="/" className="block">
+                  <span className="sr-only">about - return to index</span>
+                  <div className="overflow-hidden relative h-[1.2em]">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={isHovered ? "return" : "about"}
+                        variants={hoverLabelVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="block"
+                      >
+                        {isHovered ? "return to index" : "about"}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
+                </Link>
               </motion.h1>
             </div>
 

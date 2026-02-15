@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useState } from "react";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +20,28 @@ const listContainerVariants: Variants = {
 };
 
 export function WorkList({ studies }: { studies: CaseStudy[] }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const hoverLabelVariants: Variants = {
+    initial: { y: 20, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: MOTION_TOKENS.duration.base,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+    },
+    exit: {
+      y: -20,
+      opacity: 0,
+      transition: {
+        duration: MOTION_TOKENS.duration.fast,
+        ease: MOTION_TOKENS.ease.quart,
+      },
+    },
+  };
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-background p-4 xl:p-8">
@@ -27,8 +50,30 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
           animate="visible"
           variants={listContainerVariants}
         >
-          <div className="overflow-hidden my-3">
-            <motion.h1 className="hero-label pb-2">Case studies</motion.h1>
+          <div className="overflow-hidden my-3 inline-block">
+            <motion.h1 
+              className="hero-label pb-2"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <Link href="/" className="block">
+                <span className="sr-only">case studies - return to index</span>
+                <div className="overflow-hidden relative h-[1.2em]">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={isHovered ? "return" : "studies"}
+                      variants={hoverLabelVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="block"
+                    >
+                      {isHovered ? "return to index" : "case studies"}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+              </Link>
+            </motion.h1>
           </div>
 
           <div className="grid gap-4 grid-flow-row-dense grid-cols-1 md:grid-cols-3 max-w-[2400px] mx-auto auto-rows-[320px] sm:auto-rows-[400px]">
