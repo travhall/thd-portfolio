@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  IoMoonOutline,
-  IoSunnyOutline,
-  IoDesktopOutline,
-} from "react-icons/io5";
+import { Moon, Sun, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -36,13 +32,13 @@ export function ModeToggle() {
       className="gap-1"
     >
       <ToggleGroupItem value="light" aria-label="Light mode">
-        <IoSunnyOutline />
+        <Sun />
       </ToggleGroupItem>
       <ToggleGroupItem value="dark" aria-label="Dark mode">
-        <IoMoonOutline />
+        <Moon />
       </ToggleGroupItem>
       <ToggleGroupItem value="system" aria-label="System theme">
-        <IoDesktopOutline />
+        <Monitor />
       </ToggleGroupItem>
     </ToggleGroup>
   );

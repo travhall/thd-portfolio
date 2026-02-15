@@ -10,11 +10,6 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -232,17 +227,6 @@ export default function StyleGuide() {
               </div>
             </div>
 
-            {/* Chart Colors */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Chart Colors</h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <ColorSwatch className="bg-chart-1" label="Chart 1" />
-                <ColorSwatch className="bg-chart-2" label="Chart 2" />
-                <ColorSwatch className="bg-chart-3" label="Chart 3" />
-                <ColorSwatch className="bg-chart-4" label="Chart 4" />
-                <ColorSwatch className="bg-chart-5" label="Chart 5" />
-              </div>
-            </div>
           </div>
         </section>
 
@@ -332,26 +316,6 @@ export default function StyleGuide() {
                   <p>Card Footer</p>
                 </CardFooter>
               </Card>
-            </ComponentExample>
-
-            {/* Carousel */}
-            <ComponentExample title="Carousel">
-              <Carousel className="w-72">
-                <CarouselContent>
-                  <CarouselItem>
-                    <div className="h-48 bg-brand-1-500 rounded flex items-center justify-center">
-                      Slide 1
-                    </div>
-                  </CarouselItem>
-                  <CarouselItem>
-                    <div className="h-48 bg-brand-2-500 rounded flex items-center justify-center">
-                      Slide 2
-                    </div>
-                  </CarouselItem>
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
             </ComponentExample>
 
             {/* Input */}

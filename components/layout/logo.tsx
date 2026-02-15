@@ -1,11 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
 export function Logo() {
   const [mounted, setMounted] = useState(false);
+  const { scrollY } = useScroll();
+  
+  // Fade out logo as we scroll
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const pointerEvents = useTransform(scrollY, (y) => y > 250 ? "none" : "auto");
 
   useEffect(() => {
     setMounted(true);
@@ -22,7 +27,10 @@ export function Logo() {
   }
 
   return (
-    <div className="p-4 xl:p-8 fixed top-0 left-0 z-50">
+    <motion.div 
+      className="p-4 xl:p-8 fixed top-0 left-0 z-50"
+      style={{ opacity, pointerEvents }}
+    >
       <div className="overflow-hidden my-3">
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
@@ -36,6 +44,6 @@ export function Logo() {
           travishall.design
         </motion.h1>
       </div>
-    </div>
+    </motion.div>
   );
 }

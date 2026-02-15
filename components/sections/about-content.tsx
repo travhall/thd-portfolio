@@ -4,11 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
-import {
-  IoDownloadOutline,
-  IoLogoGithub,
-  IoLogoLinkedin,
-} from "react-icons/io5";
+import { Download, Github, Linkedin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
 
@@ -78,7 +74,7 @@ export function AboutContent() {
           }}
         >
           <div className="space-y-10">
-            <div className="overflow-hidden my-3">
+            <div className="overflow-hidden mb-4 mt-12">
               <motion.h1
                 variants={{
                   hidden: { y: "100%" },
@@ -117,19 +113,19 @@ export function AboutContent() {
             >
               <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
                 <Button variant="secondary" className="rounded-full">
-                  Check out my code <IoLogoGithub className="ml-2" aria-hidden="true" />
+                  Check out my code <Github className="ml-2" aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
               <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
                 <Button variant="secondary" className="rounded-full">
-                  Find me on LinkedIn <IoLogoLinkedin className="ml-2" aria-hidden="true" />
+                  Find me on LinkedIn <Linkedin className="ml-2" aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
               <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
                 <Button variant="secondary" className="rounded-full">
-                  Download my CV <IoDownloadOutline className="ml-2" aria-hidden="true" />
+                  Download my CV <Download className="ml-2" aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>

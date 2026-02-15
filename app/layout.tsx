@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/site-footer";
 import { SiteNav } from "@/components/layout/site-nav";
 import { Logo } from "@/components/layout/logo";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { getAllCaseStudies } from "@/data/case-studies";
 import { cn } from "@/lib/utils";
 
 const manropeSans = Manrope({
@@ -58,11 +59,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const allStudies = await getAllCaseStudies();
+  const navStudies = allStudies.map(({ id, title }) => ({ id, title }));
+
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth" data-scroll-behavior="smooth">
       <body
@@ -75,7 +79,7 @@ export default function RootLayout({
         <ThemeProvider>
           <SmoothScroll>
             <Logo />
-            <SiteNav />
+            <SiteNav studies={navStudies} />
             <main className="relative">{children}</main>
             <Footer />
           </SmoothScroll>

@@ -1,6 +1,6 @@
-import type { CaseStudy as CaseStudyType } from "@/types/case-study";
+import type { CaseStudy } from "@/types/case-study";
 
-const caseStudies: CaseStudyType[] = [
+const caseStudies: CaseStudy[] = [
   {
     id: "1",
     title: "El Camino Skate Shop",
@@ -215,8 +215,6 @@ const caseStudies: CaseStudyType[] = [
     featured: false,
   },
 ];
-
-export type CaseStudy = CaseStudyType;
 
 export async function getCaseStudy(id: string): Promise<CaseStudy | undefined> {
   return Promise.resolve(caseStudies.find((study) => study.id === id));

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CaseStudy } from "@/data/case-studies";
+import type { CaseStudy } from "@/types/case-study";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +25,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
             },
           }}
         >
-          <div className="overflow-hidden my-3">
+          <div className="overflow-hidden mb-4 mt-12">
             <motion.h1
               className="hero-label pb-2"
             >
@@ -74,7 +74,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                         </p>
                       </motion.div>
 
-                      <div className="flex gap-2 flex-wrap" aria-hidden="true">
+                      <div className="flex gap-2 flex-wrap" aria-label="Tags">
                         {study.tags.map((tag: string, tagIndex: number) => (
                           <motion.div
                             key={tag}
@@ -94,7 +94,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                       </div>
 
                       <div className="flex justify-between items-center">
-                        <p className="text-sm text-muted-foreground" aria-hidden="true">
+                        <p className="text-sm text-muted-foreground">
                           {study.year}
                         </p>
                         <ArrowUpRight className="h-6 w-6 text-muted-foreground group-hover:text-foreground transition-colors" aria-hidden="true" />

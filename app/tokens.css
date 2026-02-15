@@ -1,7 +1,9 @@
 @layer base {
   :root {
-    /* --- Animations & Motion --- */
-    
+    /* ----------------------------------------
+       Motion
+    ---------------------------------------- */
+
     /* Easings */
     --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-quart: cubic-bezier(0.04, 0.62, 0.23, 0.98);
@@ -15,62 +17,77 @@
     --duration-stagger: 0.05s;
     --duration-menu: 0.5s;
 
-    /* --- Glass & Transparency --- */
-    
-    /* Background Opacities */
-    --glass-opacity-low: 0.05;
-    --glass-opacity-mid: 0.1;
-    --glass-opacity-high: 0.85;
-    --glass-opacity-ultra: 0.95;
-
-    /* Backdrop Blurs */
+    /* ----------------------------------------
+       Blur
+    ---------------------------------------- */
     --blur-sm: 4px;
     --blur-md: 8px;
     --blur-lg: 16px;
     --blur-xl: 32px;
     --blur-2xl: 40px;
 
-    /* --- Semantic Surface Tokens --- */
-    --surface-glass: color-mix(in oklch, var(--brand-3-100), transparent calc((1 - var(--glass-opacity-high)) * 100%));
-    --surface-glass-dark: color-mix(in oklch, var(--brand-3-950), transparent calc((1 - var(--glass-opacity-ultra)) * 100%));
-    
-    --surface-card: var(--brand-1-50);
-    --surface-card-dark: var(--brand-1-950);
-
-    /* --- Component Tokens --- */
-
-    /* Navigation */
-    --nav-trigger-bg: color-mix(in oklch, var(--foreground), transparent 5%);
-    --nav-trigger-text: var(--background);
-    --nav-menu-bg: color-mix(in oklch, var(--foreground), transparent 2%);
-    --nav-menu-blur: var(--blur-xl);
-    
-    /* Hero */
-    --hero-recede-scale: 0.6;
-    --hero-title-font: var(--font-nohemi);
-    
-    /* Case Study Cards */
-    --card-border: color-mix(in oklch, var(--foreground), transparent 95%);
-    --card-border-hover: color-mix(in oklch, var(--foreground), transparent 90%);
-    --card-bg: color-mix(in oklch, var(--foreground), transparent 95%);
-    --card-radius: 1rem;
-
-    /* --- Layout & Spacing --- */
-    --spacing-container-p: 1rem;
-    --spacing-container-p-xl: 2rem;
+    /* ----------------------------------------
+       Spacing & Layout
+    ---------------------------------------- */
     --spacing-section-py: 3rem;
     --spacing-section-py-md: 4rem;
     --spacing-section-gap: 2rem;
     --spacing-section-gap-md: 3rem;
 
-    /* --- Typography --- */
+    /* ----------------------------------------
+       Typography
+    ---------------------------------------- */
     --typography-leading-display: 1.1;
     --typography-leading-body: 1.6;
 
-    /* --- Extra Component Tokens --- */
-    --case-nav-bg: color-mix(in oklch, var(--foreground), transparent 5%);
+    /* ----------------------------------------
+       Surfaces  (light mode)
+    ---------------------------------------- */
+    --surface-glass: color-mix(in oklch, var(--brand-3-100) 85%, transparent);
+    --surface-card: var(--brand-1-50);
+
+    /* ----------------------------------------
+       Component tokens  (light mode)
+    ---------------------------------------- */
+
+    /* Navigation */
+    --nav-trigger-bg: color-mix(in oklch, var(--foreground) 95%, transparent);
+    --nav-trigger-text: var(--background);
+    --nav-menu-bg: color-mix(in oklch, var(--foreground) 98%, transparent);
+
+    /* Cards */
+    --card-border: color-mix(in oklch, var(--foreground) 5%, transparent);
+    --card-border-hover: color-mix(in oklch, var(--foreground) 10%, transparent);
+    --card-bg: color-mix(in oklch, var(--foreground) 5%, transparent);
+
+    /* Case studies */
+    --case-nav-bg: color-mix(in oklch, var(--foreground) 95%, transparent);
     --case-nav-text: var(--background);
-    --case-tag-bg: color-mix(in oklch, var(--foreground), transparent 95%);
+    --case-tag-bg: color-mix(in oklch, var(--foreground) 5%, transparent);
+    --case-tag-text: var(--foreground);
+
+    /* Hero */
+    --hero-title-font: var(--font-nohemi);
+  }
+
+  /* ----------------------------------------
+     Dark mode overrides
+  ---------------------------------------- */
+  .dark {
+    --surface-glass: color-mix(in oklch, var(--brand-3-950) 95%, transparent);
+    --surface-card: var(--brand-1-950);
+
+    --nav-trigger-bg: color-mix(in oklch, var(--foreground) 95%, transparent);
+    --nav-trigger-text: var(--background);
+    --nav-menu-bg: color-mix(in oklch, var(--foreground) 98%, transparent);
+
+    --card-border: color-mix(in oklch, var(--foreground) 5%, transparent);
+    --card-border-hover: color-mix(in oklch, var(--foreground) 10%, transparent);
+    --card-bg: color-mix(in oklch, var(--foreground) 5%, transparent);
+
+    --case-nav-bg: color-mix(in oklch, var(--foreground) 95%, transparent);
+    --case-nav-text: var(--background);
+    --case-tag-bg: color-mix(in oklch, var(--foreground) 5%, transparent);
     --case-tag-text: var(--foreground);
   }
 }

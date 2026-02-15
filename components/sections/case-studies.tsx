@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import type { CaseStudy } from "@/data/case-studies";
+import type { CaseStudy } from "@/types/case-study";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
@@ -16,7 +16,7 @@ interface CaseStudiesProps {
 
 export function CaseStudies({ studies }: CaseStudiesProps) {
   return (
-    <section className="relative z-10 bg-background/80 backdrop-blur-lg p-4 xl:p-8 flex flex-col">
+    <section id="work" className="relative z-10 bg-background/80 backdrop-blur-lg p-4 xl:p-8 flex flex-col">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -35,7 +35,6 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
               },
             }}
             className="flex flex-row gap-1 lg:gap-2 pt-4"
-            id="work"
           >
             {["Featured", "work"].map((word, i) => (
               <div key={i} className="overflow-hidden">
@@ -83,7 +82,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             <Link
               href={`/work/${study.id}`}
               aria-label={`View case study: ${study.title}`}
-              className="relative block w-full h-full p-8 flex flex-col justify-between"
+              className="relative w-full h-full p-8 flex flex-col justify-between"
             >
               <div className="absolute inset-0 z-0" aria-hidden="true">
                 <Image
@@ -98,7 +97,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
               </div>
 
               <div className="relative z-10 flex justify-between items-start">
-                <Badge variant="outline" className="card-badge" aria-hidden="true">
+                <Badge variant="outline" className="card-badge">
                   {study.year}
                 </Badge>
                 <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true">
@@ -116,7 +115,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                   </p>
                 </div>
 
-                <div className="flex gap-2 flex-wrap" aria-hidden="true">
+                <div className="flex gap-2 flex-wrap" aria-label="Tags">
                   {study.tags.map((tag: string) => (
                     <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
                       {tag}

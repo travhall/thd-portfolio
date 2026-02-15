@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { MOTION_TOKENS } from "@/lib/tokens";
-// import { IoArrowDownCircleOutline } from "react-icons/io5";
 
 export function Hero() {
   const { scrollY } = useScroll();
@@ -16,8 +15,6 @@ export function Hero() {
     setMounted(true);
   }, []);
 
-  // Transform values for zoom-out/recede effect
-  // const scale = useTransform(scrollY, [0, 900], [1, 0.6]);
   const y = useTransform(scrollY, [0, 400], [0, 8]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.2]);
 
@@ -43,20 +40,6 @@ export function Hero() {
         >
           Creating thoughtful digital experiences through design &amp; code
         </motion.p>
-        {/* <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="flex flex-row items-center gap-1 text-xl lg:text-2xl mt-4 cursor-pointer"
-          onClick={() => {
-            const workElement = document.getElementById("work");
-            if (workElement) {
-              workElement.scrollIntoView({ behavior: "smooth" });
-            }
-          }}
-        >
-          <IoArrowDownCircleOutline className="mt-1" />
-        </motion.div> */}
       </motion.div>
       {/* Hero Blur Block */}
       <motion.div
@@ -71,7 +54,7 @@ export function Hero() {
         className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
       >
         {/* Background Image Container — decorative, no semantic content */}
-        <div className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden" role="presentation">
+        <div className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden bg-muted" role="presentation">
           {mounted && (
             <Image
               src={

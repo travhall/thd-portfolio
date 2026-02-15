@@ -1,36 +1,89 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ModeToggle } from "./theme-toggle";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { getAllCaseStudies } from "@/data/case-studies";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
- 
-export function SiteNav() {
+
+interface SiteNavProps {
+  studies: Array<{ id: string; title: string }>;
+}
+
+export function SiteNav({ studies }: SiteNavProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [studies, setStudies] = useState<Array<{ id: string; title: string }>>(
-    []
-  );
   const rawPathname = usePathname();
   const pathname = rawPathname.replace(/\/$/, "") || "/";
- 
-  // Load case studies when menu opens
-  const loadStudies = async () => {
-    if (studies.length === 0) {
-      const data = await getAllCaseStudies();
-      setStudies(data.map((study) => ({ id: study.id, title: study.title })));
-    }
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
+
+  const handleToggle = () => {
+    setIsOpen((prev) => !prev);
   };
- 
-  const handleToggle = async () => {
-    if (!isOpen) {
-      await loadStudies();
+
+  // Close on Escape, return focus to trigger
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setIsOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
+
+      if (e.key === "Tab") {
+        const menu = menuRef.current;
+        if (!menu) return;
+        const focusable = Array.from(
+          menu.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => !el.closest('[aria-hidden="true"]'));
+
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    },
+    [isOpen]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Move focus into menu when it opens
+  useEffect(() => {
+    if (isOpen) {
+      // Wait for animation to start before focusing
+      const id = setTimeout(() => {
+        const menu = menuRef.current;
+        if (!menu) return;
+        const first = menu.querySelector<HTMLElement>(
+          'a[href], button:not([disabled])'
+        );
+        first?.focus();
+      }, 100);
+      return () => clearTimeout(id);
     }
-    setIsOpen(!isOpen);
-  };
+  }, [isOpen]);
  
   const menuVariants: Variants = {
     closed: {
@@ -146,6 +199,7 @@ export function SiteNav() {
   return (
     <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <button
+        ref={triggerRef}
         onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls="site-nav-menu"
@@ -171,13 +225,14 @@ export function SiteNav() {
       <AnimatePresence>
         {isOpen && (
           <motion.nav
+            ref={menuRef}
             id="site-nav-menu"
             initial="closed"
             animate="open"
             exit="closed"
             variants={menuVariants}
             aria-label="Site navigation"
-            className="absolute top-10 right-0 w-[280px] rounded-sm nav-menu overflow-hidden"
+            className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
           >
             <motion.div className="p-4 space-y-3">
               <div className="space-y-4">
