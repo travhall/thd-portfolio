@@ -256,14 +256,9 @@
   }
 
   /* --- Skill badges --- */
-  .skill-badge {
-    @apply bg-card text-foreground border border-border px-3 py-1 rounded-sm text-sm;
-    transition: border-color var(--duration-fast) var(--ease-in-out);
-  }
 
-  .skill-badge:hover {
-    @apply border-muted-foreground/50;
-  }
+
+
 }
 
 /* ============================================================

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pause, Play } from "lucide-react";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
@@ -365,11 +366,11 @@ export default function StyleGuide() {
             <span className="case-tag">Research</span>
           </ComponentExample>
 
-          <ComponentExample title=".skill-badge">
-            <span className="skill-badge">Figma</span>
-            <span className="skill-badge">React</span>
-            <span className="skill-badge">TypeScript</span>
-            <span className="skill-badge">Tailwind CSS</span>
+          <ComponentExample title=".skill-badge (now Badge variant='outline')">
+            <Badge variant="outline">Figma</Badge>
+            <Badge variant="outline">React</Badge>
+            <Badge variant="outline">TypeScript</Badge>
+            <Badge variant="outline">Tailwind CSS</Badge>
           </ComponentExample>
 
           <ComponentExample title=".case-preview-card">

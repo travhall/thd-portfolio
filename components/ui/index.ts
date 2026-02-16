@@ -1,4 +1,5 @@
 // Export all component variations
+export { Badge } from "./badge";
 export { Button } from "./button";
 export {
   Card,

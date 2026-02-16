@@ -219,7 +219,7 @@ export function AboutContent() {
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {items.map((skill) => (
-                          <Badge key={skill} variant="outline" className="skill-badge">
+                          <Badge key={skill} variant="outline">
                             {skill}
                           </Badge>
                         ))}

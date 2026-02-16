@@ -1,5 +1,5 @@
-export type TextAlignment = "left" | "center" | "right";
-export type ImagePosition = "left" | "right";
+type TextAlignment = "left" | "center" | "right";
+type ImagePosition = "left" | "right";
 
 export interface TextSection {
   type: "text";

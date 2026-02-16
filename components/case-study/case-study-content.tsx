@@ -7,7 +7,6 @@ import type { CaseStudy } from "@/types/case-study";
 import { TextBlock } from "./sections/text-section";
 import { ImageTextBlock } from "./sections/image-text-section";
 import { CaseStudyNavigation } from "./case-study-navigation";
-import { MOTION_TOKENS } from "@/lib/tokens";
 
 // Named constants for scroll transform ranges
 const BLUR_SCROLL_RANGE = [100, 600];
@@ -48,7 +47,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 xl:p-8 z-0"
+          className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-end sticky top-0 p-4 xl:p-8 mb-12 z-0"
         >
           <div className="space-y-6">
             <motion.h1
