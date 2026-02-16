@@ -86,7 +86,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
           >
             <Link
               href={`/work/${study.id}`}
-              aria-label={`View case study: ${study.title}`}
+              aria-labelledby={`study-title-${study.id}`}
               className="relative w-full h-full p-8 flex flex-col justify-between"
             >
               <div className="absolute inset-0 z-0" aria-hidden="true">

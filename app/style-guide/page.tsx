@@ -522,9 +522,9 @@ export default function StyleGuide() {
 
           <ComponentExample title="Progress">
             <div className="w-72 space-y-3">
-              <Progress value={25} />
-              <Progress value={60} />
-              <Progress value={90} />
+              <Progress value={25} aria-label="25% complete" />
+              <Progress value={60} aria-label="60% complete" />
+              <Progress value={90} aria-label="90% complete" />
             </div>
           </ComponentExample>
 

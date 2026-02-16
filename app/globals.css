@@ -114,7 +114,7 @@
     --color-card-foreground:      var(--color-brand-1-50);
     --color-popover:              var(--color-brand-3-900);
     --color-popover-foreground:   var(--color-brand-1-50);
-    --color-primary:              var(--color-brand-1-400);
+    --color-primary:              var(--color-brand-1-500);
     --color-primary-foreground:   var(--color-brand-3-950);
     --color-secondary:            var(--color-brand-2-600);
     --color-secondary-foreground: var(--color-brand-3-950);
@@ -124,7 +124,7 @@
     --color-accent:               var(--color-brand-2-400);
     --color-accent-foreground:    var(--color-brand-1-950);
     /* destructive bumped to 0.63 L → ~4.7:1 on dark bg, AA normal text ✓ */
-    --color-destructive:          oklch(0.63 0.18 25);
+    --color-destructive:          oklch(0.54 0.18 25);
     --color-destructive-foreground: oklch(0.98 0.01 0);
     --color-border:               var(--color-brand-3-800);
     --color-input:                var(--color-brand-3-800);

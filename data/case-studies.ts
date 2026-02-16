@@ -2,7 +2,7 @@ import type { CaseStudy } from "@/types/case-study";
 
 const caseStudies: CaseStudy[] = [
   {
-    id: "1",
+    id: "el-camino-skate-shop",
     title: "El Camino Skate Shop",
     description:
       "A full-stack e-commerce storefront for a skater-owned shop in Eau Claire, WI — built on Astro, Square, and Netlify with real-time inventory and a persistent cart.",
@@ -50,12 +50,12 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "2",
-    prevProject: "5",
+    nextProject: "moxie-beauty-studio",
+    prevProject: "project-wylie-dog",
     featured: true,
   },
   {
-    id: "2",
+    id: "moxie-beauty-studio",
     title: "Moxie Beauty Studio",
     description:
       "A bespoke marketing site for a solo lash and brow studio in Wisconsin — built on Next.js with a handcrafted design system, Square Appointments integration, and scroll-driven animations.",
@@ -103,12 +103,12 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "3",
-    prevProject: "1",
+    nextProject: "buddyhead",
+    prevProject: "el-camino-skate-shop",
     featured: false,
   },
   {
-    id: "3",
+    id: "buddyhead",
     title: "Buddyhead",
     description:
       "A full redesign of the legendary punk and indie music publication — a multi-section editorial platform for news, reviews, a zine, and record label, built on Next.js and WordPress.",
@@ -156,12 +156,12 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "4",
-    prevProject: "2",
+    nextProject: "this-portfolio",
+    prevProject: "moxie-beauty-studio",
     featured: true,
   },
   {
-    id: "4",
+    id: "this-portfolio",
     title: "This Portfolio",
     description:
       "A self-directed design and engineering project — building my own portfolio as a live laboratory for Tailwind v4, Framer Motion, and a handcrafted design system.",
@@ -208,12 +208,12 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "5",
-    prevProject: "3",
+    nextProject: "project-wylie-dog",
+    prevProject: "buddyhead",
     featured: false,
   },
   {
-    id: "5",
+    id: "project-wylie-dog",
     title: "Project Wylie Dog",
     description:
       "An enterprise-grade design system built on OKLCH color science, a three-tier token architecture, and 42 fully-tested React components.",
@@ -266,8 +266,8 @@ const caseStudies: CaseStudy[] = [
         alignment: "left",
       },
     ],
-    nextProject: "1",
-    prevProject: "4",
+    nextProject: "el-camino-skate-shop",
+    prevProject: "this-portfolio",
     featured: true,
   },
 ];

@@ -91,7 +91,6 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
             <Image
               src={study.coverImage}
               alt=""
-              role="presentation"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover mt-12"

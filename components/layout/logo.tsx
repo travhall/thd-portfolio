@@ -27,20 +27,21 @@ export function Logo() {
 
   if (!mounted) {
     return (
-      <div className="p-4 xl:p-8 fixed top-0 left-0 z-50 pointer-events-none">
+      <header aria-label="Home" className="p-4 xl:p-8 fixed top-0 left-0 z-50 pointer-events-none">
         <div className="overflow-hidden my-3">
-          <h1 className="hero-label opacity-0">
+          <span className="hero-label opacity-0">
             <Link href="/">travishall.design</Link>
-          </h1>
+          </span>
         </div>
-      </div>
+      </header>
     );
   }
 
   return (
     <AnimatePresence>
       {!isHiddenPage && (
-        <motion.div 
+        <motion.header
+          aria-label="Home"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -48,7 +49,7 @@ export function Logo() {
           style={{ opacity: scrollOpacity, pointerEvents }}
         >
           <div className="overflow-hidden my-3">
-            <motion.h1
+            <motion.span
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -58,9 +59,9 @@ export function Logo() {
               className="hero-label"
             >
               <Link href="/">travishall.design</Link>
-            </motion.h1>
+            </motion.span>
           </div>
-        </motion.div>
+        </motion.header>
       )}
     </AnimatePresence>
   );

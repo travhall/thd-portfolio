@@ -201,16 +201,16 @@ export function SiteNav({ studies }: SiteNavProps) {
 
   if (!mounted) {
     return (
-      <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none">
+      <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site">
         <div className="px-4 py-2 rounded-sm nav-trigger opacity-0">
           <span className="text-xs font-medium tracking-wider lowercase">Menu</span>
         </div>
-      </div>
+      </header>
     );
   }
 
   return (
-    <div className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
+    <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50" aria-label="Site">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -245,82 +245,80 @@ export function SiteNav({ studies }: SiteNavProps) {
         </button>
       </motion.div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.nav
-            ref={menuRef}
-            id="site-nav-menu"
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
-            aria-label="Site navigation"
-            className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
-          >
-            <motion.div className="p-4 space-y-3">
-              <div className="space-y-4">
-                <div className="overflow-hidden">
-                  <motion.div variants={itemVariants}>
-                    <MenuItem href="/" isActive={pathname === "/"}>
-                      Index
-                    </MenuItem>
-                  </motion.div>
-                </div>
- 
-                <div className="space-y-3">
-                  <div className="overflow-hidden px-2">
+      {/* Menu is always in the DOM so aria-controls always resolves; visibility toggled via animation */}
+      <motion.nav
+        ref={menuRef}
+        id="site-nav-menu"
+        initial="closed"
+        animate={isOpen ? "open" : "closed"}
+        variants={menuVariants}
+        aria-label="Site navigation"
+        aria-hidden={!isOpen}
+        className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
+        style={{ pointerEvents: isOpen ? "auto" : "none" }}
+      >
+        <motion.div className="p-4 space-y-3">
+          <div className="space-y-4">
+            <div className="overflow-hidden">
+              <motion.div variants={itemVariants}>
+                <MenuItem href="/" isActive={pathname === "/"}>
+                  Index
+                </MenuItem>
+              </motion.div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="overflow-hidden px-2">
+                <motion.div variants={itemVariants}>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                    Work
+                  </span>
+                </motion.div>
+              </div>
+              <div className="space-y-1">
+                {studies.slice(0, 5).map((study) => (
+                  <div key={study.id} className="overflow-hidden">
                     <motion.div variants={itemVariants}>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                        Work
-                      </span>
+                      <MenuItem
+                        href={`/work/${study.id}`}
+                        isActive={pathname === `/work/${study.id}`}
+                      >
+                        {study.title}
+                      </MenuItem>
                     </motion.div>
                   </div>
-                  <div className="space-y-1">
-                    {studies.slice(0, 5).map((study) => (
-                      <div key={study.id} className="overflow-hidden">
-                        <motion.div variants={itemVariants}>
-                          <MenuItem
-                            href={`/work/${study.id}`}
-                            isActive={pathname === `/work/${study.id}`}
-                          >
-                            {study.title}
-                          </MenuItem>
-                        </motion.div>
-                      </div>
-                    ))}
-                    {studies.length > 5 && (
-                      <div className="overflow-hidden">
-                        <motion.div variants={itemVariants}>
-                          <MenuItem href="/work" isActive={pathname === "/work"}>
-                            All Case Studies
-                          </MenuItem>
-                        </motion.div>
-                      </div>
-                    )}
+                ))}
+                {studies.length > 5 && (
+                  <div className="overflow-hidden">
+                    <motion.div variants={itemVariants}>
+                      <MenuItem href="/work" isActive={pathname === "/work"}>
+                        All Case Studies
+                      </MenuItem>
+                    </motion.div>
                   </div>
-                </div>
+                )}
               </div>
- 
-              <div className="pt-4 border-t border-foreground/10">
-                <div className="overflow-hidden">
-                  <motion.div variants={itemVariants}>
-                    <MenuItem href="/about" isActive={pathname === "/about"}>
-                      About
-                    </MenuItem>
-                  </motion.div>
-                </div>
-              </div>
-              <div className="pt-4 border-t border-foreground/10">
-                <div className="overflow-hidden">
-                  <motion.div variants={itemVariants}>
-                    <ModeToggle />
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-    </div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-foreground/10">
+            <div className="overflow-hidden">
+              <motion.div variants={itemVariants}>
+                <MenuItem href="/about" isActive={pathname === "/about"}>
+                  About
+                </MenuItem>
+              </motion.div>
+            </div>
+          </div>
+          <div className="pt-4 border-t border-foreground/10">
+            <div className="overflow-hidden">
+              <motion.div variants={itemVariants}>
+                <ModeToggle />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.nav>
+    </header>
   );
 }

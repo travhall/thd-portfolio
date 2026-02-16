@@ -7,17 +7,17 @@ import type { Metadata } from "next";
 export async function generateStaticParams() {
   const studies = await getAllCaseStudies();
   return studies.map((study) => ({
-    id: study.id,
+    slug: study.id,
   }));
 }
 
 export async function generateMetadata(
   props: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ slug: string }>;
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const study = await getCaseStudy(params.id);
+  const study = await getCaseStudy(params.slug);
 
   if (!study) return {};
 
@@ -34,11 +34,11 @@ export async function generateMetadata(
 
 export default async function CaseStudy(
   props: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ slug: string }>;
   }
 ) {
   const params = await props.params;
-  const study = await getCaseStudy(params.id);
+  const study = await getCaseStudy(params.slug);
 
   if (!study) {
     notFound();

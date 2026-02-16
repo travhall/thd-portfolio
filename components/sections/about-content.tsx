@@ -122,38 +122,34 @@ export function AboutContent() {
           variants={containerVariants}
         >
           <div className="space-y-10">
-            <div className="flex items-baseline gap-3 my-3">
-              <div className="overflow-hidden">
-                <motion.h1
-                  variants={labelVariants}
-                  className="hero-label pb-2 inline-block"
-                >
-                  About
-                </motion.h1>
-              </div>
-              <div className="overflow-hidden">
+            <div className="overflow-hidden my-3">
+              <motion.h1
+                aria-label="About — return to index"
+                variants={labelVariants}
+                className="hero-label pb-2 inline-block"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
                 <Link
                   href="/"
-                  className="hero-label pb-2 block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
+                  className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
                 >
                   <div className="overflow-hidden relative h-[1.2em]">
                     <AnimatePresence mode="wait">
                       <motion.span
-                        key={isHovered ? "return" : "back"}
+                        key={isHovered ? "return" : "about"}
                         variants={hoverLabelVariants}
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="block lowercase text-muted-foreground hover:text-foreground transition-colors"
+                        className="block"
                       >
-                        {isHovered ? "Return to index" : "← Index"}
+                        {isHovered ? "return to index" : "about"}
                       </motion.span>
                     </AnimatePresence>
                   </div>
                 </Link>
-              </div>
+              </motion.h1>
             </div>
 
             <motion.p variants={fadeUpVariants} className="about-heading">
@@ -170,24 +166,24 @@ export function AboutContent() {
               variants={fadeUpVariants}
               className="flex flex-row flex-wrap gap-3"
             >
-              <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" className="rounded-full">
+              <Button asChild variant="ghost" className="rounded-full">
+                <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
                   Check out my code <Github aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
-                </Button>
-              </Link>
-              <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" className="rounded-full">
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" className="rounded-full">
+                <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
                   Find me on LinkedIn <Linkedin aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
-                </Button>
-              </Link>
-              <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
-                <Button variant="ghost" className="rounded-full">
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" className="rounded-full">
+                <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
                   Download my CV <Download aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
