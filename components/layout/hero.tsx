@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
 // Named constants for scroll transform ranges
@@ -38,20 +38,24 @@ export function Hero() {
         className="relative z-10 max-w-2xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh]"
         style={{ opacity }}
       >
-        <motion.p
+        <motion.h1
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: MOTION_TOKENS.duration.base, delay: 0.25 }}
           className="hero-heading mt-1"
         >
           Creating thoughtful digital experiences through design &amp; code
-        </motion.p>
+        </motion.h1>
       </motion.div>
       {/* Hero Blur Block — decorative overlay */}
       <motion.div
         aria-hidden="true"
-        className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
-        style={{ opacity: blurOpacity }}
+        className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 pointer-events-none"
+        style={{
+          opacity: blurOpacity,
+          backgroundColor: "var(--hero-blur-bg)",
+          mixBlendMode: "var(--hero-blur-blend)" as React.CSSProperties["mixBlendMode"],
+        }}
       />
       <motion.div
         initial={{ opacity: 0, y: 32 }}

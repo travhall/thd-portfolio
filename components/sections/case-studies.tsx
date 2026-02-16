@@ -67,6 +67,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
         {studies.map((study, index) => (
           <motion.article
             key={study.id}
+            aria-labelledby={`study-title-${study.id}`}
             initial={{ opacity: 0, y: 48 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
@@ -111,7 +112,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
 
               <div className="relative z-10 space-y-4">
                 <div className="space-y-2">
-                  <h3 className="text-3xl md:text-4xl font-nohemi font-semibold tracking-tight">
+                  <h3 id={`study-title-${study.id}`} className="text-3xl md:text-4xl font-nohemi font-semibold tracking-tight">
                     {study.title}
                   </h3>
                   <p className="text-muted-foreground text-lg max-w-md line-clamp-2">
@@ -119,13 +120,13 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                   </p>
                 </div>
 
-                <div className="flex gap-2 flex-wrap" aria-label="Tags">
+                <ul className="flex gap-2 flex-wrap" aria-label="Tags">
                   {study.tags.map((tag: string) => (
-                    <span key={tag} className="case-section-label">
+                    <li key={tag} className="case-section-label">
                       {tag}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             </Link>
           </motion.article>

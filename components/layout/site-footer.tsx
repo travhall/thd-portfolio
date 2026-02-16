@@ -6,6 +6,7 @@ import { MOTION_TOKENS } from "@/lib/tokens";
 export function Footer() {
   return (
     <motion.footer
+      aria-label="Site"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: MOTION_TOKENS.duration.slow, ease: MOTION_TOKENS.ease.expo }}

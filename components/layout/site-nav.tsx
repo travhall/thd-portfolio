@@ -176,8 +176,10 @@ export function SiteNav({ studies }: SiteNavProps) {
         <Link
           href={href}
           onClick={() => setIsOpen(false)}
+          aria-current={isActive ? "page" : undefined}
           className={cn(
-            "block py-1 px-2 rounded-sm text-background hover:text-foreground relative z-10 transition-colors duration-200",
+            "block py-1 px-2 rounded-sm text-card-foreground hover:text-card relative z-10 transition-colors duration-200",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
             isActive ? "font-bold underline decoration underline-offset-4" : ""
           )}
         >
@@ -189,7 +191,7 @@ export function SiteNav({ studies }: SiteNavProps) {
             scale: isHovered ? 1 : 0.8,
             opacity: isHovered ? 1 : 0,
           }}
-          className="absolute inset-0 bg-background rounded-xs"
+          className="absolute inset-0 bg-foreground/80 rounded-xs"
           style={{ originX: 0 }}
           transition={{ duration: 0.2 }}
         />
@@ -268,7 +270,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                 <div className="space-y-3">
                   <div className="overflow-hidden px-2">
                     <motion.div variants={itemVariants}>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-background/50">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
                         Work
                       </span>
                     </motion.div>
@@ -299,7 +301,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                 </div>
               </div>
  
-              <div className="pt-4 border-t border-background/10">
+              <div className="pt-4 border-t border-foreground/10">
                 <div className="overflow-hidden">
                   <motion.div variants={itemVariants}>
                     <MenuItem href="/about" isActive={pathname === "/about"}>
@@ -308,7 +310,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                   </motion.div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-background/10">
+              <div className="pt-4 border-t border-foreground/10">
                 <div className="overflow-hidden">
                   <motion.div variants={itemVariants}>
                     <ModeToggle />

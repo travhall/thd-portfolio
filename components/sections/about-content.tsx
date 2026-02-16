@@ -122,31 +122,38 @@ export function AboutContent() {
           variants={containerVariants}
         >
           <div className="space-y-10">
-            <div className="overflow-hidden my-3">
-              <motion.h1 
-                variants={labelVariants} 
-                className="hero-label pb-2 inline-block"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <Link href="/" className="block">
-                  <span className="sr-only">About - Return to index</span>
+            <div className="flex items-baseline gap-3 my-3">
+              <div className="overflow-hidden">
+                <motion.h1
+                  variants={labelVariants}
+                  className="hero-label pb-2 inline-block"
+                >
+                  About
+                </motion.h1>
+              </div>
+              <div className="overflow-hidden">
+                <Link
+                  href="/"
+                  className="hero-label pb-2 block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
                   <div className="overflow-hidden relative h-[1.2em]">
                     <AnimatePresence mode="wait">
                       <motion.span
-                        key={isHovered ? "return" : "about"}
+                        key={isHovered ? "return" : "back"}
                         variants={hoverLabelVariants}
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="block lowercase"
+                        className="block lowercase text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {isHovered ? "Return to index" : "About"}
+                        {isHovered ? "Return to index" : "← Index"}
                       </motion.span>
                     </AnimatePresence>
                   </div>
                 </Link>
-              </motion.h1>
+              </div>
             </div>
 
             <motion.p variants={fadeUpVariants} className="about-heading">
@@ -164,20 +171,20 @@ export function AboutContent() {
               className="flex flex-row flex-wrap gap-3"
             >
               <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" className="rounded-full">
-                  Check out my code <Github className="ml-2" aria-hidden="true" />
+                <Button variant="ghost" className="rounded-full">
+                  Check out my code <Github aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
               <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" className="rounded-full">
-                  Find me on LinkedIn <Linkedin className="ml-2" aria-hidden="true" />
+                <Button variant="ghost" className="rounded-full">
+                  Find me on LinkedIn <Linkedin aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
               <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
-                <Button variant="secondary" className="rounded-full">
-                  Download my CV <Download className="ml-2" aria-hidden="true" />
+                <Button variant="ghost" className="rounded-full">
+                  Download my CV <Download aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Button>
               </Link>
@@ -216,7 +223,7 @@ export function AboutContent() {
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {items.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="skill-badge">
+                          <Badge key={skill} variant="outline" className="skill-badge">
                             {skill}
                           </Badge>
                         ))}

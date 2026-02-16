@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
@@ -34,8 +35,12 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
         {/* Hero Blur Block */}
         <motion.div
           aria-hidden="true"
-          className="absolute backdrop-blur-lg h-full w-full top-0 left-0 z-10 bg-primary mix-blend-screen dark:mix-blend-multiply pointer-events-none"
-          style={{ opacity: blurOpacity }}
+          className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 pointer-events-none"
+          style={{
+            opacity: blurOpacity,
+            backgroundColor: "var(--hero-blur-bg)",
+            mixBlendMode: "var(--hero-blur-blend)" as React.CSSProperties["mixBlendMode"],
+          }}
         />
 
         {/* Hero Section */}
@@ -62,9 +67,9 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
             >
               {study.description}
             </motion.p>
-            <div className="flex gap-2 flex-wrap" aria-label="Tags">
+            <ul className="flex gap-2 flex-wrap" aria-label="Tags">
               {study.tags.map((tag, index) => (
-                <motion.span
+                <motion.li
                   key={tag}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -72,9 +77,9 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
                   className="case-tag"
                 >
                   {tag}
-                </motion.span>
+                </motion.li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <motion.div
@@ -85,7 +90,8 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           >
             <Image
               src={study.coverImage}
-              alt={study.title}
+              alt=""
+              role="presentation"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover mt-12"

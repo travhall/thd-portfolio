@@ -58,8 +58,8 @@
   /* --- Semantic colors (light mode defaults) --- */
   --color-background:           var(--color-brand-3-100);
   --color-foreground:           var(--color-brand-1-950);
-  --color-card:                 var(--color-brand-1-50);
-  --color-card-foreground:      var(--color-brand-1-950);
+  --color-card:                 var(--color-brand-3-50);
+  --color-card-foreground:      var(--color-brand-3-950);
   --color-popover:              var(--color-brand-3-100);
   --color-popover-foreground:   var(--color-brand-1-950);
   --color-primary:              var(--color-brand-1-600);
@@ -77,9 +77,11 @@
   --color-input:                var(--color-brand-3-200);
   --color-ring:                 var(--color-brand-1-700);
 
-  /* --- Toggle component tokens (light mode) ---
-     Active uses primary so the pressed state has the same visual weight as a
-     primary button; hover is a gentle step above the page background. */
+  /* --- Hero blur overlay tokens (light mode) --- */
+  --hero-blur-bg:        var(--color-brand-1-600);  /* teal — mix-blend-screen on light */
+  --hero-blur-blend:     screen;
+
+  /* --- Toggle component tokens (light mode) --- */
   --toggle-hover-bg:     var(--color-brand-3-200);
   --toggle-hover-text:   var(--color-brand-1-950);
   --toggle-active-bg:    var(--color-brand-1-700);
@@ -113,9 +115,9 @@
     --color-popover:              var(--color-brand-3-900);
     --color-popover-foreground:   var(--color-brand-1-50);
     --color-primary:              var(--color-brand-1-400);
-    --color-primary-foreground:   var(--color-brand-1-950);
+    --color-primary-foreground:   var(--color-brand-3-950);
     --color-secondary:            var(--color-brand-2-600);
-    --color-secondary-foreground: var(--color-brand-2-50);
+    --color-secondary-foreground: var(--color-brand-3-950);
     --color-muted:                var(--color-brand-3-900);
     --color-muted-foreground:     var(--color-brand-3-400);
     /* accent-400 (oklch 0.79 0.160 80) — bright amber, ~9:1 on dark bg, AA text ✓ */
@@ -127,6 +129,10 @@
     --color-border:               var(--color-brand-3-800);
     --color-input:                var(--color-brand-3-800);
     --color-ring:                 var(--color-brand-1-400);
+
+    /* Hero blur overlay tokens (dark mode) */
+    --hero-blur-bg:        var(--color-brand-2-600);  /* amber — mix-blend-multiply on dark */
+    --hero-blur-blend:     multiply;
 
     /* Toggle component tokens (dark mode) */
     --toggle-hover-bg:     var(--color-brand-3-800);
@@ -167,7 +173,7 @@
      light surface in dark mode. Expressed directly here rather than
      through an extra token layer. */
   .nav-trigger {
-    @apply bg-foreground text-background backdrop-blur-xl;
+    @apply bg-foreground/80 text-background backdrop-blur-xl;
     transition: opacity var(--duration-fast) var(--ease-in-out);
   }
 
@@ -181,7 +187,7 @@
   }
 
   .nav-menu {
-    @apply bg-foreground text-background backdrop-blur-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10;
+    @apply bg-card text-card-foreground backdrop-blur-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10;
   }
 
   /* --- Typography helpers --- */

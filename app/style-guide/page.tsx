@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pause, Play } from "lucide-react";
 import {
@@ -146,72 +146,65 @@ function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string })
 }
 
 /* ------------------------------------------------------------------ */
-/* Static palette data (no interpolated Tailwind classes)               */
+/* Palette config — single source of truth is globals.css @theme.      */
+/* Swatches reference CSS vars directly; no value duplication here.    */
 /* ------------------------------------------------------------------ */
 
-const brand1 = [
-  { label: "50",  val: "oklch(0.99 0.010 195.9)" },
-  { label: "100", val: "oklch(0.97 0.020 195.9)" },
-  { label: "200", val: "oklch(0.92 0.040 195.9)" },
-  { label: "300", val: "oklch(0.83 0.070 195.9)" },
-  { label: "400", val: "oklch(0.69 0.100 195.9)" },
-  { label: "500", val: "oklch(0.57 0.110 195.9)" },
-  { label: "600", val: "oklch(0.48 0.090 195.9)" },
-  { label: "700", val: "oklch(0.38 0.070 195.9)" },
-  { label: "800", val: "oklch(0.29 0.050 195.9)" },
-  { label: "900", val: "oklch(0.23 0.040 195.9)" },
-  { label: "950", val: "oklch(0.18 0.030 195.9)" },
-];
+const SCALE_STEPS = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const;
 
-const brand2 = [
-  { label: "50",  val: "oklch(0.99 0.010 80)" },
-  { label: "100", val: "oklch(0.97 0.030 80)" },
-  { label: "200", val: "oklch(0.93 0.065 80)" },
-  { label: "300", val: "oklch(0.87 0.115 80)" },
-  { label: "400", val: "oklch(0.79 0.160 80)" },
-  { label: "500", val: "oklch(0.72 0.185 80)" },
-  { label: "600", val: "oklch(0.60 0.160 80)" },
-  { label: "700", val: "oklch(0.48 0.125 80)" },
-  { label: "800", val: "oklch(0.36 0.090 80)" },
-  { label: "900", val: "oklch(0.28 0.065 80)" },
-  { label: "950", val: "oklch(0.21 0.045 80)" },
-];
+const palettes = [
+  { key: "brand-1", label: "Brand 1 — Blue-teal (h195)" },
+  { key: "brand-2", label: "Brand 2 — Amber (h80)" },
+  { key: "brand-3", label: "Brand 3 — Sage/Neutral (h127)" },
+] as const;
 
-const brand3 = [
-  { label: "50",  val: "oklch(0.99 0.005 127)" },
-  { label: "100", val: "oklch(0.97 0.010 127)" },
-  { label: "200", val: "oklch(0.92 0.015 127)" },
-  { label: "300", val: "oklch(0.84 0.020 127)" },
-  { label: "400", val: "oklch(0.71 0.030 127)" },
-  { label: "500", val: "oklch(0.53 0.030 127)" },
-  { label: "600", val: "oklch(0.44 0.025 127)" },
-  { label: "700", val: "oklch(0.35 0.020 127)" },
-  { label: "800", val: "oklch(0.27 0.015 127)" },
-  { label: "900", val: "oklch(0.22 0.010 127)" },
-  { label: "950", val: "oklch(0.17 0.010 127)" },
-];
+/**
+ * Reads all semantic color tokens directly from the parsed stylesheet.
+ * Any --color-* property that isn't a palette token (--color-brand-*)
+ * is considered semantic. Order follows declaration order in globals.css.
+ * Adding or removing a token there is automatically reflected here.
+ */
+function useSemanticTokens() {
+  const [tokens, setTokens] = useState<{ token: string; label: string }[]>([]);
 
-const semanticTokens = [
-  { token: "--color-background",           label: "background" },
-  { token: "--color-foreground",           label: "foreground" },
-  { token: "--color-card",                 label: "card" },
-  { token: "--color-card-foreground",      label: "card-foreground" },
-  { token: "--color-popover",              label: "popover" },
-  { token: "--color-popover-foreground",   label: "popover-foreground" },
-  { token: "--color-primary",              label: "primary" },
-  { token: "--color-primary-foreground",   label: "primary-foreground" },
-  { token: "--color-secondary",            label: "secondary" },
-  { token: "--color-secondary-foreground", label: "secondary-foreground" },
-  { token: "--color-muted",                label: "muted" },
-  { token: "--color-muted-foreground",     label: "muted-foreground" },
-  { token: "--color-accent",               label: "accent" },
-  { token: "--color-accent-foreground",    label: "accent-foreground" },
-  { token: "--color-destructive",          label: "destructive" },
-  { token: "--color-destructive-foreground", label: "destructive-fg" },
-  { token: "--color-border",               label: "border" },
-  { token: "--color-input",                label: "input" },
-  { token: "--color-ring",                 label: "ring" },
-];
+  useEffect(() => {
+    const seen = new Set<string>();
+    const result: { token: string; label: string }[] = [];
+
+    // Walk a rule list, including nested @layer / @media blocks recursively
+    function walkRules(rules: CSSRuleList) {
+      for (const rule of Array.from(rules)) {
+        if (rule instanceof CSSStyleRule) {
+          for (const prop of Array.from(rule.style)) {
+            if (
+              prop.startsWith("--color-") &&
+              !prop.startsWith("--color-brand-") &&
+              !seen.has(prop)
+            ) {
+              seen.add(prop);
+              result.push({ token: prop, label: prop.replace(/^--color-/, "") });
+            }
+          }
+        }
+        // Recurse into @layer, @media, @supports, etc.
+        const nested = (rule as CSSGroupingRule).cssRules;
+        if (nested) walkRules(nested);
+      }
+    }
+
+    for (const sheet of Array.from(document.styleSheets)) {
+      try {
+        walkRules(sheet.cssRules);
+      } catch {
+        // Cross-origin sheet — skip
+      }
+    }
+
+    setTokens(result);
+  }, []);
+
+  return tokens;
+}
 
 const spacingSteps = [
   { rem: "0.25", cls: "w-1",  px: "4px"  },
@@ -230,6 +223,8 @@ const spacingSteps = [
 /* ------------------------------------------------------------------ */
 
 export default function StyleGuide() {
+  const semanticTokens = useSemanticTokens();
+
   return (
     <div className="max-w-7xl mx-auto px-4 xl:px-8 pt-32 pb-24 space-y-20">
       {/* Header */}
@@ -293,28 +288,24 @@ export default function StyleGuide() {
       {/* ── Color Palette ────────────────────────────────────────────── */}
       <Section id="colors" title="Color Palette">
         <div className="space-y-8">
-
-          <div className="space-y-3">
-            <p className="case-section-label">Brand 1 — Blue-teal (h195)</p>
-            <div className="grid grid-cols-6 md:grid-cols-11 gap-2">
-              {brand1.map((s) => <Swatch key={s.label} bg={s.val} label={s.label} sub={s.val} />)}
+          {palettes.map(({ key, label }) => (
+            <div key={key} className="space-y-3">
+              <p className="case-section-label">{label}</p>
+              <div className="grid grid-cols-6 md:grid-cols-11 gap-2">
+                {SCALE_STEPS.map((step) => {
+                  const token = `--color-${key}-${step}`;
+                  return (
+                    <Swatch
+                      key={step}
+                      bg={`var(${token})`}
+                      label={step}
+                      sub={token}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
-
-          <div className="space-y-3">
-            <p className="case-section-label">Brand 2 — Amber (h80)</p>
-            <div className="grid grid-cols-6 md:grid-cols-11 gap-2">
-              {brand2.map((s) => <Swatch key={s.label} bg={s.val} label={s.label} sub={s.val} />)}
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <p className="case-section-label">Brand 3 — Sage/Neutral (h127)</p>
-            <div className="grid grid-cols-6 md:grid-cols-11 gap-2">
-              {brand3.map((s) => <Swatch key={s.label} bg={s.val} label={s.label} sub={s.val} />)}
-            </div>
-          </div>
-
+          ))}
         </div>
       </Section>
 
@@ -322,11 +313,21 @@ export default function StyleGuide() {
       <Section id="tokens" title="Semantic Tokens">
         <p className="text-sm text-muted-foreground -mt-4">
           These resolve differently per mode — use the theme toggle in the nav to verify.
+          Tokens are read live from the stylesheet; adding a <code className="text-xs font-mono">--color-*</code> property
+          to <code className="text-xs font-mono">globals.css</code> will appear here automatically.
         </p>
         <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
-          {semanticTokens.map(({ token, label }) => (
-            <Swatch key={token} bg={`var(${token})`} label={label} sub={token} />
-          ))}
+          {semanticTokens.length === 0
+            ? Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="space-y-1.5">
+                  <Skeleton className="h-10 w-full rounded-sm" />
+                  <Skeleton className="h-3 w-3/4" />
+                </div>
+              ))
+            : semanticTokens.map(({ token, label }) => (
+                <Swatch key={token} bg={`var(${token})`} label={label} sub={token} />
+              ))
+          }
         </div>
       </Section>
 

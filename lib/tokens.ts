@@ -1,7 +1,7 @@
 /**
  * Shared design tokens for motion and animations.
  * Used in Framer Motion transitions where CSS variables are not supported.
- * Keep in sync with app/tokens.css for CSS-based transitions.
+ * Keep in sync with app/globals.css for CSS-based transitions.
  */
 
 export const MOTION_TOKENS = {
