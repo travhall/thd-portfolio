@@ -360,19 +360,6 @@ export default function StyleGuide() {
             </div>
           </ComponentExample>
 
-          <ComponentExample title=".case-tag">
-            <span className="case-tag">Product Design</span>
-            <span className="case-tag">Design Systems</span>
-            <span className="case-tag">Research</span>
-          </ComponentExample>
-
-          <ComponentExample title=".skill-badge (now Badge variant='outline')">
-            <Badge variant="outline">Figma</Badge>
-            <Badge variant="outline">React</Badge>
-            <Badge variant="outline">TypeScript</Badge>
-            <Badge variant="outline">Tailwind CSS</Badge>
-          </ComponentExample>
-
           <ComponentExample title=".case-preview-card">
             <div className="case-preview-card w-72 space-y-2">
               <p className="case-section-label">Preview</p>
@@ -496,6 +483,25 @@ export default function StyleGuide() {
             <Button size="sm" variant="default">Small</Button>
             <Button size="default" variant="default">Default</Button>
             <Button size="lg" variant="default">Large</Button>
+          </ComponentExample>
+
+          <ComponentExample title="Badge Default">
+            <Badge>New Project</Badge>
+            <Badge>Coming Soon</Badge>
+            <Badge>Archived</Badge>
+          </ComponentExample>
+
+          <ComponentExample title="Badge Secondary">
+            <Badge variant="secondary">Product Design</Badge>
+            <Badge variant="secondary">Design Systems</Badge>
+            <Badge variant="secondary">Research</Badge>
+          </ComponentExample>
+
+          <ComponentExample title="Badge Outline">
+            <Badge variant="outline">Figma</Badge>
+            <Badge variant="outline">React</Badge>
+            <Badge variant="outline">TypeScript</Badge>
+            <Badge variant="outline">Tailwind CSS</Badge>
           </ComponentExample>
 
           <ComponentExample title="Card">

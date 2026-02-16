@@ -6,6 +6,7 @@ import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from 
 import type { CaseStudy } from "@/types/case-study";
 import { TextBlock } from "./sections/text-section";
 import { ImageTextBlock } from "./sections/image-text-section";
+import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
 
 // Named constants for scroll transform ranges
@@ -73,9 +74,8 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className="case-tag"
                 >
-                  {tag}
+                  <Badge variant="secondary">{tag}</Badge>
                 </motion.li>
               ))}
             </ul>

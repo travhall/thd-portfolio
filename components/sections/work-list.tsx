@@ -140,7 +140,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                               ease: MOTION_TOKENS.ease.expo,
                             }}
                           >
-                            <Badge variant="secondary" className="case-tag">
+                            <Badge variant="secondary">
                               {tag}
                             </Badge>
                           </motion.li>

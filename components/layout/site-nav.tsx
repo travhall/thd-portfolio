@@ -270,7 +270,7 @@ export function SiteNav({ studies }: SiteNavProps) {
             <div className="space-y-3">
               <div className="overflow-hidden px-2">
                 <motion.div variants={itemVariants}>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">
                     Work
                   </span>
                 </motion.div>

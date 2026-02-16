@@ -82,10 +82,10 @@
   --hero-blur-blend:     screen;
 
   /* --- Toggle component tokens (light mode) --- */
-  --toggle-hover-bg:     var(--color-brand-3-200);
-  --toggle-hover-text:   var(--color-brand-1-950);
-  --toggle-active-bg:    var(--color-brand-1-700);
-  --toggle-active-text:  var(--color-brand-3-100);
+  --toggle-hover-bg:     var(--color-brand-2-200);
+  --toggle-hover-text:   var(--color-brand-2-950);
+  --toggle-active-bg:    var(--color-brand-2-600);
+  --toggle-active-text:  var(--color-brand-2-100);
 
   /* --- Custom blur step (32px — between Tailwind xl/2xl) --- */
   --blur-3xl: 32px;
@@ -135,10 +135,10 @@
     --hero-blur-blend:     multiply;
 
     /* Toggle component tokens (dark mode) */
-    --toggle-hover-bg:     var(--color-brand-3-800);
-    --toggle-hover-text:   var(--color-brand-1-50);
-    --toggle-active-bg:    var(--color-brand-1-400);
-    --toggle-active-text:  var(--color-brand-1-950);
+    --toggle-hover-bg:     var(--color-brand-2-800);
+    --toggle-hover-text:   var(--color-brand-2-50);
+    --toggle-active-bg:    var(--color-brand-2-400);
+    --toggle-active-text:  var(--color-brand-2-950);
   }
 
   * {
@@ -243,9 +243,7 @@
   }
 
   /* --- Case study elements --- */
-  .case-tag {
-    @apply bg-secondary text-secondary-foreground px-3 py-1 rounded-sm text-sm;
-  }
+
 
   .case-section-label {
     @apply text-[10px] font-bold uppercase tracking-widest text-muted-foreground;

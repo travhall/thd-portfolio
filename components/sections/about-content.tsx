@@ -166,19 +166,19 @@ export function AboutContent() {
               variants={fadeUpVariants}
               className="flex flex-row flex-wrap gap-3"
             >
-              <Button asChild variant="ghost" className="rounded-full">
+              <Button asChild variant="outline" className="rounded-full">
                 <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
                   Check out my code <Github aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>
-              <Button asChild variant="ghost" className="rounded-full">
+              <Button asChild variant="outline" className="rounded-full">
                 <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
                   Find me on LinkedIn <Linkedin aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>
-              <Button asChild variant="ghost" className="rounded-full">
+              <Button asChild variant="outline" className="rounded-full">
                 <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
                   Download my CV <Download aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
