@@ -167,7 +167,7 @@
 
   html,
   body {
-    @apply absolute bg-background text-foreground underline-offset-4;
+    @apply absolute top-0 right-0 left-0 bg-background text-foreground underline-offset-4;
   }
 
   ::selection {
