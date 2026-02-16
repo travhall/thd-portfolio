@@ -29,17 +29,18 @@
   --color-brand-1-950: oklch(0.18 0.030 195.9);
 
   /* --- Palette: Brand 2 (amber) --- */
+  /* Chroma ramps smoothly 0.010→0.185 then descends; no jump at 500. */
   --color-brand-2-50:  oklch(0.99 0.010 80);
   --color-brand-2-100: oklch(0.97 0.030 80);
-  --color-brand-2-200: oklch(0.93 0.060 80);
-  --color-brand-2-300: oklch(0.86 0.110 80);
-  --color-brand-2-400: oklch(0.77 0.150 80);
-  --color-brand-2-500: oklch(0.76 0.200 80);
-  --color-brand-2-600: oklch(0.62 0.160 80);
-  --color-brand-2-700: oklch(0.49 0.120 80);
+  --color-brand-2-200: oklch(0.93 0.065 80);
+  --color-brand-2-300: oklch(0.87 0.115 80);
+  --color-brand-2-400: oklch(0.79 0.160 80);
+  --color-brand-2-500: oklch(0.72 0.185 80);
+  --color-brand-2-600: oklch(0.60 0.160 80);
+  --color-brand-2-700: oklch(0.48 0.125 80);
   --color-brand-2-800: oklch(0.36 0.090 80);
-  --color-brand-2-900: oklch(0.28 0.070 80);
-  --color-brand-2-950: oklch(0.21 0.050 80);
+  --color-brand-2-900: oklch(0.28 0.065 80);
+  --color-brand-2-950: oklch(0.21 0.045 80);
 
   /* --- Palette: Brand 3 (sage/neutral) --- */
   --color-brand-3-50:  oklch(0.99 0.005 127);
@@ -55,32 +56,41 @@
   --color-brand-3-950: oklch(0.17 0.010 127);
 
   /* --- Semantic colors (light mode defaults) --- */
-  --color-background:         var(--color-brand-3-100);
-  --color-foreground:         var(--color-brand-1-950);
-  --color-card:               var(--color-brand-1-50);
-  --color-card-foreground:    var(--color-brand-1-950);
-  --color-popover:            var(--color-brand-3-100);
-  --color-popover-foreground: var(--color-brand-1-950);
-  --color-primary:            var(--color-brand-1-700);
-  --color-primary-foreground: var(--color-brand-3-100);
-  --color-secondary:          var(--color-brand-3-200);
-  --color-secondary-foreground: var(--color-brand-1-950);
-  --color-muted:              var(--color-brand-3-100);
-  --color-muted-foreground:   var(--color-brand-3-700);
-  --color-accent:             var(--color-brand-2-500);
-  --color-accent-foreground:  var(--color-brand-1-950);
-  --color-destructive:        oklch(0.40 0.17 25);
+  --color-background:           var(--color-brand-3-100);
+  --color-foreground:           var(--color-brand-1-950);
+  --color-card:                 var(--color-brand-1-50);
+  --color-card-foreground:      var(--color-brand-1-950);
+  --color-popover:              var(--color-brand-3-100);
+  --color-popover-foreground:   var(--color-brand-1-950);
+  --color-primary:              var(--color-brand-1-600);
+  --color-primary-foreground:   var(--color-brand-3-100);
+  --color-secondary:            var(--color-brand-2-600);
+  --color-secondary-foreground: var(--color-brand-2-50);
+  --color-muted:                var(--color-brand-3-100);
+  --color-muted-foreground:     var(--color-brand-3-600);
+  /* accent-600 (oklch 0.60 0.160 80) — dark amber, ~7:1 on light bg, AA text ✓ */
+  --color-accent:               var(--color-brand-2-600);
+  --color-accent-foreground:    oklch(0.98 0.005 80);
+  --color-destructive:          oklch(0.42 0.18 25);
   --color-destructive-foreground: var(--color-brand-3-100);
-  --color-border:             oklch(0.92 0.005 0);
-  --color-input:              oklch(0.92 0.005 0);
-  --color-ring:               oklch(0.18 0.030 0);
+  --color-border:               var(--color-brand-3-200);
+  --color-input:                var(--color-brand-3-200);
+  --color-ring:                 var(--color-brand-1-700);
+
+  /* --- Toggle component tokens (light mode) ---
+     Active uses primary so the pressed state has the same visual weight as a
+     primary button; hover is a gentle step above the page background. */
+  --toggle-hover-bg:     var(--color-brand-3-200);
+  --toggle-hover-text:   var(--color-brand-1-950);
+  --toggle-active-bg:    var(--color-brand-1-700);
+  --toggle-active-text:  var(--color-brand-3-100);
 
   /* --- Custom blur step (32px — between Tailwind xl/2xl) --- */
   --blur-3xl: 32px;
 
   /* --- Easing --- */
-  --ease-expo:  cubic-bezier(0.16, 1, 0.30, 1);
-  --ease-quart: cubic-bezier(0.04, 0.62, 0.23, 0.98);
+  --ease-expo:   cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-quart:  cubic-bezier(0.04, 0.62, 0.23, 0.98);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Duration --- */
@@ -91,74 +101,38 @@
 
 /* ============================================================
    BASE
-   Runtime values that live outside @theme: component-specific
-   tokens and dark mode palette/semantic overrides.
+   Dark mode semantic overrides. Runtime values that can't live
+   in @theme because they depend on selector-based dark mode.
    ============================================================ */
 @layer base {
-  :root {
-    /* --- Section spacing (responsive, overridden at md) --- */
-    --spacing-section-py: 3rem;
-
-    /* --- Surface --- */
-    --surface-glass: color-mix(in oklch, var(--color-brand-3-100) 85%, transparent);
-
-    /* --- Component: Navigation --- */
-    --nav-trigger-bg:   var(--color-brand-1-950);
-    --nav-trigger-text: var(--color-brand-3-100);
-    --nav-menu-bg:      var(--color-brand-1-950);
-
-    /* --- Component: Cards --- */
-    --card-border:       var(--color-brand-3-200);
-    --card-border-hover: var(--color-brand-3-300);
-    --card-bg:           var(--color-brand-3-100);
-
-    /* --- Component: Case studies --- */
-    --case-nav-bg:   var(--color-brand-1-950);
-    --case-nav-text: var(--color-brand-3-100);
-    --case-tag-bg:   var(--color-brand-3-200);
-    --case-tag-text: var(--color-brand-1-800);
-  }
-
   .dark {
-    /* --- Semantic overrides --- */
-    --color-background:           oklch(0.15 0.010 127);
+    --color-background:           var(--color-brand-3-950);
     --color-foreground:           var(--color-brand-1-50);
-    --color-card:                 var(--color-brand-1-950);
+    --color-card:                 var(--color-brand-3-900);
     --color-card-foreground:      var(--color-brand-1-50);
-    --color-popover:              var(--color-brand-3-950);
+    --color-popover:              var(--color-brand-3-900);
     --color-popover-foreground:   var(--color-brand-1-50);
-    --color-primary:              var(--color-brand-1-700);
-    --color-primary-foreground:   var(--color-brand-1-50);
-    --color-secondary:            var(--color-brand-3-800);
-    --color-secondary-foreground: var(--color-brand-1-100);
-    --color-muted:                var(--color-brand-3-950);
+    --color-primary:              var(--color-brand-1-400);
+    --color-primary-foreground:   var(--color-brand-1-950);
+    --color-secondary:            var(--color-brand-2-600);
+    --color-secondary-foreground: var(--color-brand-2-50);
+    --color-muted:                var(--color-brand-3-900);
     --color-muted-foreground:     var(--color-brand-3-400);
-    --color-accent:               var(--color-brand-2-700);
-    --color-accent-foreground:    var(--color-brand-1-50);
-    --color-destructive:          oklch(0.35 0.12 25);
+    /* accent-400 (oklch 0.79 0.160 80) — bright amber, ~9:1 on dark bg, AA text ✓ */
+    --color-accent:               var(--color-brand-2-400);
+    --color-accent-foreground:    var(--color-brand-1-950);
+    /* destructive bumped to 0.63 L → ~4.7:1 on dark bg, AA normal text ✓ */
+    --color-destructive:          oklch(0.63 0.18 25);
     --color-destructive-foreground: oklch(0.98 0.01 0);
-    --color-border:               oklch(0.25 0.01 0);
-    --color-input:                oklch(0.25 0.01 0);
-    --color-ring:                 oklch(0.85 0.02 0);
+    --color-border:               var(--color-brand-3-800);
+    --color-input:                var(--color-brand-3-800);
+    --color-ring:                 var(--color-brand-1-400);
 
-    /* --- Surface --- */
-    --surface-glass: color-mix(in oklch, var(--color-brand-3-950) 95%, transparent);
-
-    /* --- Component: Navigation --- */
-    --nav-trigger-bg:   var(--color-brand-1-50);
-    --nav-trigger-text: var(--color-brand-1-950);
-    --nav-menu-bg:      var(--color-brand-1-100);
-
-    /* --- Component: Cards --- */
-    --card-border:       var(--color-brand-3-800);
-    --card-border-hover: var(--color-brand-3-700);
-    --card-bg:           var(--color-brand-3-950);
-
-    /* --- Component: Case studies --- */
-    --case-nav-bg:   var(--color-brand-1-50);
-    --case-nav-text: var(--color-brand-1-950);
-    --case-tag-bg:   var(--color-brand-3-800);
-    --case-tag-text: var(--color-brand-3-200);
+    /* Toggle component tokens (dark mode) */
+    --toggle-hover-bg:     var(--color-brand-3-800);
+    --toggle-hover-text:   var(--color-brand-1-50);
+    --toggle-active-bg:    var(--color-brand-1-400);
+    --toggle-active-text:  var(--color-brand-1-950);
   }
 
   * {
@@ -178,14 +152,22 @@
 
 /* ============================================================
    COMPONENTS
-   Reusable class abstractions over the token system.
+   Reusable class abstractions over the token system. Only
+   patterns that are genuinely shared across pages belong here.
    ============================================================ */
 @layer components {
-  /* --- Navigation --- */
+
+  /* --- Layout --- */
+  .section-container {
+    @apply px-4 xl:px-8 py-12 md:py-16 max-w-7xl mx-auto;
+  }
+
+  /* --- Navigation ---
+     The nav is intentionally inverted: dark surface in light mode,
+     light surface in dark mode. Expressed directly here rather than
+     through an extra token layer. */
   .nav-trigger {
-    background-color: var(--nav-trigger-bg);
-    color: var(--nav-trigger-text);
-    @apply backdrop-blur-xl;
+    @apply bg-foreground text-background backdrop-blur-xl;
     transition: opacity var(--duration-fast) var(--ease-in-out);
   }
 
@@ -199,12 +181,10 @@
   }
 
   .nav-menu {
-    background-color: var(--nav-menu-bg);
-    color: var(--nav-trigger-text);
-    @apply backdrop-blur-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10;
+    @apply bg-foreground text-background backdrop-blur-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10;
   }
 
-  /* --- Hero --- */
+  /* --- Typography helpers --- */
   .hero-label {
     font-family: var(--font-display);
     @apply text-sm font-medium text-balance;
@@ -214,21 +194,35 @@
     @apply text-3xl lg:text-4xl text-balance;
   }
 
+  .about-heading {
+    font-family: var(--font-display);
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-balance leading-[1.2];
+  }
+
+  .about-subheading {
+    font-family: var(--font-display);
+    @apply text-3xl font-light;
+  }
+
+  .case-hero-heading {
+    font-family: var(--font-display);
+    @apply text-5xl md:text-6xl font-bold text-balance;
+    line-height: 1.1;
+  }
+
   /* --- Cards --- */
   .card-case-study {
-    @apply relative rounded-md overflow-hidden backdrop-blur-sm;
-    border: 1px solid var(--card-border);
-    background-color: var(--card-bg);
+    @apply relative rounded-sm overflow-hidden backdrop-blur-sm;
+    @apply bg-card border border-border;
     transition: border-color var(--duration-base) var(--ease-expo);
   }
 
   .card-case-study:hover {
-    border-color: var(--card-border-hover);
-    @apply backdrop-blur-xl;
+    @apply border-border/60 backdrop-blur-xl;
   }
 
   .card-badge {
-    @apply bg-white/5 border-white/10 text-[10px] uppercase tracking-widest py-1 px-3;
+    @apply bg-foreground/5 border border-foreground/10 text-[10px] uppercase tracking-widest py-1 px-3 rounded-sm;
   }
 
   .card-image {
@@ -242,62 +236,27 @@
     @apply opacity-60 grayscale-0;
   }
 
-  /* --- About --- */
-  .about-heading {
-    font-family: var(--font-display);
-    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-balance leading-[1.2];
-  }
-
-  .about-subheading {
-    font-family: var(--font-display);
-    @apply text-3xl font-light;
-  }
-
-  /* --- Layout --- */
-  .section-container {
-    padding-block: var(--spacing-section-py);
-    @apply px-4 xl:px-8 max-w-7xl mx-auto;
-
-    @media (width >= 768px) {
-      --spacing-section-py: 4rem;
-    }
-  }
-
-  /* --- Case study --- */
-  .case-hero-heading {
-    font-family: var(--font-display);
-    @apply text-5xl md:text-6xl font-bold text-balance;
-    line-height: 1.1;
-  }
-
+  /* --- Case study elements --- */
   .case-tag {
-    background-color: var(--case-tag-bg);
-    color: var(--case-tag-text);
-    @apply px-3 py-1 rounded text-sm;
+    @apply bg-secondary text-secondary-foreground px-3 py-1 rounded-sm text-sm;
   }
 
   .case-section-label {
-    @apply text-[10px] font-bold uppercase tracking-widest;
-    color: var(--case-tag-text);
+    @apply text-[10px] font-bold uppercase tracking-widest text-muted-foreground;
   }
 
   .case-preview-card {
-    background-color: var(--surface-glass);
-    @apply backdrop-blur-3xl rounded p-4;
-    border: 1px solid var(--color-border);
+    @apply bg-card/85 backdrop-blur-3xl rounded-sm p-4 border border-border;
   }
 
   /* --- Skill badges --- */
   .skill-badge {
-    background-color: var(--card-bg);
-    color: var(--color-foreground);
-    border: 1px solid var(--card-border);
-    @apply px-3 py-1 rounded text-sm;
+    @apply bg-card text-foreground border border-border px-3 py-1 rounded-sm text-sm;
     transition: border-color var(--duration-fast) var(--ease-in-out);
   }
 
   .skill-badge:hover {
-    border-color: var(--card-border-hover);
+    @apply border-muted-foreground/50;
   }
 }
 
