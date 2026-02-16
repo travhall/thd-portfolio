@@ -44,7 +44,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-background p-4 xl:p-8">
+      <div className="min-h-screen p-4 xl:p-8">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -104,7 +104,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                     priority={index === 0}
                   />
                   <div
-                    className="absolute inset-0 bg-background/95 backdrop-blur transition-opacity group-hover:opacity-90"
+                    className="absolute inset-0 bg-background/90 backdrop-blur transition-opacity group-hover:opacity-90"
                     aria-hidden="true"
                   />
 

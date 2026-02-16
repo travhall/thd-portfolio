@@ -115,7 +115,7 @@ export function AboutContent() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-background p-4 xl:p-8 max-w-8xl mx-auto">
+      <div className="min-h-screen p-4 xl:p-8 max-w-8xl mx-auto">
         <motion.div
           initial="hidden"
           animate="visible"

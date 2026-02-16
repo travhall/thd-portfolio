@@ -75,13 +75,6 @@
   --color-input:              oklch(0.92 0.005 0);
   --color-ring:               oklch(0.18 0.030 0);
 
-  /* --- Border radius --- */
-  --radius:    0.5rem;
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 4px);
-
   /* --- Custom blur step (32px — between Tailwind xl/2xl) --- */
   --blur-3xl: 32px;
 
@@ -172,6 +165,7 @@
     @apply border-border;
   }
 
+  html,
   body {
     @apply bg-background text-foreground underline-offset-4;
   }

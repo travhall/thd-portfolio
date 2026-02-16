@@ -37,7 +37,7 @@ interface CaseStudiesProps {
 
 export function CaseStudies({ studies }: CaseStudiesProps) {
   return (
-    <section id="work" className="relative z-10 bg-background/80 backdrop-blur-lg p-4 xl:p-8 flex flex-col">
+    <section id="work" className="relative z-10 bg-background/90 backdrop-blur p-4 xl:p-8 flex flex-col">
       <motion.div
         initial="hidden"
         whileInView="visible"

@@ -72,7 +72,7 @@ interface ColorSwatchProps {
 function ColorSwatch({ className, label }: ColorSwatchProps) {
   return (
     <div className="space-y-2">
-      <div className={`h-16 w-full rounded ${className}`} />
+      <div className={`h-16 w-full rounded-sm ${className}`} />
       <p className="text-sm text-muted-foreground mb-4">{label}</p>
     </div>
   );

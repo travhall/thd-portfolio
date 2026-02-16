@@ -73,7 +73,7 @@ export default async function RootLayout({
         className={cn(
           manropeSans.variable,
           nohemi.variable,
-          "antialiased relative min-h-screen bg-background font-sans selection:bg-primary selection:text-primary-foreground"
+          "antialiased relative min-h-screen font-sans"
         )}
       >
         <ThemeProvider>

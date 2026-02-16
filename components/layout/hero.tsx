@@ -62,7 +62,7 @@ export function Hero() {
       >
         {/* Background Image Container — decorative, no semantic content */}
         <div
-          className="absolute inset-0 z-0 rounded-md border-2 border-border overflow-hidden bg-muted"
+          className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted"
           aria-hidden="true"
         >
           <Image
