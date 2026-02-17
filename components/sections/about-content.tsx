@@ -5,7 +5,8 @@ import { motion, type Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
-import { Download, Github, Linkedin } from "lucide-react";
+import { FiDownload } from "react-icons/fi";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
 
@@ -168,19 +169,19 @@ export function AboutContent() {
             >
               <Button asChild variant="outline" className="rounded-full">
                 <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
-                  Check out my code <Github aria-hidden="true" />
+                  <FiGithub aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" className="rounded-full">
                 <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
-                  Find me on LinkedIn <Linkedin aria-hidden="true" />
+                  <FiLinkedin aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" className="rounded-full">
                 <Link href="/Travis-Hall_CV.pdf" target="_blank" rel="noopener noreferrer" download>
-                  Download my CV <Download aria-hidden="true" />
+                  Download my CV <FiDownload aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>

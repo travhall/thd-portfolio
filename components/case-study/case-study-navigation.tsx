@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import type { CaseStudy } from "@/types/case-study";
@@ -53,9 +53,9 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
     aria-label={`${direction === "prev" ? "Previous" : "Next"} case study: ${study.title}`}
-    className="group relative flex flex-col p-4 rounded-sm bg-foreground/10 backdrop-blur text-(--case-nav-text) text-2xl transition-colors"
+    className="group relative flex flex-col p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground text-2xl transition-colors"
   >
-    {direction === "prev" ? <ChevronLeft aria-hidden="true" /> : <ChevronRight aria-hidden="true" />}
+    {direction === "prev" ? <FiChevronLeft aria-hidden="true" /> : <FiChevronRight aria-hidden="true" />}
   </Link>
 );
 

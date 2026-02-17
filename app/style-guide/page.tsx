@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Pause, Play } from "lucide-react";
+import { FiPause, FiPlay } from "react-icons/fi";
 import {
   Badge,
   Button,
@@ -113,7 +113,7 @@ function EasingCard({
           className="w-7 h-7 flex items-center justify-center rounded-sm border border-border bg-background hover:bg-secondary transition-colors"
           aria-label={playing ? "Pause" : "Play"}
         >
-          {playing ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+          {playing ? <FiPause className="w-3 h-3" /> : <FiPlay className="w-3 h-3" />}
         </button>
       </div>
       <div className="h-1 w-full bg-border rounded-full overflow-hidden">

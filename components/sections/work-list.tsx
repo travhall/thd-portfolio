@@ -6,7 +6,7 @@ import type { CaseStudy } from "@/types/case-study";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight } from "lucide-react";
+import { FiArrowUpRight } from "react-icons/fi";
 import { PageTransition } from "@/components/layout/page-transition";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
@@ -149,7 +149,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
 
                       <div className="flex justify-between items-center">
                         <p className="text-sm text-muted-foreground">{study.year}</p>
-                        <ArrowUpRight
+                        <FiArrowUpRight
                           className="h-6 w-6 text-muted-foreground group-hover:text-foreground transition-colors"
                           aria-hidden="true"
                         />

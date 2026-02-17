@@ -4,7 +4,7 @@ import React from "react";
 import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { FiArrowUpRight } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import type { CaseStudy } from "@/types/case-study";
 import { cn } from "@/lib/utils";
@@ -106,7 +106,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                   {study.year}
                 </Badge>
                 <div className="bg-white/10 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true">
-                  <ArrowUpRight className="h-5 w-5 text-white" />
+                  <FiArrowUpRight className="h-5 w-5 text-white" />
                 </div>
               </div>
 
