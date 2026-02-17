@@ -9,8 +9,11 @@ import { ImageTextBlock } from "./sections/image-text-section";
 import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
 
-// Named constants for scroll transform ranges
-const BLUR_SCROLL_RANGE = [100, 600];
+// Named constants for scroll transform ranges — mirrors home hero
+const HERO_SCROLL_RANGE = [0, 400];
+const HERO_OPACITY_OUTPUT = [1, 0.2];
+const HERO_Y_OUTPUT = [0, 8];
+const BLUR_SCROLL_RANGE = [500, 800];
 const BLUR_OPACITY_OUTPUT = [0, 1];
 
 interface CaseStudyContentProps {
@@ -23,6 +26,8 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
 
+  const y = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [0, 0] : HERO_Y_OUTPUT);
+  const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [1, 1] : HERO_OPACITY_OUTPUT);
   const blurOpacity = useTransform(
     scrollY,
     BLUR_SCROLL_RANGE,
@@ -43,59 +48,62 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           }}
         />
 
-        {/* Hero Section */}
+        {/* Hero Text Block */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="grid gap-12 md:grid-cols-[1.5fr_1fr] items-start lg:sticky top-0 p-4 xl:p-8 z-0 min-h-screen"
+          className="relative z-10 max-w-2xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh] space-y-6"
+          style={{ opacity }}
         >
-          <div className="space-y-6 self-end mb-12">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="case-hero-heading"
-            >
-              {study.title}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl text-muted-foreground text-balance"
-            >
-              {study.description}
-            </motion.p>
-            <ul className="flex gap-2 flex-wrap" aria-label="Tags">
-              {study.tags.map((tag, index) => (
-                <motion.li
-                  key={tag}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                >
-                  <Badge variant="secondary">{tag}</Badge>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="relative aspect-4/5 md:aspect-3/4 lg:aspect-4/3 rounded-sm overflow-hidden row-start-1"
+            className="case-hero-heading"
+          >
+            {study.title}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-xl text-muted-foreground text-balance"
+          >
+            {study.description}
+          </motion.p>
+          <ul className="flex gap-2 flex-wrap" aria-label="Tags">
+            {study.tags.map((tag, index) => (
+              <motion.li
+                key={tag}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+              >
+                <Badge variant="secondary">{tag}</Badge>
+              </motion.li>
+            ))}
+          </ul>
+        </motion.div>
+
+        {/* Hero Image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
+          style={{ y }}
+          className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
+        >
+          <div
+            className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted"
+            aria-hidden="true"
           >
             <Image
               src={study.coverImage}
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover mt-12"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
+              className="object-cover"
               priority
             />
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Content Sections */}
