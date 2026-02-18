@@ -2,6 +2,62 @@ import type { CaseStudy } from "@/types/case-study";
 
 const caseStudies: CaseStudy[] = [
   {
+    id: "project-wylie-dog",
+    title: "Project Wylie Dog",
+    description:
+      "An enterprise-grade design system built on OKLCH color science, a three-tier token architecture, and 42 fully-tested React components.",
+    fullDescription:
+      "A production-ready design system and component library engineered from the ground up — combining next-generation color science, W3C-compliant design tokens, a Figma plugin for design-to-code synchronization, and comprehensive Storybook documentation.",
+    coverImage: "/images/screenshot-wyliedog.png",
+    year: "2024",
+    tags: ["Design Systems", "React", "TypeScript", "Tailwind CSS", "Storybook"],
+    role: "Design System Architect & Lead Engineer",
+    duration: "Ongoing",
+    sections: [
+      {
+        type: "text",
+        content:
+          "Most design systems start with components. This one started with color. The core challenge was building a system that could scale across teams, enforce consistency without constraining creativity, and remain genuinely maintainable as both the design and codebase evolved. That meant solving the token problem first — not as an afterthought, but as the structural foundation everything else would be built on.",
+        alignment: "center",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/screenshot-wyliedog.png",
+          alt: "Wylie Dog design system Storybook documentation showing component library overview",
+          caption: "Interactive component documentation in Storybook",
+        },
+        content:
+          "The system is structured as a Turborepo monorepo with three core packages: a token pipeline, a React component library, and a Figma plugin. Turborepo's task graph ensures tokens are always compiled before components build, and Storybook only runs against verified artifacts — enforcing correctness at every layer of the pipeline. Build times stay under one second thanks to intelligent caching across the workspace.",
+        imagePosition: "right",
+      },
+      {
+        type: "text",
+        content:
+          "The token architecture follows a strict three-tier hierarchy: primitive values (275+ raw OKLCH color steps, spacing, and typography scales), semantic mappings (background-primary, text-danger, border-focus), and component-level tokens (button-primary-background, input-border-hover). Each tier is processed by Style Dictionary into CSS custom properties, TypeScript constants, and JSON — all from a single W3C DTCG-compliant source. OKLCH was chosen over HSL or RGB for its perceptual uniformity: equal numeric steps in lightness actually look equal to the human eye, which makes building accessible, predictable color ramps dramatically more reliable. The result is 12 full color palettes and a semantic layer that handles both light and dark mode without duplicating values.",
+        alignment: "left",
+      },
+      {
+        type: "image-text",
+        image: {
+          url: "/images/placeholder-wylie-components.jpg",
+          alt: "Component variants and states across the Wylie Dog component library",
+          caption: "42 components with full variant and state coverage",
+        },
+        content:
+          "The component library ships 42 React components built on Radix UI primitives, each with its own export path for tree-shaking, full TypeScript types, and a co-located Storybook story. Test coverage sits at 95.41% via Vitest and @testing-library/react, with axe-core integrated into the test suite to catch accessibility regressions automatically. The Figma plugin — Token Bridge — closes the design-to-code loop by syncing token values bidirectionally between the Figma variables panel and the repository, with conflict detection and a change preview UI built in Preact.",
+        imagePosition: "left",
+      },
+      {
+        type: "text",
+        content:
+          "The system has been externally assessed as a top-5% design token implementation. Bundle sizes run at 14–44% of enforced limits, enforced via size-limit in CI. The OKLCH approach is approximately two to three years ahead of mainstream adoption — making this as much a reference implementation and proof of concept as it is production infrastructure. The biggest lesson: the constraints you put on yourself upfront (W3C compliance, strict token naming, CI quality gates) are what let you move fast later without accumulating design debt.",
+        alignment: "left",
+      },
+    ],
+    featured: true,
+  },
+  {
     id: "el-camino-skate-shop",
     title: "El Camino Skate Shop",
     description:
@@ -104,57 +160,6 @@ const caseStudies: CaseStudy[] = [
     featured: true,
   },
   {
-    id: "buddyhead",
-    title: "Buddyhead",
-    description:
-      "A full redesign of the legendary punk and indie music publication — a multi-section editorial platform for news, reviews, a zine, and record label, built on Next.js and WordPress.",
-    fullDescription:
-      "A ground-up redesign and front-end build for Buddyhead, one of the original voices of early 2000s music internet — bringing the publication into the modern web while preserving the irreverent, no-rules energy that made it iconic.",
-    coverImage: "/images/placeholder-buddyhead.jpg",
-    year: "2024",
-    tags: ["Next.js", "WordPress", "TypeScript", "Tailwind CSS", "Design"],
-    client: "Buddyhead",
-    role: "Designer & Front-End Engineer",
-    duration: "Ongoing",
-    sections: [
-      {
-        type: "text",
-        content:
-          "Buddyhead has been a fixture of punk, indie, and underground music culture since 1996 — founded by Travis Keller in Los Angeles, it was one of the first outlets to publish brutally honest music criticism and celebrity gossip on the early internet, and it's been going ever since. The redesign brief was deceptively simple: make it look like now without making it look like everything else. The site needed to support an active editorial operation — news, music reviews, a zine section, a record label roster, and a newsletter — while keeping the raw, irreverent tone that's always defined it. No corporate polish. No template energy. Just a fast, accessible, well-built site that gets out of the content's way.",
-        alignment: "center",
-      },
-      {
-        type: "image-text",
-        image: {
-          url: "/images/placeholder-buddyhead-home.jpg",
-          alt: "Buddyhead homepage showing multi-section content grid with News, Reviews, Zine, and Label columns",
-          caption: "Homepage — multi-section editorial grid",
-        },
-        content:
-          "The design leans into high contrast and editorial density — a dark-first aesthetic with a tight typographic system, heavy use of monospace and grotesque type, and a content grid that surfaces four distinct content streams (News/Gossip, Reviews, Zine, Label) on the homepage simultaneously without feeling cluttered. The homepage layout is deliberately newspaper-like: section headers act as navigational anchors, recent articles stack beneath each, and a hero slot highlights a featured piece with a YouTube embed. The Figma prototype captured the full intended design; the live site reflects the design with some evolution since launch.",
-        imagePosition: "right",
-      },
-      {
-        type: "text",
-        content:
-          "The front end is built on Next.js with TypeScript, using WordPress as a headless CMS via the WP REST API. Content types — posts, reviews, zine articles, artists — are mapped to typed interfaces and fetched server-side, keeping the front end fully static where possible and falling back to ISR for frequently updated sections. The reviews section features a pinned post system and category tagging (Record Reviews, etc.) with metadata-driven timestamps and contributor bylines. The W. Axl Rose rating system — a Buddyhead tradition — is implemented as a custom field surfaced via the REST API and rendered as a reusable component. Dark and light modes are supported via a theme toggle with localStorage persistence.",
-        alignment: "left",
-      },
-      {
-        type: "image-text",
-        image: {
-          url: "/images/placeholder-buddyhead-review.jpg",
-          alt: "Buddyhead record review article page showing the W. Axl Rose rating system and editorial layout",
-          caption: "Review article — custom rating system and editorial typography",
-        },
-        content:
-          "The breadcrumb navigation, scroll-aware header, and newsletter signup in the footer are all handled as lightweight client components to preserve SSR performance elsewhere. The site includes a dedicated LA Fires resource page — a community mutual aid hub added in response to the 2025 wildfires — which reflects how the CMS-driven architecture allows rapid new content types to be stood up without touching the application layer. The Figma designs for the original prototype are available as a reference for the intended design direction.",
-        imagePosition: "left",
-      },
-    ],
-    featured: true,
-  },
-  {
     id: "travishall-dot-design",
     title: "travishall.design",
     description:
@@ -205,57 +210,52 @@ const caseStudies: CaseStudy[] = [
     featured: false,
   },
   {
-    id: "project-wylie-dog",
-    title: "Project Wylie Dog",
+    id: "buddyhead",
+    title: "Buddyhead",
     description:
-      "An enterprise-grade design system built on OKLCH color science, a three-tier token architecture, and 42 fully-tested React components.",
+      "A full redesign of the legendary punk and indie music publication — a multi-section editorial platform for news, reviews, a zine, and record label, built on Next.js and WordPress.",
     fullDescription:
-      "A production-ready design system and component library engineered from the ground up — combining next-generation color science, W3C-compliant design tokens, a Figma plugin for design-to-code synchronization, and comprehensive Storybook documentation.",
-    coverImage: "/images/screenshot-wyliedog.png",
+      "A ground-up redesign and front-end build for Buddyhead, one of the original voices of early 2000s music internet — bringing the publication into the modern web while preserving the irreverent, no-rules energy that made it iconic.",
+    coverImage: "/images/placeholder-buddyhead.jpg",
     year: "2024",
-    tags: ["Design Systems", "React", "TypeScript", "Tailwind CSS", "Storybook"],
-    role: "Design System Architect & Lead Engineer",
+    tags: ["Next.js", "WordPress", "TypeScript", "Tailwind CSS", "Design"],
+    client: "Buddyhead",
+    role: "Designer & Front-End Engineer",
     duration: "Ongoing",
     sections: [
       {
         type: "text",
         content:
-          "Most design systems start with components. This one started with color. The core challenge was building a system that could scale across teams, enforce consistency without constraining creativity, and remain genuinely maintainable as both the design and codebase evolved. That meant solving the token problem first — not as an afterthought, but as the structural foundation everything else would be built on.",
+          "Buddyhead has been a fixture of punk, indie, and underground music culture since 1996 — founded by Travis Keller in Los Angeles, it was one of the first outlets to publish brutally honest music criticism and celebrity gossip on the early internet, and it's been going ever since. The redesign brief was deceptively simple: make it look like now without making it look like everything else. The site needed to support an active editorial operation — news, music reviews, a zine section, a record label roster, and a newsletter — while keeping the raw, irreverent tone that's always defined it. No corporate polish. No template energy. Just a fast, accessible, well-built site that gets out of the content's way.",
         alignment: "center",
       },
       {
         type: "image-text",
         image: {
-          url: "/images/screenshot-wyliedog.png",
-          alt: "Wylie Dog design system Storybook documentation showing component library overview",
-          caption: "Interactive component documentation in Storybook",
+          url: "/images/placeholder-buddyhead-home.jpg",
+          alt: "Buddyhead homepage showing multi-section content grid with News, Reviews, Zine, and Label columns",
+          caption: "Homepage — multi-section editorial grid",
         },
         content:
-          "The system is structured as a Turborepo monorepo with three core packages: a token pipeline, a React component library, and a Figma plugin. Turborepo's task graph ensures tokens are always compiled before components build, and Storybook only runs against verified artifacts — enforcing correctness at every layer of the pipeline. Build times stay under one second thanks to intelligent caching across the workspace.",
+          "The design leans into high contrast and editorial density — a dark-first aesthetic with a tight typographic system, heavy use of monospace and grotesque type, and a content grid that surfaces four distinct content streams (News/Gossip, Reviews, Zine, Label) on the homepage simultaneously without feeling cluttered. The homepage layout is deliberately newspaper-like: section headers act as navigational anchors, recent articles stack beneath each, and a hero slot highlights a featured piece with a YouTube embed. The Figma prototype captured the full intended design; the live site reflects the design with some evolution since launch.",
         imagePosition: "right",
       },
       {
         type: "text",
         content:
-          "The token architecture follows a strict three-tier hierarchy: primitive values (275+ raw OKLCH color steps, spacing, and typography scales), semantic mappings (background-primary, text-danger, border-focus), and component-level tokens (button-primary-background, input-border-hover). Each tier is processed by Style Dictionary into CSS custom properties, TypeScript constants, and JSON — all from a single W3C DTCG-compliant source. OKLCH was chosen over HSL or RGB for its perceptual uniformity: equal numeric steps in lightness actually look equal to the human eye, which makes building accessible, predictable color ramps dramatically more reliable. The result is 12 full color palettes and a semantic layer that handles both light and dark mode without duplicating values.",
+          "The front end is built on Next.js with TypeScript, using WordPress as a headless CMS via the WP REST API. Content types — posts, reviews, zine articles, artists — are mapped to typed interfaces and fetched server-side, keeping the front end fully static where possible and falling back to ISR for frequently updated sections. The reviews section features a pinned post system and category tagging (Record Reviews, etc.) with metadata-driven timestamps and contributor bylines. The W. Axl Rose rating system — a Buddyhead tradition — is implemented as a custom field surfaced via the REST API and rendered as a reusable component. Dark and light modes are supported via a theme toggle with localStorage persistence.",
         alignment: "left",
       },
       {
         type: "image-text",
         image: {
-          url: "/images/placeholder-wylie-components.jpg",
-          alt: "Component variants and states across the Wylie Dog component library",
-          caption: "42 components with full variant and state coverage",
+          url: "/images/placeholder-buddyhead-review.jpg",
+          alt: "Buddyhead record review article page showing the W. Axl Rose rating system and editorial layout",
+          caption: "Review article — custom rating system and editorial typography",
         },
         content:
-          "The component library ships 42 React components built on Radix UI primitives, each with its own export path for tree-shaking, full TypeScript types, and a co-located Storybook story. Test coverage sits at 95.41% via Vitest and @testing-library/react, with axe-core integrated into the test suite to catch accessibility regressions automatically. The Figma plugin — Token Bridge — closes the design-to-code loop by syncing token values bidirectionally between the Figma variables panel and the repository, with conflict detection and a change preview UI built in Preact.",
+          "The breadcrumb navigation, scroll-aware header, and newsletter signup in the footer are all handled as lightweight client components to preserve SSR performance elsewhere. The site includes a dedicated LA Fires resource page — a community mutual aid hub added in response to the 2025 wildfires — which reflects how the CMS-driven architecture allows rapid new content types to be stood up without touching the application layer. The Figma designs for the original prototype are available as a reference for the intended design direction.",
         imagePosition: "left",
-      },
-      {
-        type: "text",
-        content:
-          "The system has been externally assessed as a top-5% design token implementation. Bundle sizes run at 14–44% of enforced limits, enforced via size-limit in CI. The OKLCH approach is approximately two to three years ahead of mainstream adoption — making this as much a reference implementation and proof of concept as it is production infrastructure. The biggest lesson: the constraints you put on yourself upfront (W3C compliance, strict token naming, CI quality gates) are what let you move fast later without accumulating design debt.",
-        alignment: "left",
       },
     ],
     featured: true,

@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { motion, type Variants, AnimatePresence, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
-import { FiDownload, FiGithub, FiLinkedin } from "react-icons/fi";
+import { FiDownload, FiGithub, FiLinkedin, FiArrowRight } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
 
@@ -43,7 +44,7 @@ const fadeUpVariants: Variants = {
   },
 };
 
-// Moved out of component — static object, no dependency on props or state
+// Static — no dependency on props or state
 const hoverLabelVariants: Variants = {
   initial: { y: 20, opacity: 0 },
   animate: {
@@ -75,36 +76,47 @@ interface SkillGroup {
 const skills: SkillGroup[] = [
   {
     category: "design",
-    label: "Design",
+    label: "Skills",
     items: [
       "Design Systems",
       "User Experience Design",
       "User Interface Development",
       "Wireframing & Prototyping",
-      "User Research & Testing",
+      "User Research & Usability Testing",
       "Information Architecture",
-    ],
-  },
-  {
-    category: "development",
-    label: "Development",
-    items: [
-      "HTML/CSS/JavaScript",
-      "React & Next.js",
-      "Node.js",
-      "Tailwind CSS",
-      "Vue & Nuxt",
-      "GraphQL",
-    ],
-  },
-  {
-    category: "other",
-    label: "Other",
-    items: [
+      "Design Sprints",
       "Product Strategy",
       "Agile Development Methodology",
       "Design Leadership",
       "Teaching",
+    ],
+  },
+  {
+    category: "tools",
+    label: "Tools",
+    items: [
+      "Figma & FigJam",
+      "VS Code",
+      "Command Line",
+      "Atlassian Suite",
+      "Adobe Creative Suite",
+      "Sketch",
+      "GitHub & Bitbucket",
+    ],
+  },
+  {
+    category: "technologies",
+    label: "Technologies",
+    items: [
+      "HTML / CSS / JavaScript",
+      "TypeScript",
+      "React & Next.js",
+      "Vue & Nuxt",
+      "Node.js",
+      "Tailwind CSS",
+      "GraphQL & Apollo",
+      "Shopify & Square",
+      "WordPress & Strapi",
     ],
   },
 ];
@@ -124,10 +136,10 @@ const experiences: Experience[] = [
     role: "Senior Design Manager, UX Design Lead",
     company: "Arrow Digital: Arrow Electronics, Inc.",
     url: "https://www.arrow.com",
-    dateTime: "2016-01",
+    dateTime: "2016-01/",
     period: "January 2016 – Present",
     description:
-      "Lead UX design initiatives for Arrow Electronics' eCommerce platforms, establishing and optimizing UX processes while delivering comprehensive design systems.",
+      "Leading UX across Arrow's eCommerce platforms — a suite serving millions of engineers globally. Established the design system foundation, built and scaled the UX team, and introduced research-driven process across product and engineering orgs.",
   },
   {
     role: "Senior Front End Developer",
@@ -135,7 +147,7 @@ const experiences: Experience[] = [
     dateTime: "2013-09/2015-01",
     period: "September 2013 – January 2015",
     description:
-      "Led front-end development projects for clients like Target and Betty Crocker, delivering standards-compliant code for websites and email campaigns.",
+      "Front-end lead on campaigns and microsites for Target, Betty Crocker, and other national brands — responsible for production code quality, standards compliance, and cross-browser delivery across a high-volume agency pipeline.",
   },
   {
     role: "Front End Developer",
@@ -144,7 +156,25 @@ const experiences: Experience[] = [
     dateTime: "2010-09/2013-02",
     period: "September 2010 – February 2013",
     description:
-      "Created responsive microsites and dynamic email campaigns for loyalty marketing efforts, pioneering the agency's inaugural responsive website.",
+      "Built responsive microsites and email campaigns for loyalty marketing programs. Delivered the agency's first responsive website, introducing the practice internally at a time when responsive design was still far from standard.",
+  },
+  {
+    role: "Visiting Artist / Faculty",
+    company: "Minneapolis College of Art and Design",
+    url: "https://www.mcad.edu",
+    dateTime: "2008-08/2010-08",
+    period: "August 2008 – August 2010",
+    description:
+      "Taught digital media design and web development at both postbaccalaureate and undergraduate levels — covering digital image creation, audio/video production, and front-end technologies.",
+  },
+  {
+    role: "Freelance Designer / Developer",
+    company: "travishall.design",
+    url: "https://www.travishall.design",
+    dateTime: "2005-05/",
+    period: "May 2005 – Present",
+    description:
+      "Independent practice spanning art direction, branding, wireframing, and bespoke site development. Clients have included McCann, Likeletter Projects, Morsekode, and playworkgroup.",
   },
 ];
 
@@ -195,80 +225,94 @@ export function AboutContent() {
             </div>
 
             <div className="section-container space-y-10">
-              <motion.p variants={fadeUpVariants} className="about-heading">
-                Hi I&rsquo;m Travis, and I make things people use. In other words,
-                I specialize in creating inclusive, human-centered digital
-                experiences.{" "}
-                <span className="text-muted-foreground">
-                  But something tells me you&rsquo;re not here to read a bunch of
-                  industry jargon, now are you?
-                </span>
-              </motion.p>
 
-              <motion.div
-                variants={fadeUpVariants}
-                className="flex flex-row flex-wrap gap-3"
-              >
-                <Button asChild variant="outline" className="rounded-full p-2.5">
-                  <Link
-                    href="https://github.com/travhall"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FiGithub aria-hidden="true" />
-                    <span className="sr-only">GitHub (opens in new tab)</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="rounded-full p-2.5">
-                  <Link
-                    href="https://www.linkedin.com/in/travhall/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FiLinkedin aria-hidden="true" />
-                    <span className="sr-only">LinkedIn (opens in new tab)</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="rounded-full">
-                  <Link
-                    href="/Travis-Hall_CV.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                  >
-                    Download my CV <FiDownload aria-hidden="true" />
-                    <span className="sr-only">(opens in new tab)</span>
-                  </Link>
-                </Button>
-              </motion.div>
+              {/* Intro — photo + bio side by side */}
+              <div className="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16 items-start">
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
-                <motion.div
-                  variants={fadeUpVariants}
-                  className="col-span-1 lg:col-span-2 space-y-6 text-lg text-muted-foreground"
-                >
-                  <p>
-                    With expertise in both design and development,{" "}
-                    {/* del carries semantic "struck/removed" meaning for SR users */}
-                    <del className="line-through decoration-1 text-muted-foreground/50 no-underline [text-decoration:line-through]">
-                      coupled with an endless supply of useless trivia about rap
-                      music, 90&rsquo;s hoops, and golden era skateboarding,
-                    </del>{" "}
-                    I bring a unique perspective to every project.
-                  </p>
-                  <p>
-                    I hold an MFA in Interactive Media and have extensive experience
-                    in UX/UI design, design systems, and front-end development. I
-                    combine creative vision with technical expertise to build
-                    engaging digital experiences that are as functional as they are beautiful.
-                  </p>
+                {/* Photo */}
+                <motion.div variants={fadeUpVariants} className="w-full">
+                  <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-muted">
+                    <Image
+                      src="/images/profile-img.jpg"
+                      alt="Travis Hall"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
                 </motion.div>
+
+                {/* Bio + links */}
+                <div className="space-y-8">
+                  <motion.p variants={fadeUpVariants} className="about-heading">
+                    Hi, I&rsquo;m Travis — I make things people use.
+                  </motion.p>
+
+                  <motion.div
+                    variants={fadeUpVariants}
+                    className="space-y-5 text-lg text-muted-foreground"
+                  >
+                    <p>
+                      I hold an MFA in Interactive Media and have spent nearly two
+                      decades at the intersection of design and engineering —
+                      teaching it at art school, building it at agencies, and
+                      scaling it across eCommerce platforms used by millions of
+                      engineers worldwide.
+                    </p>
+                    <p>
+                      I&rsquo;ve built design systems, led UX teams, taught
+                      front-end development at the postsecondary level, and shipped
+                      the code myself. The work in this portfolio is the
+                      through-line.
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    variants={fadeUpVariants}
+                    className="flex flex-row flex-wrap gap-3 pt-2"
+                  >
+                    <Button asChild variant="outline" className="rounded-full p-3">
+                      <Link
+                        href="https://github.com/travhall"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FiGithub aria-hidden="true" />
+                        <span className="sr-only">GitHub (opens in new tab)</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="rounded-full p-3">
+                      <Link
+                        href="https://www.linkedin.com/in/travhall/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FiLinkedin aria-hidden="true" />
+                        <span className="sr-only">LinkedIn (opens in new tab)</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="rounded-full">
+                      <Link
+                        href="/Travis-Hall_CV.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                      >
+                        Download my CV <FiDownload aria-hidden="true" />
+                        <span className="sr-only">(opens in new tab)</span>
+                      </Link>
+                    </Button>
+                  </motion.div>
+                </div>
               </div>
 
+              {/* Skills + Experience */}
               <div className="grid md:grid-cols-2 gap-16 pt-12">
+
                 {/* Skills */}
                 <motion.div variants={fadeUpVariants} className="space-y-12">
-                  <h2 className="about-subheading">Skills &amp; Technologies</h2>
+                  <h2 className="about-subheading">Skills &amp; Expertise</h2>
                   <div className="space-y-10">
                     {skills.map(({ category, label, items }) => (
                       <div key={category} className="space-y-4">
@@ -318,6 +362,26 @@ export function AboutContent() {
                   </ul>
                 </motion.div>
               </div>
+
+              {/* CTA */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="pt-16 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-border"
+              >
+                <p className="text-xl text-muted-foreground">
+                  If you&rsquo;ve made it this far, the work is probably worth a look.
+                </p>
+                <Button asChild variant="outline" className="group">
+                  <Link href="/work">
+                    View my work
+                    <FiArrowRight
+                      aria-hidden="true"
+                      className="transition-transform duration-200 group-hover:translate-x-1"
+                    />
+                  </Link>
+                </Button>
+              </motion.div>
+
             </div>
           </div>
         </motion.div>

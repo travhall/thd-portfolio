@@ -52,7 +52,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
         >
           <div className="overflow-hidden my-3 inline-block">
             <motion.h1
-              aria-label="Case studies — return to index"
+              aria-label="Work — return to index"
               className="hero-label pb-2"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
@@ -71,7 +71,7 @@ export function WorkList({ studies }: { studies: CaseStudy[] }) {
                       exit="exit"
                       className="block"
                     >
-                      {isHovered ? "return to index" : "case studies"}
+                      {isHovered ? "return to index" : "work"}
                     </motion.span>
                   </AnimatePresence>
                 </div>
