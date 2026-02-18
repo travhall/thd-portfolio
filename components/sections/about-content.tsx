@@ -153,6 +153,7 @@ export function AboutContent() {
               </motion.h1>
             </div>
 
+            <div className="section-container space-y-10">
             <motion.p variants={fadeUpVariants} className="about-heading">
               Hi I&rsquo;m Travis, and I make things people use. In other words,
               I specialize in creating inclusive, human-centered digital
@@ -167,13 +168,13 @@ export function AboutContent() {
               variants={fadeUpVariants}
               className="flex flex-row flex-wrap gap-3"
             >
-              <Button asChild variant="outline" className="rounded-full">
+              <Button asChild variant="outline" className="rounded-full p-2.5">
                 <Link href="https://github.com/travhall" target="_blank" rel="noopener noreferrer">
                   <FiGithub aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="rounded-full">
+              <Button asChild variant="outline" className="rounded-full p-2.5">
                 <Link href="https://www.linkedin.com/in/travhall/" target="_blank" rel="noopener noreferrer">
                   <FiLinkedin aria-hidden="true" />
                   <span className="sr-only">(opens in new tab)</span>
@@ -247,6 +248,7 @@ export function AboutContent() {
                 </div>
               </motion.div>
             </div>
+          </div>
           </div>
         </motion.div>
       </div>

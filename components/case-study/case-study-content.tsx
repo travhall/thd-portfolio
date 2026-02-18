@@ -108,7 +108,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
 
         {/* Content Sections */}
         <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20 space-y-0">
-          {study.sections?.map((section, index) => (
+          {study.sections.map((section, index) => (
             <div key={index} className="section-container border-b border-border/5 last:border-none">
               {section.type === "text" && <TextBlock section={section} />}
               {section.type === "image-text" && <ImageTextBlock section={section} />}

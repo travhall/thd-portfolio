@@ -10,6 +10,15 @@ import type { CaseStudy } from "@/types/case-study";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
+// Column spans for the featured grid — edit here when adding/removing studies.
+// Must sum to 12 per row (or across rows) to fill the lg:grid-cols-12 container.
+const FEATURED_COL_SPANS = [
+  "lg:col-span-8", // index 0 — wide hero
+  "lg:col-span-4", // index 1
+  "lg:col-span-5", // index 2
+  "lg:col-span-7", // index 3
+];
+
 const headingContainerVariants: Variants = {
   hidden: {},
   visible: {
@@ -78,10 +87,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             }}
             className={cn(
               "group card-case-study h-[500px] md:h-[600px]",
-              index === 0 ? "lg:col-span-8 lg:row-span-1" : "lg:col-span-4",
-              index === 2 ? "lg:col-span-5" : "",
-              index === 1 ? "lg:col-span-4" : "",
-              index === 3 ? "lg:col-span-7" : ""
+              FEATURED_COL_SPANS[index] ?? "lg:col-span-6"
             )}
           >
             <Link

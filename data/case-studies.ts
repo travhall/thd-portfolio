@@ -50,8 +50,6 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "moxie-beauty-studio",
-    prevProject: "project-wylie-dog",
     featured: true,
   },
   {
@@ -103,9 +101,7 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "buddyhead",
-    prevProject: "el-camino-skate-shop",
-    featured: false,
+    featured: true,
   },
   {
     id: "buddyhead",
@@ -156,21 +152,19 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "this-portfolio",
-    prevProject: "moxie-beauty-studio",
     featured: true,
   },
   {
-    id: "this-portfolio",
-    title: "This Portfolio",
+    id: "travishall-dot-design",
+    title: "travishall.design",
     description:
       "A self-directed design and engineering project — building my own portfolio as a live laboratory for Tailwind v4, Framer Motion, and a handcrafted design system.",
     fullDescription:
       "A personal portfolio site designed and engineered from scratch — used as a living testbed for modern front-end techniques including Tailwind CSS v4's @theme token system, scroll-linked animations, and a fully custom design system without a component library.",
     coverImage: "/images/placeholder-portfolio.jpg",
     year: "2025",
-    tags: ["Next.js", "Tailwind CSS", "Framer Motion", "Design Systems", "TypeScript"],
-    role: "Designer & Engineer",
+    tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
+    role: "Designer & Developer",
     duration: "Ongoing",
     sections: [
       {
@@ -208,8 +202,6 @@ const caseStudies: CaseStudy[] = [
         imagePosition: "left",
       },
     ],
-    nextProject: "project-wylie-dog",
-    prevProject: "buddyhead",
     featured: false,
   },
   {
@@ -266,8 +258,6 @@ const caseStudies: CaseStudy[] = [
         alignment: "left",
       },
     ],
-    nextProject: "el-camino-skate-shop",
-    prevProject: "this-portfolio",
     featured: true,
   },
 ];
@@ -282,4 +272,16 @@ export async function getAllCaseStudies(): Promise<CaseStudy[]> {
 
 export async function getFeaturedCaseStudies(): Promise<CaseStudy[]> {
   return Promise.resolve(caseStudies.filter((study) => study.featured));
+}
+
+export async function getAdjacentCaseStudies(id: string): Promise<{
+  prevStudy: CaseStudy | undefined;
+  nextStudy: CaseStudy | undefined;
+}> {
+  const index = caseStudies.findIndex((study) => study.id === id);
+  if (index === -1) return { prevStudy: undefined, nextStudy: undefined };
+  return {
+    prevStudy: index > 0 ? caseStudies[index - 1] : caseStudies[caseStudies.length - 1],
+    nextStudy: index < caseStudies.length - 1 ? caseStudies[index + 1] : caseStudies[0],
+  };
 }

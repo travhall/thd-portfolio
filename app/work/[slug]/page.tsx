@@ -1,4 +1,4 @@
-import { getCaseStudy, getAllCaseStudies } from "@/data/case-studies";
+import { getCaseStudy, getAllCaseStudies, getAdjacentCaseStudies } from "@/data/case-studies";
 import { CaseStudyContent } from "@/components/case-study/case-study-content";
 import { notFound } from "next/navigation";
 import { PageTransition } from "@/components/layout/page-transition";
@@ -44,13 +44,7 @@ export default async function CaseStudy(
     notFound();
   }
 
-  // Get previous and next studies
-  const prevStudy = study.prevProject
-    ? await getCaseStudy(study.prevProject)
-    : undefined;
-  const nextStudy = study.nextProject
-    ? await getCaseStudy(study.nextProject)
-    : undefined;
+  const { prevStudy, nextStudy } = await getAdjacentCaseStudies(params.slug);
 
   return (
     <PageTransition>

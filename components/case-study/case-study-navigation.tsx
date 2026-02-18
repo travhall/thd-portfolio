@@ -66,17 +66,14 @@ interface NavigationProps {
 
 export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
   const [hoveredStudy, setHoveredStudy] = useState<CaseStudy | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    const checkDesktop = () => {
-      const width = window.innerWidth;
-      setIsDesktop(width >= 1024); // lg breakpoint
-    };
-
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop);
-    return () => window.removeEventListener("resize", checkDesktop);
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   return (
@@ -86,7 +83,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       transition={{ delay: 0.7 }}
       className="p-4 xl:p-8 mt-28 flex flex-row place-content-end gap-1"
     >
-      {isDesktop && (
+      {isDesktop === true && (
         <div className="preview-container w-full relative">
           <PreviewContent study={hoveredStudy} />
         </div>

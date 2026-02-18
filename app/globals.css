@@ -128,8 +128,8 @@
     --color-ring:                 var(--color-brand-1-400);
 
     /* Hero blur overlay tokens (dark mode) */
-    --hero-blur-bg:        var(--color-brand-2-600);  /* amber — mix-blend-multiply on dark */
-    --hero-blur-blend:     multiply;
+    --hero-blur-bg:        var(--color-brand-1-600);  /* amber — mix-blend-multiply on dark */
+    --hero-blur-blend:     hue;
 
     /* Toggle component tokens (dark mode) */
     --toggle-hover-bg:     var(--color-brand-2-800);
@@ -144,7 +144,7 @@
 
   html,
   body {
-    @apply absolute top-0 right-0 left-0 bg-background text-foreground underline-offset-4;
+    @apply bg-background text-foreground underline-offset-4;
   }
 
   ::selection {

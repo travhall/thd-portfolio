@@ -30,7 +30,5 @@ export interface CaseStudy {
   role?: string;
   duration?: string;
   sections: (TextSection | ImageTextSection)[];
-  nextProject?: string;
-  prevProject?: string;
   featured: boolean;
 }
