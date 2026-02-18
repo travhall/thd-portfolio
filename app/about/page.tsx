@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Senior Design Manager and UX Design Lead specializing in inclusive, human-centered digital experiences.",
+  description: "I'm Travis — I make things people use. Designer, engineer, and MFA-holder specializing in inclusive, human-centered digital experiences.",
 };
 
 export default function AboutPage() {
