@@ -11,9 +11,9 @@ export function LedeBlock({ section, links }: LedeBlockProps) {
   const hasLinks = links && links.length > 0;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="max-w-3xl space-y-8">
       {/* Opening paragraph — bordered left accent, upsized, lighter weight */}
-      <p className="border-l-2 border-border pl-6 text-lg font-light leading-relaxed text-muted-foreground text-balance">
+      <p className="border-l-2 border-border pl-6 xl:pl-8 text-lg font-light leading-relaxed text-muted-foreground text-balance">
         {section.content}
       </p>
 

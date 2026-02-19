@@ -24,7 +24,7 @@ export function CaseStudyMeta({ study }: CaseStudyMetaProps) {
 
   return (
     <dl
-      className="mx-auto max-w-md grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-x-8 gap-y-6 self-start"
+      className="max-w-md grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-x-8 gap-y-6 self-start pl-8"
       aria-label="Project details"
     >
       {entries.map(({ label, value }) => (

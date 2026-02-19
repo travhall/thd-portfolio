@@ -154,7 +154,7 @@ export function SiteNav({ studies }: SiteNavProps) {
           menu.querySelectorAll<HTMLElement>(
             'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
           )
-        ).filter((el) => !el.closest('[aria-hidden="true"]'));
+        ).filter((el) => !el.closest('[inert]') && !el.closest('[aria-hidden="true"]'));
 
         if (focusable.length === 0) return;
         const first = focusable[0];
@@ -181,21 +181,16 @@ export function SiteNav({ studies }: SiteNavProps) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  // Move focus into menu when it opens
-  useEffect(() => {
-    if (isOpen) {
-      // Wait for animation to start before focusing
-      const id = setTimeout(() => {
-        const menu = menuRef.current;
-        if (!menu) return;
-        const first = menu.querySelector<HTMLElement>(
-          'a[href], button:not([disabled])'
-        );
-        first?.focus();
-      }, 100);
-      return () => clearTimeout(id);
+  // Focus the first interactive item once the open animation completes.
+  // Called via onAnimationComplete on the motion.nav — avoids a fragile setTimeout.
+  const handleMenuAnimationComplete = (definition: string) => {
+    if (definition === "open") {
+      const menu = menuRef.current;
+      if (!menu) return;
+      const first = menu.querySelector<HTMLElement>("a[href], button:not([disabled])");
+      first?.focus();
     }
-  }, [isOpen]);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -203,7 +198,7 @@ export function SiteNav({ studies }: SiteNavProps) {
 
   if (!mounted) {
     return (
-      <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site">
+      <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site navigation">
         <div className="px-4 py-2 rounded-sm nav-trigger opacity-0">
           <span className="text-xs font-medium tracking-wider lowercase">Menu</span>
         </div>
@@ -212,7 +207,7 @@ export function SiteNav({ studies }: SiteNavProps) {
   }
 
   return (
-    <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50" aria-label="Site">
+    <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50" aria-label="Site navigation">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -256,11 +251,10 @@ export function SiteNav({ studies }: SiteNavProps) {
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={menuVariants}
+        onAnimationComplete={handleMenuAnimationComplete}
         aria-label="Site navigation"
-        // @ts-expect-error — inert is a valid HTML attribute; React types lag behind the spec
         inert={!isOpen ? true : undefined}
         className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
-        style={{ pointerEvents: isOpen ? "auto" : "none" }}
       >
         <motion.div className="p-4 space-y-3">
           <div className="space-y-4">
@@ -272,10 +266,13 @@ export function SiteNav({ studies }: SiteNavProps) {
               </motion.div>
             </div>
 
-            <div className="space-y-3">
+            <div role="group" aria-labelledby="nav-work-label" className="space-y-3">
               <div className="overflow-hidden px-2">
                 <motion.div variants={itemVariants}>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">
+                  <span
+                    id="nav-work-label"
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary"
+                  >
                     Work
                   </span>
                 </motion.div>
