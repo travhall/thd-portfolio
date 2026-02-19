@@ -74,6 +74,49 @@ const buttonTextVariants: Variants = {
   },
 };
 
+// Defined at module scope — not recreated on every SiteNav render.
+interface MenuItemProps {
+  href: string;
+  children: React.ReactNode;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function MenuItem({ href, children, isActive, onClick }: MenuItemProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="relative"
+    >
+      <Link
+        href={href}
+        onClick={onClick}
+        aria-current={isActive ? "page" : undefined}
+        className={cn(
+          "block py-1 px-2 rounded-sm text-card-foreground hover:text-card relative z-10 transition-colors duration-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+          isActive ? "font-bold underline decoration underline-offset-4" : ""
+        )}
+      >
+        {children}
+      </Link>
+      <motion.div
+        initial={false}
+        animate={{
+          scale: isHovered ? 1 : 0.8,
+          opacity: isHovered ? 1 : 0,
+        }}
+        className="absolute inset-0 bg-foreground/80 rounded-xs"
+        style={{ originX: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    </motion.div>
+  );
+}
+
 interface SiteNavProps {
   studies: Array<{ id: string; title: string }>;
 }
@@ -89,6 +132,8 @@ export function SiteNav({ studies }: SiteNavProps) {
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
+
+  const handleClose = () => setIsOpen(false);
 
   // Close on Escape, return focus to trigger
   const handleKeyDown = useCallback(
@@ -156,49 +201,6 @@ export function SiteNav({ studies }: SiteNavProps) {
     setMounted(true);
   }, []);
 
-  const MenuItem = ({
-    href,
-    children,
-    isActive,
-  }: {
-    href: string;
-    children: React.ReactNode;
-    isActive: boolean;
-  }) => {
-    const [isHovered, setIsHovered] = useState(false);
-
-    return (
-      <motion.div
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
-        className="relative"
-      >
-        <Link
-          href={href}
-          onClick={() => setIsOpen(false)}
-          aria-current={isActive ? "page" : undefined}
-          className={cn(
-            "block py-1 px-2 rounded-sm text-card-foreground hover:text-card relative z-10 transition-colors duration-200",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-            isActive ? "font-bold underline decoration underline-offset-4" : ""
-          )}
-        >
-          {children}
-        </Link>
-        <motion.div
-          initial={false}
-          animate={{
-            scale: isHovered ? 1 : 0.8,
-            opacity: isHovered ? 1 : 0,
-          }}
-          className="absolute inset-0 bg-foreground/80 rounded-xs"
-          style={{ originX: 0 }}
-          transition={{ duration: 0.2 }}
-        />
-      </motion.div>
-    );
-  };
-
   if (!mounted) {
     return (
       <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site">
@@ -245,7 +247,9 @@ export function SiteNav({ studies }: SiteNavProps) {
         </button>
       </motion.div>
 
-      {/* Menu is always in the DOM so aria-controls always resolves; visibility toggled via animation */}
+      {/* Menu is always in the DOM so aria-controls always resolves.
+          `inert` removes it from tab order and AT when closed without
+          breaking the aria-controls reference (unlike aria-hidden). */}
       <motion.nav
         ref={menuRef}
         id="site-nav-menu"
@@ -253,7 +257,8 @@ export function SiteNav({ studies }: SiteNavProps) {
         animate={isOpen ? "open" : "closed"}
         variants={menuVariants}
         aria-label="Site navigation"
-        aria-hidden={!isOpen}
+        // @ts-expect-error — inert is a valid HTML attribute; React types lag behind the spec
+        inert={!isOpen ? true : undefined}
         className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
         style={{ pointerEvents: isOpen ? "auto" : "none" }}
       >
@@ -261,7 +266,7 @@ export function SiteNav({ studies }: SiteNavProps) {
           <div className="space-y-4">
             <div className="overflow-hidden">
               <motion.div variants={itemVariants}>
-                <MenuItem href="/" isActive={pathname === "/"}>
+                <MenuItem href="/" isActive={pathname === "/"} onClick={handleClose}>
                   Index
                 </MenuItem>
               </motion.div>
@@ -282,6 +287,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                       <MenuItem
                         href={`/work/${study.id}`}
                         isActive={pathname === `/work/${study.id}`}
+                        onClick={handleClose}
                       >
                         {study.title}
                       </MenuItem>
@@ -291,7 +297,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                 {studies.length > 5 && (
                   <div className="overflow-hidden">
                     <motion.div variants={itemVariants}>
-                      <MenuItem href="/work" isActive={pathname === "/work"}>
+                      <MenuItem href="/work" isActive={pathname === "/work"} onClick={handleClose}>
                         All Case Studies
                       </MenuItem>
                     </motion.div>
@@ -304,7 +310,7 @@ export function SiteNav({ studies }: SiteNavProps) {
           <div className="pt-4 border-t border-foreground/10">
             <div className="overflow-hidden">
               <motion.div variants={itemVariants}>
-                <MenuItem href="/about" isActive={pathname === "/about"}>
+                <MenuItem href="/about" isActive={pathname === "/about"} onClick={handleClose}>
                   About
                 </MenuItem>
               </motion.div>

@@ -100,7 +100,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image
               src={study.coverImage}
-              alt={`${study.title} — cover image`}
+              alt=""
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
               className="object-cover"
@@ -114,7 +114,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           {study.sections.map((section, index) => (
             <div key={index} className="section-container border-b border-border/5 last:border-none">
               {section.type === "lede" && (
-                <div className="space-y-10 flex flex-col xl:flex-row-reverse">
+                <div className="flex flex-col xl:flex-row-reverse gap-10">
                   <LedeBlock section={section} links={study.links} />
                   <CaseStudyMeta study={study} />
                 </div>

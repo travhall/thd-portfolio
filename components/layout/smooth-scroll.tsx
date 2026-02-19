@@ -1,8 +1,25 @@
 "use client";
 
 import { ReactLenis, useLenis } from "lenis/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+// Reactive media query — responds to OS setting changes mid-session.
+// useSyncExternalStore is SSR-safe: the server snapshot always returns false,
+// and the client subscribes to the MediaQueryList for live updates.
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    (callback) => {
+      const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+      mq.addEventListener("change", callback);
+      return () => mq.removeEventListener("change", callback);
+    },
+    () => window.matchMedia(REDUCED_MOTION_QUERY).matches,
+    () => false, // server snapshot
+  );
+}
 
 function ScrollReset() {
   const lenis = useLenis();
@@ -17,11 +34,7 @@ function ScrollReset() {
 }
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
-  // Respect prefers-reduced-motion: pass prevent fn so Lenis stops intercepting scroll
-  const prefersReducedMotion =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <ReactLenis

@@ -40,7 +40,7 @@ const PreviewContent = ({ study }: PreviewProps) => {
       <div className="relative aspect-video max-w-[20rem] rounded-sm overflow-hidden mb-4 z-40">
         <Image
           src={study.coverImage}
-          alt={study.title}
+          alt=""
           fill
           className="object-cover transition-transform duration-500"
         />

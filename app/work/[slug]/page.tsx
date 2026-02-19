@@ -29,6 +29,12 @@ export async function generateMetadata(
       description: study.description,
       images: [study.coverImage],
     },
+    twitter: {
+      card: "summary_large_image" as const,
+      title: study.title,
+      description: study.description,
+      images: [study.coverImage],
+    },
   };
 }
 

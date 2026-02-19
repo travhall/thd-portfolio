@@ -160,6 +160,17 @@
    ============================================================ */
 @layer components {
 
+  /* --- Skip navigation --- */
+  .skip-nav {
+    @apply fixed top-0 left-0 z-[9999] px-4 py-2 bg-background text-foreground font-medium text-sm rounded-br-sm;
+    transform: translateY(-100%);
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+
+  .skip-nav:focus {
+    transform: translateY(0);
+  }
+
   /* --- Layout --- */
   .section-container {
     @apply px-4 xl:px-8 py-12 md:py-16 max-w-7xl mx-auto;

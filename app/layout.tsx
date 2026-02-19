@@ -44,11 +44,13 @@ export const metadata: Metadata = {
     siteName: "travishall.design",
     locale: "en_US",
     type: "website",
+    images: ["/images/og-default.jpg"],
   },
   twitter: {
     card: "summary_large_image",
     title: "travishall.design",
     description: "Selected design and development work by Travis Hall",
+    images: ["/images/og-default.jpg"],
   },
   robots: {
     index: true,
@@ -78,9 +80,15 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <SmoothScroll>
+            <a
+              href="#main-content"
+              className="skip-nav"
+            >
+              Skip to main content
+            </a>
             <Logo />
             <SiteNav studies={navStudies} />
-            <main className="relative">{children}</main>
+            <main id="main-content" className="relative">{children}</main>
             <Footer />
           </SmoothScroll>
         </ThemeProvider>
