@@ -1,6 +1,16 @@
 type TextAlignment = "left" | "center" | "right";
 type ImagePosition = "left" | "right";
 
+export interface CaseStudyLink {
+  href: string;
+  label: string;
+}
+
+export interface LedeSection {
+  type: "lede";
+  content: string;
+}
+
 export interface TextSection {
   type: "text";
   content: string;
@@ -29,6 +39,9 @@ export interface CaseStudy {
   client?: string;
   role?: string;
   duration?: string;
-  sections: (TextSection | ImageTextSection)[];
+  // Optional links surfaced in the lede — e.g. live site, repo, Figma prototype.
+  // Only renders if at least one entry is present.
+  links?: CaseStudyLink[];
+  sections: (LedeSection | TextSection | ImageTextSection)[];
   featured: boolean;
 }

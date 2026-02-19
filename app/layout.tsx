@@ -59,12 +59,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const allStudies = await getAllCaseStudies();
+  const allStudies = getAllCaseStudies();
   const navStudies = allStudies.map(({ id, title }) => ({ id, title }));
 
   return (

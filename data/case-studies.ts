@@ -15,10 +15,9 @@ const caseStudies: CaseStudy[] = [
     duration: "Ongoing",
     sections: [
       {
-        type: "text",
+        type: "lede",
         content:
           "Most design systems start with components. This one started with color. The core challenge was building a system that could scale across teams, enforce consistency without constraining creativity, and remain genuinely maintainable as both the design and codebase evolved. That meant solving the token problem first — not as an afterthought, but as the structural foundation everything else would be built on.",
-        alignment: "center",
       },
       {
         type: "image-text",
@@ -70,12 +69,14 @@ const caseStudies: CaseStudy[] = [
     client: "El Camino Skate Shop",
     role: "Lead Engineer & Designer",
     duration: "Ongoing",
+    links: [
+      { href: "https://elcaminoskateshop.com", label: "Visit El Camino" },
+    ],
     sections: [
       {
-        type: "text",
+        type: "lede",
         content:
           "El Camino is a skater-owned shop in Eau Claire, WI that needed more than a template storefront — they needed a platform that could reflect their identity and keep pace with real inventory, real customers, and real transactions. The challenge was building something genuinely production-ready: Square-integrated catalog sync, live inventory validation, a persistent cart that survives navigation, and a checkout flow that doesn't add friction between a customer and their next deck.",
-        alignment: "center",
       },
       {
         type: "image-text",
@@ -121,12 +122,14 @@ const caseStudies: CaseStudy[] = [
     client: "Moxie Beauty Studio",
     role: "Designer & Engineer",
     duration: "Ongoing",
+    links: [
+      { href: "https://moxiebeautystudio.com", label: "Visit Moxie" },
+    ],
     sections: [
       {
-        type: "text",
+        type: "lede",
         content:
           "Moxie Beauty Studio is a solo practice — one artist, a carefully curated menu of services, and a clientele that values the personal touch. The site needed to carry that same energy: warm without being generic, polished without feeling corporate. The brief was essentially to build a luxury small-business web presence that didn't look like a template — one that could hold its own visually while still converting visitors into booked appointments.",
-        alignment: "center",
       },
       {
         type: "image-text",
@@ -171,12 +174,14 @@ const caseStudies: CaseStudy[] = [
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
     role: "Designer & Developer",
     duration: "Ongoing",
+    links: [
+      { href: "https://travishall.design", label: "You're looking at it" },
+    ],
     sections: [
       {
-        type: "text",
+        type: "lede",
         content:
           "A portfolio is a strange project — it has to do the job of showcasing work while being work itself. The brief I set for myself was to build something that reflected how I actually think about front-end: obsessive about tokens, deliberate about motion, fluent in the full stack from CSS architecture to component API design. No pre-built component libraries (beyond Radix UI primitives for accessibility), no off-the-shelf templates. Just a considered system built up from first principles, used as a live testing ground for techniques I'd been wanting to push further.",
-        alignment: "center",
       },
       {
         type: "image-text",
@@ -222,12 +227,14 @@ const caseStudies: CaseStudy[] = [
     client: "Buddyhead",
     role: "Designer & Front-End Engineer",
     duration: "Ongoing",
+    links: [
+      { href: "https://buddyhead.com", label: "Visit Buddyhead" },
+    ],
     sections: [
       {
-        type: "text",
+        type: "lede",
         content:
           "Buddyhead has been a fixture of punk, indie, and underground music culture since 1996 — founded by Travis Keller in Los Angeles, it was one of the first outlets to publish brutally honest music criticism and celebrity gossip on the early internet, and it's been going ever since. The redesign brief was deceptively simple: make it look like now without making it look like everything else. The site needed to support an active editorial operation — news, music reviews, a zine section, a record label roster, and a newsletter — while keeping the raw, irreverent tone that's always defined it. No corporate polish. No template energy. Just a fast, accessible, well-built site that gets out of the content's way.",
-        alignment: "center",
       },
       {
         type: "image-text",
@@ -262,22 +269,24 @@ const caseStudies: CaseStudy[] = [
   },
 ];
 
-export async function getCaseStudy(id: string): Promise<CaseStudy | undefined> {
-  return Promise.resolve(caseStudies.find((study) => study.id === id));
+export function getCaseStudy(id: string): CaseStudy | undefined {
+  return caseStudies.find((study) => study.id === id);
 }
 
-export async function getAllCaseStudies(): Promise<CaseStudy[]> {
-  return Promise.resolve(caseStudies);
+export function getAllCaseStudies(): CaseStudy[] {
+  return caseStudies;
 }
 
-export async function getFeaturedCaseStudies(): Promise<CaseStudy[]> {
-  return Promise.resolve(caseStudies.filter((study) => study.featured));
+export function getFeaturedCaseStudies(): CaseStudy[] {
+  return caseStudies.filter((study) => study.featured);
 }
 
-export async function getAdjacentCaseStudies(id: string): Promise<{
+// Navigation wraps around — the last study links back to the first and vice versa,
+// creating a continuous loop through the case study sequence.
+export function getAdjacentCaseStudies(id: string): {
   prevStudy: CaseStudy | undefined;
   nextStudy: CaseStudy | undefined;
-}> {
+} {
   const index = caseStudies.findIndex((study) => study.id === id);
   if (index === -1) return { prevStudy: undefined, nextStudy: undefined };
   return {

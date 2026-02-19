@@ -4,8 +4,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import type { CaseStudy } from "@/types/case-study";
+
+// SSR-safe media query hook — avoids the undefined→boolean flash that occurs
+// when initializing with useState + useEffect, since useSyncExternalStore
+// provides the correct server snapshot on first render.
+function useMediaQuery(query: string): boolean {
+  return useSyncExternalStore(
+    (callback) => {
+      const mq = window.matchMedia(query);
+      mq.addEventListener("change", callback);
+      return () => mq.removeEventListener("change", callback);
+    },
+    () => window.matchMedia(query).matches,
+    () => false, // server snapshot — no match on SSR
+  );
+}
 
 interface PreviewProps {
   study: CaseStudy | null;
@@ -66,15 +81,7 @@ interface NavigationProps {
 
 export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
   const [hoveredStudy, setHoveredStudy] = useState<CaseStudy | null>(null);
-  const [isDesktop, setIsDesktop] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
     <motion.div
@@ -83,7 +90,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       transition={{ delay: 0.7 }}
       className="p-4 xl:p-8 mt-28 flex flex-row place-content-end gap-1"
     >
-      {isDesktop === true && (
+      {isDesktop && (
         <div className="preview-container w-full relative">
           <PreviewContent study={hoveredStudy} />
         </div>

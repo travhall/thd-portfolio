@@ -5,7 +5,7 @@ import { PageTransition } from "@/components/layout/page-transition";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
-  const studies = await getAllCaseStudies();
+  const studies = getAllCaseStudies();
   return studies.map((study) => ({
     slug: study.id,
   }));
@@ -17,7 +17,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const study = await getCaseStudy(params.slug);
+  const study = getCaseStudy(params.slug);
 
   if (!study) return {};
 
@@ -38,13 +38,13 @@ export default async function CaseStudy(
   }
 ) {
   const params = await props.params;
-  const study = await getCaseStudy(params.slug);
+  const study = getCaseStudy(params.slug);
 
   if (!study) {
     notFound();
   }
 
-  const { prevStudy, nextStudy } = await getAdjacentCaseStudies(params.slug);
+  const { prevStudy, nextStudy } = getAdjacentCaseStudies(params.slug);
 
   return (
     <PageTransition>

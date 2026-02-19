@@ -4,12 +4,18 @@ import React from "react";
 import Image from "next/image";
 import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
+import { LedeBlock } from "./sections/lede-section";
 import { TextBlock } from "./sections/text-section";
 import { ImageTextBlock } from "./sections/image-text-section";
+import { CaseStudyMeta } from "./case-study-meta";
 import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
 
-// Named constants for scroll transform ranges — mirrors home hero
+// Scroll transform ranges for the hero section.
+// HERO_SCROLL_RANGE: the image fades and shifts as the user scrolls into the content (0–400px).
+// BLUR_SCROLL_RANGE: the frosted-glass overlay fades in slightly later (500–800px), after the
+// hero text has cleared, so both effects don't compete. The 400–500px gap is intentional — it
+// gives the hero fade a moment to settle before the blur overlay begins appearing.
 const HERO_SCROLL_RANGE = [0, 400];
 const HERO_OPACITY_OUTPUT = [1, 0.2];
 const HERO_Y_OUTPUT = [0, 8];
@@ -91,13 +97,10 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           style={{ y }}
           className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
         >
-          <div
-            className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted"
-            aria-hidden="true"
-          >
+          <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image
               src={study.coverImage}
-              alt=""
+              alt={`${study.title} — cover image`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
               className="object-cover"
@@ -110,6 +113,12 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
         <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20 space-y-0">
           {study.sections.map((section, index) => (
             <div key={index} className="section-container border-b border-border/5 last:border-none">
+              {section.type === "lede" && (
+                <div className="space-y-10 flex flex-col xl:flex-row-reverse">
+                  <LedeBlock section={section} links={study.links} />
+                  <CaseStudyMeta study={study} />
+                </div>
+              )}
               {section.type === "text" && <TextBlock section={section} />}
               {section.type === "image-text" && <ImageTextBlock section={section} />}
             </div>

@@ -1,8 +1,8 @@
 import { getAllCaseStudies } from "@/data/case-studies";
 import { WorkList } from "@/components/sections/work-list";
 
-export default async function WorkPage() {
-  const studies = await getAllCaseStudies();
+export default function WorkPage() {
+  const studies = getAllCaseStudies();
 
   return <WorkList studies={studies} />;
 }
