@@ -231,7 +231,7 @@ export function AboutContent() {
 
                 {/* Photo */}
                 <motion.div variants={fadeUpVariants} className="w-full">
-                  <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-muted">
+                  <div className="relative aspect-3/4 rounded-sm overflow-hidden bg-muted">
                     <Image
                       src="/images/profile-img.jpg"
                       alt="Travis Hall"
