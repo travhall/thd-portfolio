@@ -50,12 +50,13 @@ function clamp01(v: number): number {
 // ── Ref shape ──────────────────────────────────────────────────────────────
 
 interface PanelRefs {
-  bg: HTMLDivElement | null;        // fades
-  counter: HTMLSpanElement | null;  // fades with meta
-  meta: HTMLDivElement | null;      // translateY + opacity
-  titleWrap: HTMLDivElement | null; // clip-path
-  titleInner: HTMLDivElement | null; // translateY through clip
-  body: HTMLDivElement | null;      // translateY + opacity
+  bg: HTMLDivElement | null;         // fades
+  content: HTMLDivElement | null;    // exit: whole block clipped out the top
+  counter: HTMLSpanElement | null;   // enter: fades in with meta
+  meta: HTMLDivElement | null;       // enter: translateY + opacity
+  titleWrap: HTMLDivElement | null;  // enter: clip-path from bottom
+  titleInner: HTMLDivElement | null; // enter: translateY through clip
+  body: HTMLDivElement | null;       // enter: translateY + opacity
 }
 
 // ── StudyPanel ─────────────────────────────────────────────────────────────
@@ -76,6 +77,7 @@ function StudyPanel({ study, index, total, brandColor, isFirst, setRefs }: Study
   const border= light ? "border-[#1a1a1a]/25": "border-[#f0f0f0]/25";
 
   const bgRef         = useRef<HTMLDivElement>(null);
+  const contentRef    = useRef<HTMLDivElement>(null);
   const counterRef    = useRef<HTMLSpanElement>(null);
   const metaRef       = useRef<HTMLDivElement>(null);
   const titleWrapRef  = useRef<HTMLDivElement>(null);
@@ -85,6 +87,7 @@ function StudyPanel({ study, index, total, brandColor, isFirst, setRefs }: Study
   useEffect(() => {
     setRefs({
       bg:         bgRef.current,
+      content:    contentRef.current,
       counter:    counterRef.current,
       meta:       metaRef.current,
       titleWrap:  titleWrapRef.current,
@@ -122,7 +125,7 @@ function StudyPanel({ study, index, total, brandColor, isFirst, setRefs }: Study
       </div>
 
       {/* ── Content (never faded — only clip + translate) ── */}
-      <div className="relative h-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-20 pb-10 md:pb-14">
+      <div ref={contentRef} className="relative h-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-20 pb-10 md:pb-14">
         {/* Counter */}
         <div className="flex justify-end">
           <span
@@ -261,8 +264,8 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
       if (!r) return;
 
       if (i === 0) {
-        if (r.bg)      r.bg.style.opacity      = "1";
-        if (r.counter) r.counter.style.opacity  = "1";
+        if (r.bg)      r.bg.style.opacity     = "1";
+        if (r.counter) r.counter.style.opacity = "1";
         return;
       }
 
@@ -274,9 +277,23 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
           : easeOut(clamp01(bgRaw)).toFixed(4);
       }
 
-      // ── Text reveal: clip + translate only, zero opacity changes ───────
+      // ── Shared scroll progress for this panel's transition ─────────────
       const tRaw = (rel - i * vh) / (TEXT_ZONE * vh);
       const t    = reduced ? (tRaw >= 0.5 ? 1 : 0) : clamp01(tRaw);
+
+      // ── EXIT: slide the previous panel's entire content block out the top ─
+      const prev = panelRefs.current[i - 1];
+      if (prev) {
+        const exitT = easeOutQuint(clamp01(t / 0.7));
+
+        // Clip the whole content wrapper from the top — swallows everything upward
+        if (prev.content) {
+          prev.content.style.clipPath  = `inset(${(exitT * 105).toFixed(2)}% 0 0 0)`;
+          prev.content.style.transform = `translateY(${(exitT * -60).toFixed(2)}px)`;
+        }
+      }
+
+      // ── ENTER: reveal this panel's content from the bottom ─────────────
 
       // Counter + Meta: slide up, fade in together before title
       const metaT = easeOut(clamp01(t / 0.7));
