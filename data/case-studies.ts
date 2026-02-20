@@ -55,6 +55,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
+    // Cool blue-teal — systematic, precise, matches the design system subject matter
+    brandLight: "oklch(0.88 0.04 196)",
+    brandDark:  "oklch(0.20 0.06 196)",
   },
   {
     id: "el-camino-skate-shop",
@@ -108,6 +111,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
+    // Warm concrete — raw, urban, skate culture without being cliché
+    brandLight: "oklch(0.87 0.02 70)",
+    brandDark:  "oklch(0.19 0.03 60)",
   },
   {
     id: "moxie-beauty-studio",
@@ -161,6 +167,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
+    // Warm blush rose — refined, personal, beauty-adjacent without being pink
+    brandLight: "oklch(0.90 0.025 15)",
+    brandDark:  "oklch(0.19 0.04 15)",
   },
   {
     id: "travishall-dot-design",
@@ -213,6 +222,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: false,
+    // Sage neutral — same palette as the site itself, self-referential
+    brandLight: "oklch(0.88 0.012 127)",
+    brandDark:  "oklch(0.20 0.015 127)",
   },
   {
     id: "buddyhead",
@@ -266,6 +278,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
+    // Punk publication — near-black warm ground, high contrast
+    brandLight: "oklch(0.87 0.01 80)",
+    brandDark:  "oklch(0.15 0.02 80)",
   },
 ];
 

@@ -44,4 +44,11 @@ export interface CaseStudy {
   links?: CaseStudyLink[];
   sections: (LedeSection | TextSection | ImageTextSection)[];
   featured: boolean;
+  // Brand colors for the /work panel layout.
+  // OKLCH strings — e.g. "oklch(0.88 0.04 196)".
+  // Light mode uses brandLight, dark mode uses brandDark.
+  // Text color on each panel is determined by the lightness value:
+  // L >= 0.55 → dark text, L < 0.55 → light text.
+  brandLight?: string;
+  brandDark?: string;
 }
