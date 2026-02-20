@@ -15,7 +15,6 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { useLenis } from "lenis/react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FiArrowUpRight } from "react-icons/fi";
 import type { CaseStudy } from "@/types/case-study";
@@ -111,18 +110,9 @@ function StudyPanel({ study, index, total, brandColor, isFirst, setRefs }: Study
         style={{
           backgroundColor: brandColor,
           opacity: isFirst ? 1 : 0,
+          transition: "background-color 0.3s ease",
         }}
-      >
-        <Image
-          src={study.coverImage}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover grayscale"
-          style={{ opacity: 0.04 }}
-          priority={index < 2}
-        />
-      </div>
+      />
 
       {/* ── Content (never faded — only clip + translate) ── */}
       <div ref={contentRef} className="relative h-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-20 pb-10 md:pb-14">
@@ -216,25 +206,36 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
   const reduced = useReducedMotion() ?? false;
   const studies = allStudies;
 
+  // Theme detection — deferred until after hydration to avoid SSR mismatch.
+  // `mounted` starts false so server and client first-paint agree on a neutral
+  // fallback color. After mount, we read the real theme and set up an observer
+  // for live dark/light switching. A CSS transition on backgroundColor (set
+  // directly on the bg div inline style) makes the one-frame swap invisible.
+  const [mounted, setMounted]   = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   useEffect(() => {
+    setDarkMode(document.documentElement.classList.contains("dark"));
+    setMounted(true);
     const sync = () => setDarkMode(document.documentElement.classList.contains("dark"));
-    sync();
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
 
   const getBrandColor = useCallback(
-    (study: CaseStudy) => darkMode
-      ? (study.brandDark  ?? "oklch(0.20 0.01 0)")
-      : (study.brandLight ?? "oklch(0.88 0.01 0)"),
-    [darkMode]
+    (study: CaseStudy) => {
+      if (!mounted) return "oklch(0.15 0.01 0)"; // neutral dark — server + client first-paint agree
+      return darkMode
+        ? (study.brandDark  ?? "oklch(0.20 0.01 0)")
+        : (study.brandLight ?? "oklch(0.88 0.01 0)");
+    },
+    [mounted, darkMode]
   );
 
   const containerRef    = useRef<HTMLDivElement>(null);
   const panelRefs       = useRef<PanelRefs[]>([]);
   const containerTopRef = useRef<number>(0);
+  const isSnappingRef   = useRef(false); // guard: prevent re-firing while Lenis animates to target
 
   const makeSetRefs = useCallback(
     (i: number) => (refs: PanelRefs) => { panelRefs.current[i] = refs; },
@@ -317,6 +318,55 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
         r.body.style.opacity   = bodyT.toFixed(4);
       }
     });
+  }, [studies, reduced]);
+
+  // ── Soft snap: magnetic pull toward panel boundaries when coasting ─────────
+  // Fires a second useLenis so it has access to `velocity` without cluttering
+  // the animation handler. Only snaps when:
+  //   • not reduced motion
+  //   • scroll is within SNAP_ZONE of a boundary
+  //   • velocity has dropped below VELOCITY_THRESHOLD (user is coasting)
+  //   • not already mid-snap (isSnappingRef guard)
+  useLenis((lenis) => {
+    if (reduced || studies.length === 0) return;
+
+    const { scroll, velocity } = lenis;
+
+    const VELOCITY_THRESHOLD = 0.8;  // px/frame — below this = coasting
+    const SNAP_ZONE          = 0.38; // fraction of vh on each side of a boundary
+
+    // Don't interrupt a snap already in flight
+    if (isSnappingRef.current) {
+      // Clear the guard once Lenis has nearly settled
+      if (Math.abs(velocity) < 0.05) isSnappingRef.current = false;
+      return;
+    }
+
+    // Only snap when velocity is low (coasting, not actively scrolling)
+    if (Math.abs(velocity) >= VELOCITY_THRESHOLD) return;
+
+    const vh            = window.innerHeight;
+    const containerTop  = containerTopRef.current;
+    const containerEnd  = containerTop + studies.length * vh;
+
+    // Only act while inside the work section
+    if (scroll < containerTop - vh || scroll > containerEnd) return;
+
+    // Find nearest panel boundary
+    const rel           = scroll - containerTop;
+    const nearestIndex  = Math.round(rel / vh);
+    const clampedIndex  = Math.max(0, Math.min(studies.length - 1, nearestIndex));
+    const targetScroll  = containerTop + clampedIndex * vh;
+    const distanceToBoundary = Math.abs(scroll - targetScroll);
+
+    // Only snap if within the zone and not already exactly there
+    if (distanceToBoundary < SNAP_ZONE * vh && distanceToBoundary > 2) {
+      isSnappingRef.current = true;
+      lenis.scrollTo(targetScroll, {
+        duration: 0.6,
+        easing: (t: number) => 1 - Math.pow(1 - t, 4), // easeOutQuart
+      });
+    }
   }, [studies, reduced]);
 
   const [isHovered, setIsHovered] = useState(false);
