@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { PageBgProvider } from "@/components/layout/page-bg-provider";
 import { Footer } from "@/components/layout/site-footer";
 import { SiteNav } from "@/components/layout/site-nav";
 import { Logo } from "@/components/layout/logo";
@@ -79,6 +80,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider>
+          <PageBgProvider>
           <SmoothScroll>
             <a
               href="#main-content"
@@ -91,6 +93,7 @@ export default function RootLayout({
             <main id="main-content" className="relative">{children}</main>
             <Footer />
           </SmoothScroll>
+          </PageBgProvider>
         </ThemeProvider>
       </body>
     </html>

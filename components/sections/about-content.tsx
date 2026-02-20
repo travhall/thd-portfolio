@@ -9,6 +9,7 @@ import { MOTION_TOKENS } from "@/lib/tokens";
 import { FiDownload, FiGithub, FiLinkedin, FiArrowRight } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
+import { usePageBg } from "@/hooks/use-page-bg";
 
 // --- Variants (module scope — not recreated on every render) ---
 
@@ -183,6 +184,10 @@ const experiences: Experience[] = [
 export function AboutContent() {
   const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  // Explicitly reset the page background to the theme default on mount.
+  // Without this, navigating away from a brand-colored case study page would
+  // leave --page-bg set to that brand color for the duration of the about page.
+  usePageBg(null);
 
   return (
     <PageTransition>

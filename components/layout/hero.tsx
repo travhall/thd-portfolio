@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MOTION_TOKENS } from "@/lib/tokens";
+import { usePageBg } from "@/hooks/use-page-bg";
 
 // Named constants for scroll transform ranges
 const HERO_SCROLL_RANGE = [0, 400];
@@ -23,6 +24,10 @@ export function Hero() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Reset page background to theme default when home page mounts.
+  // Handles the case where the user navigates home from a brand-colored page.
+  usePageBg(null);
 
   const y = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_Y_OUTPUT);
   const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_OPACITY_OUTPUT);

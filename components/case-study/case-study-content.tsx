@@ -10,6 +10,8 @@ import { ImageTextBlock } from "./sections/image-text-section";
 import { CaseStudyMeta } from "./case-study-meta";
 import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
+import { usePageBg } from "@/hooks/use-page-bg";
+import { usePageBgContext } from "@/components/layout/page-bg-provider";
 
 // Scroll transform ranges for the hero section.
 // HERO_SCROLL_RANGE: the image fades and shifts as the user scrolls into the content (0–400px).
@@ -31,6 +33,14 @@ interface CaseStudyContentProps {
 export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyContentProps) {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
+
+  // Declare this page's brand background color.
+  // Picks dark/light variant from context, falls back to null (theme default).
+  const { isDark } = usePageBgContext();
+  const brandColor = isDark
+    ? (study.brandDark  ?? null)
+    : (study.brandLight ?? null);
+  usePageBg(brandColor);
 
   const y = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [0, 0] : HERO_Y_OUTPUT);
   const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [1, 1] : HERO_OPACITY_OUTPUT);

@@ -106,7 +106,12 @@
    in @theme because they depend on selector-based dark mode.
    ============================================================ */
 @layer base {
+  :root {
+    --page-bg: var(--color-background);
+  }
+
   .dark {
+    --page-bg: var(--color-background);
     --color-background:           var(--color-brand-3-950);
     --color-foreground:           var(--color-brand-1-50);
     --color-card:                 var(--color-brand-3-900);
@@ -144,7 +149,16 @@
 
   html,
   body {
-    @apply bg-background text-foreground underline-offset-4;
+    @apply text-foreground underline-offset-4;
+    background-color: var(--page-bg);
+  }
+
+  /* Only animate background-color when a brand color is actively set.
+     The provider adds/removes this class via JS, so the transition never
+     fires on initial page paint — only on deliberate navigations. */
+  html.page-bg-transition,
+  html.page-bg-transition body {
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   ::selection {
