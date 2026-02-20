@@ -1,20 +1,14 @@
 "use client";
 
 // ---------------------------------------------------------------------------
-// /work page — sticky full-viewport panel layout with crossfade transitions
+// Architecture: single sticky panel per study, but background and content
+// are separate children within it.
 //
-// Crossfade model:
-//   Panel 0 is always opacity 1 (base layer). Panels 1..n start at opacity 0.
-//   The Lenis handler directly mutates el.style.opacity + el.style.transform
-//   on every scroll tick — no React state, no re-renders, full 60fps.
+// Each panel wrapper has opacity:1 always and is sticky.
+// The background div INSIDE the panel is what gets faded via opacity.
+// The content div INSIDE the panel is never faded — only clip + translate.
 //
-//   Because the incoming panel fades in on top of the previous panel
-//   (which is still sticky and fully visible), you see a genuine color blend.
-//
-// Scroll model:
-//   Each panel gets one full viewport of scroll depth.
-//   Panel i starts fading in at relativeScroll = i * vh.
-//   FADE_ZONE controls how quickly the fade completes (as fraction of vh).
+// This means the bg crossfade and text reveal are fully independent.
 // ---------------------------------------------------------------------------
 
 import { useRef, useState, useCallback, useEffect } from "react";
@@ -35,40 +29,34 @@ function parseOklch(value: string): [number, number, number] | null {
   return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
 }
 
-/** L >= 0.55 → light background → use dark text */
 function isLightPanel(oklch: string): boolean {
   const parsed = parseOklch(oklch);
   return parsed ? parsed[0] >= 0.55 : true;
 }
 
-// Each panel occupies one full vh of scroll depth.
-// FADE_ZONE = how much of that vh is used for the crossfade (0–1).
-// 0.4 = fade completes in the first 40% of each panel's scroll zone.
-const FADE_ZONE = 0.4;
+const FADE_ZONE = 0.4;  // fraction of vh for bg crossfade
+const TEXT_ZONE = 0.25; // fraction of vh for text reveal (snappier)
 
-// How many px the content translates upward as the panel fades in.
-const CONTENT_RISE_PX = 48;
+function easeOut(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
+}
+function easeOutQuint(t: number): number {
+  return 1 - Math.pow(1 - t, 5);
+}
+function clamp01(v: number): number {
+  return Math.max(0, Math.min(1, v));
+}
 
-// ── Panel content entrance variants ────────────────────────────────────────
+// ── Ref shape ──────────────────────────────────────────────────────────────
 
-const panelContentVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.05 },
-  },
-};
-
-const panelItemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: MOTION_TOKENS.duration.base,
-      ease: MOTION_TOKENS.ease.expo,
-    },
-  },
-};
+interface PanelRefs {
+  bg: HTMLDivElement | null;        // fades
+  counter: HTMLSpanElement | null;  // fades with meta
+  meta: HTMLDivElement | null;      // translateY + opacity
+  titleWrap: HTMLDivElement | null; // clip-path
+  titleInner: HTMLDivElement | null; // translateY through clip
+  body: HTMLDivElement | null;      // translateY + opacity
+}
 
 // ── StudyPanel ─────────────────────────────────────────────────────────────
 
@@ -77,36 +65,51 @@ interface StudyPanelProps {
   index: number;
   total: number;
   brandColor: string;
-  setPanelEl: (el: HTMLElement | null) => void;
-  setContentEl: (el: HTMLDivElement | null) => void;
+  isFirst: boolean;
+  setRefs: (refs: PanelRefs) => void;
 }
 
-function StudyPanel({
-  study,
-  index,
-  total,
-  brandColor,
-  setPanelEl,
-  setContentEl,
-}: StudyPanelProps) {
+function StudyPanel({ study, index, total, brandColor, isFirst, setRefs }: StudyPanelProps) {
   const light = isLightPanel(brandColor);
-  const text = light ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
+  const text  = light ? "text-[#1a1a1a]"    : "text-[#f0f0f0]";
   const muted = light ? "text-[#1a1a1a]/55" : "text-[#f0f0f0]/55";
-  const borderCls = light ? "border-[#1a1a1a]/25" : "border-[#f0f0f0]/25";
+  const border= light ? "border-[#1a1a1a]/25": "border-[#f0f0f0]/25";
+
+  const bgRef         = useRef<HTMLDivElement>(null);
+  const counterRef    = useRef<HTMLSpanElement>(null);
+  const metaRef       = useRef<HTMLDivElement>(null);
+  const titleWrapRef  = useRef<HTMLDivElement>(null);
+  const titleInnerRef = useRef<HTMLDivElement>(null);
+  const bodyRef       = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setRefs({
+      bg:         bgRef.current,
+      counter:    counterRef.current,
+      meta:       metaRef.current,
+      titleWrap:  titleWrapRef.current,
+      titleInner: titleInnerRef.current,
+      body:       bodyRef.current,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
+    // Panel wrapper: sticky, always opacity 1, never faded
     <article
-      ref={setPanelEl}
       aria-labelledby={`work-panel-title-${study.id}`}
       className="sticky top-0 h-svh w-full overflow-hidden"
-      style={{
-        backgroundColor: brandColor,
-        opacity: index === 0 ? 1 : 0,
-        zIndex: index + 1,
-      }}
+      style={{ zIndex: index + 1 }}
     >
-      {/* Subtle cover image texture */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+      {/* ── Background (this is what fades) ── */}
+      <div
+        ref={bgRef}
+        className="absolute inset-0"
+        style={{
+          backgroundColor: brandColor,
+          opacity: isFirst ? 1 : 0,
+        }}
+      >
         <Image
           src={study.coverImage}
           alt=""
@@ -118,120 +121,82 @@ function StudyPanel({
         />
       </div>
 
+      {/* ── Content (never faded — only clip + translate) ── */}
       <div className="relative h-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-20 pb-10 md:pb-14">
-        {/* Panel counter — top right */}
+        {/* Counter */}
         <div className="flex justify-end">
           <span
+            ref={counterRef}
             className={`font-nohemi text-xs tabular-nums tracking-[0.2em] ${muted}`}
             aria-hidden="true"
+            style={isFirst ? undefined : { opacity: 0 }}
           >
-            {String(index + 1).padStart(2, "0")} /{" "}
-            {String(total).padStart(2, "0")}
+            {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
         </div>
 
-        {/*
-          Content wrapper — mutated by Lenis handler for the rise effect.
-          Panel 0 starts at translateY(0); others rise from CONTENT_RISE_PX to 0.
-        */}
-        <div
-          ref={setContentEl}
-          style={{
-            transform:
-              index === 0
-                ? "translateY(0px)"
-                : `translateY(${CONTENT_RISE_PX}px)`,
-          }}
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-5%" }}
-            variants={panelContentVariants}
-            className="max-w-7xl"
+        <div className="max-w-7xl">
+          {/* Meta */}
+          <div
+            ref={metaRef}
+            className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
+            style={isFirst ? undefined : { transform: "translateY(32px)", opacity: 0 }}
           >
-            {/* Year · role · client */}
-            <motion.div
-              variants={panelItemVariants}
-              className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
-            >
-              <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">
-                {study.year}
-              </span>
-              {study.role && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span className="text-xs">{study.role}</span>
-                </>
-              )}
-              {study.client && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span className="text-xs">{study.client}</span>
-                </>
-              )}
-            </motion.div>
+            <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">{study.year}</span>
+            {study.role && <><span aria-hidden="true">·</span><span className="text-xs">{study.role}</span></>}
+            {study.client && <><span aria-hidden="true">·</span><span className="text-xs">{study.client}</span></>}
+          </div>
 
-            {/* Title */}
-            <motion.div
-              variants={panelItemVariants}
-              className="overflow-hidden pb-[0.12em]"
+          {/* Title — clip outer + thrust inner */}
+          <div className="pb-[0.12em]">
+            <div
+              ref={titleWrapRef}
+              className="overflow-hidden"
+              style={isFirst ? undefined : { clipPath: "inset(100% 0 0 0)" }}
             >
-              <h2
-                id={`work-panel-title-${study.id}`}
-                className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 ${text}`}
-                style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+              <div
+                ref={titleInnerRef}
+                style={isFirst ? undefined : { transform: "translateY(80px)" }}
               >
-                {study.title}
-              </h2>
-            </motion.div>
+                <h2
+                  id={`work-panel-title-${study.id}`}
+                  className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 ${text}`}
+                  style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+                >
+                  {study.title}
+                </h2>
+              </div>
+            </div>
+          </div>
 
-            {/* Description */}
-            <motion.p
-              variants={panelItemVariants}
-              className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted}`}
-            >
+          {/* Body */}
+          <div
+            ref={bodyRef}
+            style={isFirst ? undefined : { transform: "translateY(20px)", opacity: 0 }}
+          >
+            <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted}`}>
               {study.description}
-            </motion.p>
-
-            {/* Tags */}
-            <motion.ul
-              variants={panelItemVariants}
-              className="flex gap-2 flex-wrap mt-5"
-              aria-label={`Tags for ${study.title}`}
-            >
+            </p>
+            <ul className="flex gap-2 flex-wrap mt-5" aria-label={`Tags for ${study.title}`}>
               {study.tags.map((tag) => (
                 <li key={tag}>
-                  <Badge
-                    variant="outline"
-                    className={`bg-transparent hover:bg-transparent ${text} ${borderCls}`}
-                  >
+                  <Badge variant="outline" className={`bg-transparent hover:bg-transparent ${text} ${border}`}>
                     {tag}
                   </Badge>
                 </li>
               ))}
-            </motion.ul>
-
-            {/* CTA */}
-            <motion.div variants={panelItemVariants} className="mt-8">
+            </ul>
+            <div className="mt-8">
               <Link
                 href={`/work/${study.id}`}
-                className={`
-                  group/cta inline-flex items-center gap-2 text-sm font-medium
-                  border-b pb-px transition-colors duration-200
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm
-                  ${text} ${borderCls} hover:border-current/70 focus-visible:ring-current
-                `}
+                className={`group/cta inline-flex items-center gap-2 text-sm font-medium border-b pb-px transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm ${text} ${border} hover:border-current/70 focus-visible:ring-current`}
               >
                 View case study
-                <FiArrowUpRight
-                  className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
-                  aria-hidden="true"
-                />
+                <FiArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" aria-hidden="true" />
                 <span className="sr-only">: {study.title}</span>
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -248,121 +213,104 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
   const reduced = useReducedMotion() ?? false;
   const studies = allStudies;
 
-  // ── Reactive dark mode ──────────────────────────────────────────────────
   const [darkMode, setDarkMode] = useState(false);
-
   useEffect(() => {
-    const sync = () =>
-      setDarkMode(document.documentElement.classList.contains("dark"));
+    const sync = () => setDarkMode(document.documentElement.classList.contains("dark"));
     sync();
     const observer = new MutationObserver(sync);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
 
   const getBrandColor = useCallback(
-    (study: CaseStudy) =>
-      darkMode
-        ? (study.brandDark ?? "oklch(0.20 0.01 0)")
-        : (study.brandLight ?? "oklch(0.88 0.01 0)"),
+    (study: CaseStudy) => darkMode
+      ? (study.brandDark  ?? "oklch(0.20 0.01 0)")
+      : (study.brandLight ?? "oklch(0.88 0.01 0)"),
     [darkMode]
   );
 
-  // ── Panel + content refs (direct DOM mutation — no state updates) ────────
-  const containerRef = useRef<HTMLDivElement>(null);
-  const panelEls = useRef<(HTMLElement | null)[]>([]);
-  const contentEls = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const panelRefs       = useRef<PanelRefs[]>([]);
   const containerTopRef = useRef<number>(0);
+
+  const makeSetRefs = useCallback(
+    (i: number) => (refs: PanelRefs) => { panelRefs.current[i] = refs; },
+    []
+  );
 
   useEffect(() => {
     const measure = () => {
       const el = containerRef.current;
       if (!el) return;
-      let top = 0;
-      let node: HTMLElement | null = el;
-      while (node) {
-        top += node.offsetTop;
-        node = node.offsetParent as HTMLElement | null;
-      }
+      let top = 0, node: HTMLElement | null = el;
+      while (node) { top += node.offsetTop; node = node.offsetParent as HTMLElement | null; }
       containerTopRef.current = top;
     };
     const raf = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const makePanelRef = useCallback(
-    (i: number) => (el: HTMLElement | null) => {
-      panelEls.current[i] = el;
-    },
-    []
-  );
+  // ── Lenis handler ─────────────────────────────────────────────────────────
+  useLenis(({ scroll }) => {
+    if (studies.length === 0) return;
+    const vh  = window.innerHeight;
+    const rel = scroll - containerTopRef.current;
 
-  const makeContentRef = useCallback(
-    (i: number) => (el: HTMLDivElement | null) => {
-      contentEls.current[i] = el;
-    },
-    []
-  );
+    studies.forEach((_, i) => {
+      const r = panelRefs.current[i];
+      if (!r) return;
 
-  // ── Lenis scroll handler ────────────────────────────────────────────────
-  useLenis(
-    ({ scroll }) => {
-      const container = containerRef.current;
-      if (!container || studies.length === 0) return;
+      if (i === 0) {
+        if (r.bg)      r.bg.style.opacity      = "1";
+        if (r.counter) r.counter.style.opacity  = "1";
+        return;
+      }
 
-      const vh = window.innerHeight;
-      const relativeScroll = scroll - containerTopRef.current;
+      // ── Background crossfade ───────────────────────────────────────────
+      if (r.bg) {
+        const bgRaw = (rel - i * vh) / (FADE_ZONE * vh);
+        r.bg.style.opacity = reduced
+          ? bgRaw >= 0.5 ? "1" : "0"
+          : easeOut(clamp01(bgRaw)).toFixed(4);
+      }
 
-      studies.forEach((_, i) => {
-        const panelEl = panelEls.current[i];
-        const contentEl = contentEls.current[i];
-        if (!panelEl) return;
+      // ── Text reveal: clip + translate only, zero opacity changes ───────
+      const tRaw = (rel - i * vh) / (TEXT_ZONE * vh);
+      const t    = reduced ? (tRaw >= 0.5 ? 1 : 0) : clamp01(tRaw);
 
-        if (i === 0) {
-          panelEl.style.opacity = "1";
-          if (contentEl) contentEl.style.transform = "translateY(0px)";
-          return;
-        }
+      // Counter + Meta: slide up, fade in together before title
+      const metaT = easeOut(clamp01(t / 0.7));
+      if (r.counter) {
+        r.counter.style.opacity = metaT.toFixed(4);
+      }
+      if (r.meta) {
+        r.meta.style.transform = `translateY(${((1 - metaT) * 32).toFixed(2)}px)`;
+        r.meta.style.opacity   = metaT.toFixed(4);
+      }
 
-        // Panel i fades in during scroll zone [i*vh, i*vh + FADE_ZONE*vh].
-        // Progress 0 = start of fade, 1 = fully opaque.
-        const progress = (relativeScroll - i * vh) / (FADE_ZONE * vh);
-        const opacity = reduced
-          ? progress >= 0.5 ? 1 : 0
-          : Math.max(0, Math.min(1, progress));
-        const contentProgress = opacity;
+      // Title: clip unmasks from bottom, inner element thrusts upward
+      const titleT = easeOutQuint(clamp01((t - 0.05) / 0.65));
+      if (r.titleWrap)  r.titleWrap.style.clipPath  = `inset(${((1 - titleT) * 100).toFixed(2)}% 0 0 0)`;
+      if (r.titleInner) r.titleInner.style.transform = `translateY(${((1 - titleT) * 80).toFixed(2)}px)`;
 
-        panelEl.style.opacity = String(opacity);
-        if (contentEl) {
-          contentEl.style.transform = `translateY(${(CONTENT_RISE_PX * (1 - contentProgress)).toFixed(2)}px)`;
-        }
-      });
-    },
-    [studies, reduced]
-  );
+      // Body: slides up, fades in after title lands
+      const bodyT = easeOut(clamp01((t - 0.35) / 0.65));
+      if (r.body) {
+        r.body.style.transform = `translateY(${((1 - bodyT) * 20).toFixed(2)}px)`;
+        r.body.style.opacity   = bodyT.toFixed(4);
+      }
+    });
+  }, [studies, reduced]);
 
   const [isHovered, setIsHovered] = useState(false);
-
   const hoverLabelVariants = {
     initial: { y: 20, opacity: 0 },
-    animate: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: MOTION_TOKENS.duration.base, ease: MOTION_TOKENS.ease.quart },
-    },
-    exit: {
-      y: -20,
-      opacity: 0,
-      transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart },
-    },
+    animate: { y: 0, opacity: 1, transition: { duration: MOTION_TOKENS.duration.base, ease: MOTION_TOKENS.ease.quart } },
+    exit:    { y: -20, opacity: 0, transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart } },
   };
 
   return (
     <div>
-      {/* Fixed nav header — animated hover swap "work" ↔ "return to index" */}
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 flex items-center pointer-events-none">
         <div className="overflow-hidden inline-block pointer-events-auto">
           <h1
@@ -370,19 +318,13 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <Link
-              href="/"
-              aria-label="Work — return to index"
-              className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring rounded-sm"
-            >
+            <Link href="/" aria-label="Work — return to index" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring rounded-sm">
               <div className="overflow-hidden relative h-[1.2em]">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={isHovered ? "return" : "work"}
                     variants={hoverLabelVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
+                    initial="initial" animate="animate" exit="exit"
                     className="block"
                   >
                     {isHovered ? "return to index" : "work"}
@@ -394,15 +336,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
         </div>
       </header>
 
-      {/*
-        Container height: n * 100svh gives each panel a full viewport of scroll
-        depth. The extra 60vh lets the last panel complete its fade and rest
-        fully opaque before the scroll container ends.
-      */}
-      <div
-        ref={containerRef}
-        style={{ height: `calc(${studies.length * 100}svh + 60vh)` }}
-      >
+      <div ref={containerRef} style={{ height: `calc(${studies.length * 100}svh + 60vh)` }}>
         {studies.map((study, index) => (
           <StudyPanel
             key={study.id}
@@ -410,8 +344,8 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
             index={index}
             total={studies.length}
             brandColor={getBrandColor(study)}
-            setPanelEl={makePanelRef(index)}
-            setContentEl={makeContentRef(index)}
+            isFirst={index === 0}
+            setRefs={makeSetRefs(index)}
           />
         ))}
       </div>
