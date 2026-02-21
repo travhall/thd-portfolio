@@ -77,7 +77,7 @@
   --color-ring:                 var(--color-brand-1-700);
 
   /* --- Hero blur overlay tokens (light mode) --- */
-  --hero-blur-bg:        var(--color-brand-1-600);
+  --hero-blur-bg:        var(--page-bg);
   --hero-blur-blend:     screen;
 
   /* --- Toggle component tokens (light mode) --- */
@@ -133,7 +133,7 @@
     --color-ring:                 var(--color-brand-1-400);
 
     /* Hero blur overlay tokens (dark mode) */
-    --hero-blur-bg:        var(--color-brand-1-600);  /* amber — mix-blend-multiply on dark */
+    /* --hero-blur-bg:        var(--color-brand-1-600); */
     --hero-blur-blend:     hue;
 
     /* Toggle component tokens (dark mode) */

@@ -120,7 +120,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
         </motion.div>
 
         {/* Content Sections */}
-        <div className="mt-24 bg-background/80 backdrop-blur-xl relative z-20 space-y-0">
+        <div className="mt-24 bg-(--page-bg)/90 backdrop-blur-xl relative z-20 space-y-0">
           {study.sections.map((section, index) => (
             <div key={index} className="section-container border-b border-border/5 last:border-none">
               {section.type === "lede" && (

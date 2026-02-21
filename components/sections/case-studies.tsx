@@ -207,7 +207,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
   return (
     <section
       id="work"
-      className="relative z-10 bg-background/90 backdrop-blur px-4 xl:px-8 pt-[12vh] pb-[20vh]"
+      className="relative z-10 bg-(--page-bg)/90 backdrop-blur px-4 xl:px-8 pt-[12vh] pb-[20vh]"
     >
       {/* Section heading */}
       <motion.div
