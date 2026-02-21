@@ -376,7 +376,7 @@ export function AboutContent() {
                 <p className="text-xl text-muted-foreground">
                   If you&rsquo;ve made it this far, the work is probably worth a look.
                 </p>
-                <Button asChild variant="outline" className="group">
+                <Button asChild variant="default" className="group">
                   <Link href="/work">
                     View my work
                     <FiArrowRight

@@ -176,7 +176,7 @@
 
   /* --- Skip navigation --- */
   .skip-nav {
-    @apply fixed top-0 left-0 z-[9999] px-4 py-2 bg-background text-foreground font-medium text-sm rounded-br-sm;
+    @apply fixed top-0 left-0 z-9999 px-4 py-2 bg-background text-foreground font-medium text-sm rounded-br-sm;
     transform: translateY(-100%);
     transition: transform var(--duration-fast) var(--ease-in-out);
   }

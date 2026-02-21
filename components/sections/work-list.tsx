@@ -1,33 +1,21 @@
 "use client";
 
 // ---------------------------------------------------------------------------
-// WorkList — natural-scroll redesign
+// WorkList — natural-scroll, IntersectionObserver-driven background
 //
-// Architecture:
-//   • Each case study is a full-viewport section (min-h-svh) that scrolls
-//     naturally — no sticky stacking, no scroll-snap, no JS position math.
-//
-//   • Background: IntersectionObserver on each section with rootMargin set so
-//     the trigger fires when the section crosses the vertical midpoint of the
-//     viewport. On entry, setPageBg() writes the brand color directly to
-//     --page-bg on <html>. The existing CSS transition (0.5s ease) handles the
-//     visible blend. No per-frame updates, no lerp lag.
-//
-//   • Content reveal: a second IntersectionObserver (threshold 0.15) drives a
-//     CSS class toggle that triggers enter animations via Tailwind transitions.
-//     Fires once per section — clean, performant, no scroll math.
-//
-//   • Pointer events: not needed — sections are normal flow, all interactive.
-//
-//   • Lenis: still disabled on /work (smooth-scroll.tsx) since we don't want
-//     the lerp on a page with deliberate per-section color transitions.
+// • Each study is a min-h-svh section in normal document flow
+// • Background: IO with rootMargin "-50% 0px -50% 0px" — triggers when a
+//   section crosses the viewport midpoint; setPageBg + CSS transition blends
+// • Content reveal: staggered CSS transitions triggered by IO at threshold 0.15
+// • Single fixed tracker (top-right) updates via IO as sections become active
 // ---------------------------------------------------------------------------
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FiArrowUpRight } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
@@ -52,61 +40,63 @@ interface StudySectionProps {
   index: number;
   total: number;
   brandColor: string;
-  onVisible: (color: string) => void;
+  onBecomeActive: (index: number, color: string) => void;
   onNavigate: (color: string) => void;
 }
 
-function StudySection({ study, index, total, brandColor, onVisible, onNavigate }: StudySectionProps) {
+function StudySection({
+  study,
+  index,
+  total,
+  brandColor,
+  onBecomeActive,
+  onNavigate,
+}: StudySectionProps) {
   const light  = isLightPanel(brandColor);
   const text   = light ? "text-[#1a1a1a]"      : "text-[#f0f0f0]";
   const muted  = light ? "text-[#1a1a1a]/55"   : "text-[#f0f0f0]/55";
-  const border = light ? "border-[#1a1a1a]/25"  : "border-[#f0f0f0]/25";
+  const border = light ? "border-[#1a1a1a]/30"  : "border-[#f0f0f0]/30";
 
   const sectionRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(index === 0);
 
-  // ── Background trigger ───────────────────────────────────────────────────
-  // Fires when the section crosses the vertical midpoint of the viewport.
-  // rootMargin "-50% 0px -50% 0px" means the intersection box is a 1px
-  // horizontal stripe at the exact center — entry fires on the way down
-  // and exit fires on the way back up, so the bg tracks which section
-  // owns the center of the screen.
+  // Background: fires when section center crosses viewport midpoint
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-
-    const bgObserver = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) onVisible(brandColor);
+        if (entry.isIntersecting) onBecomeActive(index, brandColor);
       },
       { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
     );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [index, brandColor, onBecomeActive]);
 
-    bgObserver.observe(el);
-    return () => bgObserver.disconnect();
-  }, [brandColor, onVisible]);
-
-  // ── Content reveal trigger ───────────────────────────────────────────────
-  // Fires once when 15% of the section is visible. Sets `revealed` which
-  // drives the transition classes below. Disconnects after first trigger.
+  // Reveal: fires once when 15% of the section enters the viewport
   useEffect(() => {
-    if (revealed) return; // first section starts revealed
+    if (revealed) return;
     const el = sectionRef.current;
     if (!el) return;
-
-    const revealObserver = new IntersectionObserver(
-      ([entry], obs) => {
+    const obs = new IntersectionObserver(
+      ([entry], o) => {
         if (entry.isIntersecting) {
           setRevealed(true);
-          obs.disconnect();
+          o.disconnect();
         }
       },
       { threshold: 0.15 }
     );
-
-    revealObserver.observe(el);
-    return () => revealObserver.disconnect();
+    obs.observe(el);
+    return () => obs.disconnect();
   }, [revealed]);
+
+  // Shared transition base — each element adds its own delay via inline style.
+  // duration-500 / duration-700 are valid Tailwind values; duration-600 is not.
+  const base = "transition-all ease-out";
+  const hidden = "opacity-0 translate-y-5";
+  const visible = "opacity-100 translate-y-0";
 
   return (
     <section
@@ -114,78 +104,86 @@ function StudySection({ study, index, total, brandColor, onVisible, onNavigate }
       aria-labelledby={`work-title-${study.id}`}
       className="min-h-svh w-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
     >
-      {/* Counter */}
-      <div className="flex justify-end">
-        <span
-          className={`font-nohemi text-xs tabular-nums tracking-[0.2em] transition-opacity duration-500 ${muted} ${revealed ? "opacity-100" : "opacity-0"}`}
-          aria-hidden="true"
-        >
-          {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </span>
-      </div>
+      {/* Spacer — pushes content to lower half, matching the old panel layout */}
+      <div />
 
       <div className="max-w-7xl">
-        {/* Meta */}
+        {/* Meta row */}
         <div
-          className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 transition-all duration-500 delay-75 ${muted} ${
-            revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
+          className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted} ${base} ${revealed ? visible : hidden}`}
+          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "0ms" : "0ms" }}
         >
-          <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">{study.year}</span>
-          {study.role   && <><span aria-hidden="true">·</span><span className="text-xs">{study.role}</span></>}
-          {study.client && <><span aria-hidden="true">·</span><span className="text-xs">{study.client}</span></>}
+          <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">
+            {study.year}
+          </span>
+          {study.role && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="text-xs">{study.role}</span>
+            </>
+          )}
+          {study.client && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="text-xs">{study.client}</span>
+            </>
+          )}
         </div>
 
         {/* Title */}
         <div className="overflow-hidden pb-[0.12em]">
           <h2
             id={`work-title-${study.id}`}
-            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 transition-all duration-700 delay-100 ${text} ${
-              revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
-            }`}
-            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 ${text} ${base} ${revealed ? visible : hidden}`}
+            style={{
+              fontSize: "clamp(3rem, 8vw, 8rem)",
+              transitionDuration: "700ms",
+              transitionDelay: revealed ? "80ms" : "0ms",
+            }}
           >
             {study.title}
           </h2>
         </div>
 
-        {/* Body */}
-        <div
-          className={`transition-all duration-500 delay-200 ${
-            revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
+        {/* Description */}
+        <p
+          className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted} ${base} ${revealed ? visible : hidden}`}
+          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "160ms" : "0ms" }}
         >
-          <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted}`}>
-            {study.description}
-          </p>
+          {study.description}
+        </p>
 
-          <ul className="flex gap-2 flex-wrap mt-5" aria-label={`Tags for ${study.title}`}>
-            {study.tags.map((tag) => (
-              <li key={tag}>
-                <Badge
-                  variant="outline"
-                  className={`bg-transparent hover:bg-transparent ${text} ${border}`}
-                >
-                  {tag}
-                </Badge>
-              </li>
-            ))}
-          </ul>
+        {/* Tags */}
+        <ul
+          className={`flex gap-2 flex-wrap mt-5 ${base} ${revealed ? visible : hidden}`}
+          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "220ms" : "0ms" }}
+          aria-label={`Tags for ${study.title}`}
+        >
+          {study.tags.map((tag) => (
+            <li key={tag}>
+              <Badge
+                variant="outline"
+                className={`bg-transparent hover:bg-transparent ${text} ${border}`}
+              >
+                {tag}
+              </Badge>
+            </li>
+          ))}
+        </ul>
 
-          <div className="mt-8">
-            <Link
-              href={`/work/${study.id}`}
-              onClick={() => onNavigate(brandColor)}
-              className={`group/cta inline-flex items-center gap-2 text-sm font-medium border-b pb-px transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm ${text} ${border} hover:border-current/70 focus-visible:ring-current`}
-            >
-              View case study
-              <FiArrowUpRight
-                className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
-                aria-hidden="true"
-              />
+        {/* CTA */}
+        <div
+          className={`mt-8 ${base} ${revealed ? visible : hidden}`}
+          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "280ms" : "0ms" }}
+        >
+          
+          <Button size="lg" asChild className="group">
+            <Link href={`/work/${study.id}`} onClick={() => onNavigate(brandColor)}>
+              View case study 
+              <FiArrowRight aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1" />
               <span className="sr-only">: {study.title}</span>
             </Link>
-          </div>
+          </Button>
         </div>
       </div>
     </section>
@@ -201,6 +199,7 @@ interface WorkListProps {
 export function WorkList({ studies: allStudies }: WorkListProps) {
   const studies = allStudies;
   const { setPageBg, isDark } = usePageBgContext();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const getBrandColor = useCallback(
     (study: CaseStudy) =>
@@ -210,43 +209,55 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
     [isDark]
   );
 
-  // Set the initial background to the first study's color on mount.
-  // One rAF delay so the page-bg-transition CSS class is present and the
-  // blend animates rather than snapping on first paint.
+  // Set initial bg on mount
   useEffect(() => {
     if (studies.length === 0) return;
-    const raf = requestAnimationFrame(() => {
-      setPageBg(getBrandColor(studies[0]));
-    });
+    const raf = requestAnimationFrame(() => setPageBg(getBrandColor(studies[0])));
     return () => cancelAnimationFrame(raf);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // When dark/light mode changes, recompute and re-apply the first panel's
-  // color (the IO will fire for whichever is currently centered on next scroll,
-  // but we need the initial state to be correct immediately).
+  // Re-apply current panel's color when theme flips
   useEffect(() => {
     if (studies.length === 0) return;
-    setPageBg(getBrandColor(studies[0]));
-  }, [isDark, getBrandColor, setPageBg, studies]);
+    setPageBg(getBrandColor(studies[activeIndex]));
+  }, [isDark, getBrandColor, setPageBg, studies, activeIndex]);
 
-  // Stable callback passed to each section's IO so they can update the bg.
-  const handleVisible = useCallback(
-    (color: string) => setPageBg(color),
+  // Called by each section's IO when it becomes the centered panel
+  const handleBecomeActive = useCallback(
+    (index: number, color: string) => {
+      setActiveIndex(index);
+      setPageBg(color);
+    },
     [setPageBg]
   );
+
+  // Tracker colors — follows the active panel's light/dark
+  const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0]);
+  const trackerLight = isLightPanel(activeBrandColor);
+  const trackerText   = trackerLight ? "text-[#1a1a1a]"     : "text-[#f0f0f0]";
+  const trackerBorder = trackerLight ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
 
   const [isHovered, setIsHovered] = useState(false);
   const hoverLabelVariants = {
     initial: { y: 20, opacity: 0 },
-    animate: { y: 0, opacity: 1, transition: { duration: MOTION_TOKENS.duration.base, ease: MOTION_TOKENS.ease.quart } },
-    exit:    { y: -20, opacity: 0, transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart } },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: MOTION_TOKENS.duration.base, ease: MOTION_TOKENS.ease.quart },
+    },
+    exit: {
+      y: -20,
+      opacity: 0,
+      transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart },
+    },
   };
 
   return (
     <div>
-      {/* Fixed page label */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 flex items-center pointer-events-none">
+      {/* ── Fixed header row — "work" label only ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 pointer-events-none">
+        {/* Page label */}
         <div className="overflow-hidden inline-block pointer-events-auto">
           <h1
             className="hero-label pb-1"
@@ -277,7 +288,30 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
         </div>
       </header>
 
-      {/* Sections — natural flow, no sticky, no snap */}
+      {/* ── Tracker pill — sits below the nav menu button ── */}
+      {/* Nav is at top-4 right-4 xl:top-8 xl:right-8 with ~40px height */}
+      <div
+        className={`fixed top-[64px] right-4 xl:top-[82px] xl:right-8 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
+        aria-live="polite"
+        aria-label={`Case study ${activeIndex + 1} of ${studies.length}`}
+      >
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={activeIndex}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2 }}
+            className="inline-block"
+          >
+            {String(activeIndex + 1).padStart(2, "0")}
+          </motion.span>
+        </AnimatePresence>
+        <span className="mx-1">/</span>
+        <span>{String(studies.length).padStart(2, "0")}</span>
+      </div>
+
+      {/* ── Sections — natural flow ── */}
       <div>
         {studies.map((study, index) => (
           <StudySection
@@ -286,7 +320,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
             index={index}
             total={studies.length}
             brandColor={getBrandColor(study)}
-            onVisible={handleVisible}
+            onBecomeActive={handleBecomeActive}
             onNavigate={setPageBg}
           />
         ))}

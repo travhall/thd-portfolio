@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import { FiChevronRight, FiChevronLeft, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useState, useSyncExternalStore } from "react";
 import type { CaseStudy } from "@/types/case-study";
+import { Button } from "../ui";
 
 // SSR-safe media query hook — avoids the undefined→boolean flash that occurs
 // when initializing with useState + useEffect, since useSyncExternalStore
@@ -90,6 +91,18 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       transition={{ delay: 0.7 }}
       className="p-4 xl:p-8 mt-28 flex flex-row place-content-end gap-1"
     >
+
+      <Button asChild variant="ghost" className="group">
+        <Link href="/work">
+          <FiArrowLeft 
+            size="lg"
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:-translate-x-1"
+            />
+          View all work
+        </Link>
+      </Button>
+
       {isDesktop && (
         <div className="preview-container w-full relative">
           <PreviewContent study={hoveredStudy} />
