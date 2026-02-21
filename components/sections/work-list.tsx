@@ -23,9 +23,12 @@ import { usePageBgContext } from "@/components/layout/page-bg-provider";
 // ── OKLCH helpers ──────────────────────────────────────────────────────────
 
 function parseOklch(value: string): [number, number, number] | null {
-  const m = value.match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/);
+  // Matches both bare-number and percentage lightness: oklch(0.87 ...) or oklch(98.5% ...)
+  const m = value.match(/oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)\s*\)/);
   if (!m) return null;
-  return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
+  const L = parseFloat(m[1]);
+  // Normalise percentage form (0–100) to fractional (0–1)
+  return [m[2] === "%" ? L / 100 : L, parseFloat(m[3]), parseFloat(m[4])];
 }
 
 function isLightPanel(oklch: string): boolean {
@@ -134,7 +137,7 @@ function StudySection({
         <div className="overflow-hidden pb-[0.12em]">
           <h2
             id={`work-title-${study.id}`}
-            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 ${text} ${base} ${revealed ? visible : hidden}`}
+            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 text-balance ${text} ${base} ${revealed ? visible : hidden}`}
             style={{
               fontSize: "clamp(3rem, 8vw, 8rem)",
               transitionDuration: "700ms",
@@ -291,7 +294,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
       {/* ── Tracker pill — sits below the nav menu button ── */}
       {/* Nav is at top-4 right-4 xl:top-8 xl:right-8 with ~40px height */}
       <div
-        className={`fixed top-[64px] right-4 xl:top-[82px] xl:right-8 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
+        className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-[82px] xl:right-8 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
         aria-live="polite"
         aria-label={`Case study ${activeIndex + 1} of ${studies.length}`}
       >

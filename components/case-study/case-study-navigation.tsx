@@ -89,7 +89,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="p-4 xl:p-8 mt-28 flex flex-row place-content-end gap-1"
+      className="p-4 xl:p-8 mt-28 flex flex-row justify-between items-center gap-1"
     >
 
       <Button asChild variant="ghost" className="group">
