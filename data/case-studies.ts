@@ -279,8 +279,10 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Punk publication — near-black warm ground, high contrast
-    brandLight: "oklch(0.87 0.01 80)",
-    brandDark:  "oklch(0.15 0.02 80)",
+    // brandLight: "oklch(0.8318 0.2237 134.77)",
+    // brandDark:  "oklch(0.5256 0.1997 3.98)",
+    brandLight: "oklch(97% 0.001 106.424)",
+    brandDark:  "oklch(21.6% 0.006 56.043)",
   },
 ];
 

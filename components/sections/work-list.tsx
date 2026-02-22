@@ -61,6 +61,7 @@ function StudySection({
   const border = light ? "border-[#1a1a1a]/30"  : "border-[#f0f0f0]/30";
 
   const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(index === 0);
 
   // Background: fires when section center crosses viewport midpoint
@@ -77,10 +78,12 @@ function StudySection({
     return () => obs.disconnect();
   }, [index, brandColor, onBecomeActive]);
 
-  // Reveal: fires once when 15% of the section enters the viewport
+  // Reveal: observe the content div so the animation plays as content enters view.
+  // The section is min-h-svh with content pushed to the bottom half — observing
+  // the section at threshold:0.15 would fire while content is still off-screen.
   useEffect(() => {
     if (revealed) return;
-    const el = sectionRef.current;
+    const el = contentRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry], o) => {
@@ -89,17 +92,22 @@ function StudySection({
           o.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
   }, [revealed]);
 
-  // Shared transition base — each element adds its own delay via inline style.
-  // duration-500 / duration-700 are valid Tailwind values; duration-600 is not.
-  const base = "transition-all ease-out";
-  const hidden = "opacity-0 translate-y-5";
-  const visible = "opacity-100 translate-y-0";
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const, delay },
+    }),
+  };
+
+  const animate = revealed ? "visible" : "hidden";
 
   return (
     <section
@@ -107,14 +115,17 @@ function StudySection({
       aria-labelledby={`work-title-${study.id}`}
       className="min-h-svh w-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
     >
-      {/* Spacer — pushes content to lower half, matching the old panel layout */}
+      {/* Spacer — pushes content to lower half */}
       <div />
 
-      <div className="max-w-7xl">
+      <div ref={contentRef} className="max-w-7xl">
         {/* Meta row */}
-        <div
-          className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted} ${base} ${revealed ? visible : hidden}`}
-          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "0ms" : "0ms" }}
+        <motion.div
+          className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
+          variants={itemVariants}
+          initial="hidden"
+          animate={animate}
+          custom={0}
         >
           <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">
             {study.year}
@@ -131,36 +142,42 @@ function StudySection({
               <span className="text-xs">{study.client}</span>
             </>
           )}
-        </div>
+        </motion.div>
 
         {/* Title */}
         <div className="overflow-hidden pb-[0.12em]">
-          <h2
+          <motion.h2
             id={`work-title-${study.id}`}
-            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 text-balance ${text} ${base} ${revealed ? visible : hidden}`}
-            style={{
-              fontSize: "clamp(3rem, 8vw, 8rem)",
-              transitionDuration: "700ms",
-              transitionDelay: revealed ? "80ms" : "0ms",
-            }}
+            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+            variants={itemVariants}
+            initial="hidden"
+            animate={animate}
+            custom={0.08}
           >
             {study.title}
-          </h2>
+          </motion.h2>
         </div>
 
         {/* Description */}
-        <p
-          className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted} ${base} ${revealed ? visible : hidden}`}
-          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "160ms" : "0ms" }}
+        <motion.p
+          className={`mt-5 text-base md:text-lg leading-relaxed max-w-[52ch] ${muted}`}
+          variants={itemVariants}
+          initial="hidden"
+          animate={animate}
+          custom={0.16}
         >
           {study.description}
-        </p>
+        </motion.p>
 
         {/* Tags */}
-        <ul
-          className={`flex gap-2 flex-wrap mt-5 ${base} ${revealed ? visible : hidden}`}
-          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "220ms" : "0ms" }}
+        <motion.ul
+          className="flex gap-2 flex-wrap mt-5"
           aria-label={`Tags for ${study.title}`}
+          variants={itemVariants}
+          initial="hidden"
+          animate={animate}
+          custom={0.22}
         >
           {study.tags.map((tag) => (
             <li key={tag}>
@@ -172,22 +189,24 @@ function StudySection({
               </Badge>
             </li>
           ))}
-        </ul>
+        </motion.ul>
 
         {/* CTA */}
-        <div
-          className={`mt-8 ${base} ${revealed ? visible : hidden}`}
-          style={{ transitionDuration: "500ms", transitionDelay: revealed ? "280ms" : "0ms" }}
+        <motion.div
+          className="mt-8"
+          variants={itemVariants}
+          initial="hidden"
+          animate={animate}
+          custom={0.28}
         >
-          
           <Button size="lg" asChild className="group">
             <Link href={`/work/${study.id}`} onClick={() => onNavigate(brandColor)}>
-              View case study 
+              View case study
               <FiArrowRight aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1" />
               <span className="sr-only">: {study.title}</span>
             </Link>
           </Button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
