@@ -115,7 +115,7 @@ function StudySection({
       aria-labelledby={`work-title-${study.id}`}
       className="min-h-svh w-full flex flex-col justify-center px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
     >
-      <div ref={contentRef} className="max-w-7xl">
+      <div ref={contentRef} className="max-w-4xl">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -146,7 +146,7 @@ function StudySection({
           <motion.h2
             id={`work-title-${study.id}`}
             className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
-            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+            style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
             variants={itemVariants}
             initial="hidden"
             animate={animate}

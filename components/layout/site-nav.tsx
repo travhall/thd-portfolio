@@ -196,6 +196,11 @@ export function SiteNav({ studies }: SiteNavProps) {
     setMounted(true);
   }, []);
 
+  // Replaces the Lenis ScrollReset: jump to top on every route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   if (!mounted) {
     return (
       <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site navigation">

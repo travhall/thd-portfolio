@@ -7,7 +7,6 @@ import { PageBgProvider } from "@/components/layout/page-bg-provider";
 import { Footer } from "@/components/layout/site-footer";
 import { SiteNav } from "@/components/layout/site-nav";
 import { Logo } from "@/components/layout/logo";
-import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { cn } from "@/lib/utils";
 
@@ -71,7 +70,7 @@ export default function RootLayout({
   const navStudies = allStudies.map(({ id, title }) => ({ id, title }));
 
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth" data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
         className={cn(
           manropeSans.variable,
@@ -81,7 +80,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <PageBgProvider>
-          <SmoothScroll>
+          <>
             <a
               href="#main-content"
               className="skip-nav"
@@ -92,7 +91,7 @@ export default function RootLayout({
             <SiteNav studies={navStudies} />
             <main id="main-content" className="relative">{children}</main>
             <Footer />
-          </SmoothScroll>
+          </>
           </PageBgProvider>
         </ThemeProvider>
       </body>

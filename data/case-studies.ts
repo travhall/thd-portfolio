@@ -206,7 +206,7 @@ const caseStudies: CaseStudy[] = [
       {
         type: "text",
         content:
-          "Motion is handled with Framer Motion and Lenis for smooth scroll. The work list uses an AnimatePresence-driven hover interaction where the section heading swaps between 'Case studies' and 'Return to index' with a staggered exit/enter sequence. Case study pages feature scroll-linked blur and opacity animations driven by useScroll and useTransform, creating a depth effect on the hero as the user reads down. All animation variants are defined at module scope where possible — keeping components clean — with the exception of stateful variants that depend on runtime values. A MotionConfig wrapper enforces reduced-motion preferences globally rather than per-component.",
+          "Motion is handled with Framer Motion. The work list uses an AnimatePresence-driven hover interaction where the section heading swaps between 'Case studies' and 'Return to index' with a staggered exit/enter sequence. Case study pages feature scroll-linked blur and opacity animations driven by useScroll and useTransform, creating a depth effect on the hero as the user reads down. All animation variants are defined at module scope where possible — keeping components clean — with the exception of stateful variants that depend on runtime values. A MotionConfig wrapper enforces reduced-motion preferences globally rather than per-component.",
         alignment: "left",
       },
       {
