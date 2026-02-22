@@ -3,76 +3,84 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ModeToggle } from "./theme-toggle";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence, Variants, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MOTION_TOKENS } from "@/lib/tokens";
 
-const menuVariants: Variants = {
-  closed: {
-    height: 0,
-    opacity: 0,
-    transition: {
-      height: {
-        duration: MOTION_TOKENS.duration.base,
+// Variant factories — called inside the component so useReducedMotion
+// can collapse durations without touching module-scope constants.
+function buildMenuVariants(reduced: boolean): Variants {
+  return {
+    closed: {
+      height: 0,
+      opacity: 0,
+      transition: {
+        height: {
+          duration: reduced ? 0 : MOTION_TOKENS.duration.base,
+          ease: MOTION_TOKENS.ease.quart,
+        },
+        opacity: { duration: reduced ? 0 : 0.3 },
+      },
+    },
+    open: {
+      height: "auto",
+      opacity: 1,
+      transition: {
+        height: {
+          duration: reduced ? 0 : MOTION_TOKENS.duration.slow,
+          ease: MOTION_TOKENS.ease.quart,
+        },
+        opacity: { duration: reduced ? 0 : 0.5 },
+        staggerChildren: reduced ? 0 : 0.07,
+        delayChildren: reduced ? 0 : 0.2,
+      },
+    },
+  };
+}
+
+function buildItemVariants(reduced: boolean): Variants {
+  return {
+    closed: {
+      opacity: 0,
+      y: reduced ? 0 : 20,
+      transition: {
+        duration: reduced ? 0 : 0.3,
         ease: MOTION_TOKENS.ease.quart,
       },
-      opacity: { duration: 0.3 },
     },
-  },
-  open: {
-    height: "auto",
-    opacity: 1,
-    transition: {
-      height: {
-        duration: MOTION_TOKENS.duration.slow,
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: reduced ? 0 : MOTION_TOKENS.duration.slow,
         ease: MOTION_TOKENS.ease.quart,
       },
-      opacity: { duration: 0.5 },
-      staggerChildren: 0.07,
-      delayChildren: 0.2,
     },
-  },
-};
+  };
+}
 
-const itemVariants: Variants = {
-  closed: {
-    opacity: 0,
-    y: 20,
-    transition: {
-      duration: 0.3,
-      ease: MOTION_TOKENS.ease.quart,
+function buildButtonTextVariants(reduced: boolean): Variants {
+  return {
+    initial: { y: reduced ? 0 : 20, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: reduced ? 0 : MOTION_TOKENS.duration.slow,
+        ease: MOTION_TOKENS.ease.quart,
+      },
     },
-  },
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: MOTION_TOKENS.duration.slow,
-      ease: MOTION_TOKENS.ease.quart,
+    exit: {
+      y: reduced ? 0 : -20,
+      opacity: 0,
+      transition: {
+        duration: reduced ? 0 : 0.3,
+        ease: MOTION_TOKENS.ease.quart,
+      },
     },
-  },
-};
-
-const buttonTextVariants: Variants = {
-  initial: { y: 20, opacity: 0 },
-  animate: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: MOTION_TOKENS.duration.slow,
-      ease: MOTION_TOKENS.ease.quart,
-    },
-  },
-  exit: {
-    y: -20,
-    opacity: 0,
-    transition: {
-      duration: 0.3,
-      ease: MOTION_TOKENS.ease.quart,
-    },
-  },
-};
+  };
+}
 
 // Defined at module scope — not recreated on every SiteNav render.
 interface MenuItemProps {
@@ -80,9 +88,10 @@ interface MenuItemProps {
   children: React.ReactNode;
   isActive: boolean;
   onClick: () => void;
+  reduced: boolean;
 }
 
-function MenuItem({ href, children, isActive, onClick }: MenuItemProps) {
+function MenuItem({ href, children, isActive, onClick, reduced }: MenuItemProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -111,7 +120,7 @@ function MenuItem({ href, children, isActive, onClick }: MenuItemProps) {
         }}
         className="absolute inset-0 bg-foreground/80 rounded-xs"
         style={{ originX: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: reduced ? 0 : 0.2 }}
       />
     </motion.div>
   );
@@ -126,14 +135,19 @@ export function SiteNav({ studies }: SiteNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const rawPathname = usePathname();
   const pathname = rawPathname.replace(/\/$/, "") || "/";
+  const reduced = useReducedMotion() ?? false;
+  const menuVariants = buildMenuVariants(reduced);
+  const itemVariants = buildItemVariants(reduced);
+  const buttonTextVariants = buildButtonTextVariants(reduced);
+  const headerRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setIsOpen((prev) => !prev);
-  };
+  }, []);
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = useCallback(() => setIsOpen(false), []);
 
   // Close on Escape, return focus to trigger
   const handleKeyDown = useCallback(
@@ -181,29 +195,44 @@ export function SiteNav({ studies }: SiteNavProps) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  // Close when clicking outside the nav header entirely.
+  // Uses mousedown so it fires before focus shifts away.
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleMouseDown = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [isOpen]);
+
   // Focus the first interactive item once the open animation completes.
   // Called via onAnimationComplete on the motion.nav — avoids a fragile setTimeout.
-  const handleMenuAnimationComplete = (definition: string) => {
+  const handleMenuAnimationComplete = useCallback((definition: string) => {
     if (definition === "open") {
       const menu = menuRef.current;
       if (!menu) return;
       const first = menu.querySelector<HTMLElement>("a[href], button:not([disabled])");
       first?.focus();
     }
-  };
+  }, []);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Replaces the Lenis ScrollReset: jump to top on every route change
+  // Replaces the Lenis ScrollReset: jump to top on every route change.
+  // behavior:"instant" overrides scroll-smooth on <html> so the reset
+  // never animates — it always cuts immediately to the top.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [pathname]);
 
   if (!mounted) {
     return (
-      <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none" aria-label="Site navigation">
+      <header ref={headerRef} className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50 pointer-events-none">
         <div className="px-4 py-2 rounded-sm nav-trigger opacity-0">
           <span className="text-xs font-medium tracking-wider lowercase">Menu</span>
         </div>
@@ -212,18 +241,19 @@ export function SiteNav({ studies }: SiteNavProps) {
   }
 
   return (
-    <header className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50" aria-label="Site navigation">
+    <header ref={headerRef} className="fixed top-4 right-4 xl:top-8 xl:right-8 z-50">
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: reduced ? 0 : -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
-          duration: MOTION_TOKENS.duration.base,
-          delay: MOTION_TOKENS.duration.base,
+          duration: reduced ? 0 : MOTION_TOKENS.duration.base,
+          delay: reduced ? 0 : MOTION_TOKENS.duration.base,
           ease: MOTION_TOKENS.ease.quart,
         }}
       >
         <button
           ref={triggerRef}
+          type="button"
           onClick={handleToggle}
           aria-expanded={isOpen}
           aria-controls="site-nav-menu"
@@ -258,14 +288,14 @@ export function SiteNav({ studies }: SiteNavProps) {
         variants={menuVariants}
         onAnimationComplete={handleMenuAnimationComplete}
         aria-label="Site navigation"
-        inert={!isOpen ? true : undefined}
+        inert={isOpen ? undefined : true}
         className="absolute top-10 right-0 w-[18rem] rounded-sm nav-menu overflow-hidden"
       >
         <motion.div className="p-4 space-y-3">
           <div className="space-y-4">
             <div className="overflow-hidden">
               <motion.div variants={itemVariants}>
-                <MenuItem href="/" isActive={pathname === "/"} onClick={handleClose}>
+                <MenuItem href="/" isActive={pathname === "/"} onClick={handleClose} reduced={reduced}>
                   Index
                 </MenuItem>
               </motion.div>
@@ -290,6 +320,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                         href={`/work/${study.id}`}
                         isActive={pathname === `/work/${study.id}`}
                         onClick={handleClose}
+                        reduced={reduced}
                       >
                         {study.title}
                       </MenuItem>
@@ -299,7 +330,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                 {studies.length > 5 && (
                   <div className="overflow-hidden">
                     <motion.div variants={itemVariants}>
-                      <MenuItem href="/work" isActive={pathname === "/work"} onClick={handleClose}>
+                      <MenuItem href="/work" isActive={pathname === "/work"} onClick={handleClose} reduced={reduced}>
                         All Case Studies
                       </MenuItem>
                     </motion.div>
@@ -312,7 +343,7 @@ export function SiteNav({ studies }: SiteNavProps) {
           <div className="pt-4 border-t border-foreground/10">
             <div className="overflow-hidden">
               <motion.div variants={itemVariants}>
-                <MenuItem href="/about" isActive={pathname === "/about"} onClick={handleClose}>
+                <MenuItem href="/about" isActive={pathname === "/about"} onClick={handleClose} reduced={reduced}>
                   About
                 </MenuItem>
               </motion.div>

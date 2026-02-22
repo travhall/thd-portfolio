@@ -113,6 +113,7 @@ function StudySection({
     <section
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
+      data-snap
       className="min-h-svh w-full flex flex-col justify-center px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
     >
       <div ref={contentRef} className="max-w-4xl">
@@ -242,6 +243,14 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
     setPageBg(getBrandColor(studies[activeIndex]));
   }, [isDark, getBrandColor, setPageBg, studies, activeIndex]);
 
+  // Scoped scroll-snap: add class to <html> on mount, clean up on unmount.
+  // CSS rules keyed on .work-page ensure snap only applies to this page.
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.add("work-page");
+    return () => html.classList.remove("work-page");
+  }, []);
+
   // Called by each section's IO when it becomes the centered panel
   const handleBecomeActive = useCallback(
     (index: number, color: string) => {
@@ -310,7 +319,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
       {/* ── Tracker pill — sits below the nav menu button ── */}
       {/* Nav is at top-4 right-4 xl:top-8 xl:right-8 with ~40px height */}
       <div
-        className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-[82px] xl:right-8 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
+        className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
         aria-live="polite"
         aria-label={`Case study ${activeIndex + 1} of ${studies.length}`}
       >

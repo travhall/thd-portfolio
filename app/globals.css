@@ -161,6 +161,17 @@
     transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Scroll snap — work page only (toggled by WorkList mount/unmount) */
+  html.work-page {
+    scroll-snap-type: y proximity;
+  }
+
+  html.work-page section[data-snap] {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    scroll-margin-top: 0px;
+  }
+
   ::selection {
     background-color: var(--color-foreground);
     color: var(--color-background);
@@ -282,5 +293,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Disable snap entirely for reduced-motion users — snapping changes
+     scroll behaviour even when scroll-behavior is instant. */
+  html.work-page {
+    scroll-snap-type: none;
   }
 }
