@@ -55,10 +55,10 @@ function StudySection({
   onBecomeActive,
   onNavigate,
 }: StudySectionProps) {
-  const light  = isLightPanel(brandColor);
-  const text   = light ? "text-[#1a1a1a]"      : "text-[#f0f0f0]";
-  const muted  = light ? "text-[#1a1a1a]/55"   : "text-[#f0f0f0]/55";
-  const border = light ? "border-[#1a1a1a]/30"  : "border-[#f0f0f0]/30";
+  const light = isLightPanel(brandColor);
+  const text = light ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
+  const muted = light ? "text-[#1a1a1a]/55" : "text-[#f0f0f0]/55";
+  const border = light ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
 
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -114,9 +114,9 @@ function StudySection({
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
       data-snap
-      className="min-h-svh w-full flex flex-col justify-center px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
+      className="min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh]"
     >
-      <div ref={contentRef} className="max-w-4xl">
+      <div ref={contentRef} className="max-w-4xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -224,7 +224,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
   const getBrandColor = useCallback(
     (study: CaseStudy) =>
       isDark
-        ? (study.brandDark  ?? "oklch(0.20 0.01 0)")
+        ? (study.brandDark ?? "oklch(0.20 0.01 0)")
         : (study.brandLight ?? "oklch(0.88 0.01 0)"),
     [isDark]
   );
@@ -234,7 +234,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
     if (studies.length === 0) return;
     const raf = requestAnimationFrame(() => setPageBg(getBrandColor(studies[0])));
     return () => cancelAnimationFrame(raf);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Re-apply current panel's color when theme flips
@@ -263,7 +263,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
   // Tracker colors — follows the active panel's light/dark
   const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0]);
   const trackerLight = isLightPanel(activeBrandColor);
-  const trackerText   = trackerLight ? "text-[#1a1a1a]"     : "text-[#f0f0f0]";
+  const trackerText = trackerLight ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
   const trackerBorder = trackerLight ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
 
   const [isHovered, setIsHovered] = useState(false);

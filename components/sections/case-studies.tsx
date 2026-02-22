@@ -135,7 +135,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
       onMouseLeave={onMouseLeave}
       animate={{ opacity: dimmed ? 0.35 : 1 }}
       transition={{ duration: 0.4, ease: MOTION_TOKENS.ease.expo }}
-      className="relative"
+      className="relative group"
     >
       {/* Rule — wipes in before content */}
       <motion.div
@@ -164,8 +164,8 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
           <motion.h3
             id={`study-title-${study.id}`}
             variants={titleVariants(reduced)}
-            className="font-nohemi font-medium leading-[1.05] tracking-tight text-foreground"
-            style={{ fontSize: "clamp(2.5rem, 7.5vw, 6.5rem)" }}
+            className="font-nohemi font-medium leading-[1.05] tracking-tight text-balance text-muted-foreground md:pl-16"
+            style={{ fontSize: "clamp(2.5rem, 7.5vw, 5rem)" }}
           >
             {study.title}
           </motion.h3>
@@ -185,12 +185,12 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
 
           <motion.ul
             variants={metaItemVariants(reduced)}
-            className="flex gap-2 flex-wrap shrink-0"
+            className="flex gap-2 flex-wrap"
             aria-label="Tags"
           >
             {study.tags.map((tag) => (
               <li key={tag}>
-                <Badge size="sm" variant="secondary">{tag}</Badge>
+                <Badge size="sm" variant="outline">{tag}</Badge>
               </li>
             ))}
           </motion.ul>
