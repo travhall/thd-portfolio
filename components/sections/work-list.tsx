@@ -113,11 +113,8 @@ function StudySection({
     <section
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
-      className="min-h-svh w-full flex flex-col justify-between px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
+      className="min-h-svh w-full flex flex-col justify-center px-6 sm:px-10 xl:px-16 pt-28 pb-16 md:pb-20"
     >
-      {/* Spacer — pushes content to lower half */}
-      <div />
-
       <div ref={contentRef} className="max-w-7xl">
         {/* Meta row */}
         <motion.div
@@ -148,7 +145,7 @@ function StudySection({
         <div className="overflow-hidden pb-[0.12em]">
           <motion.h2
             id={`work-title-${study.id}`}
-            className={`font-nohemi font-medium leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
+            className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
             style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
             variants={itemVariants}
             initial="hidden"

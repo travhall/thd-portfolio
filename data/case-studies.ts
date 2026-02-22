@@ -2,8 +2,8 @@ import type { CaseStudy } from "@/types/case-study";
 
 const caseStudies: CaseStudy[] = [
   {
-    id: "project-wylie-dog",
-    title: "Project Wylie Dog",
+    id: "wylie-dog-design-system",
+    title: "Wylie Dog Design System",
     description:
       "An enterprise-grade design system built on OKLCH color science, a three-tier token architecture, and 42 fully-tested React components.",
     fullDescription:
