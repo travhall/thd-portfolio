@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { Badge } from "@/components/ui/badge";
+import { usePageBgContext } from "@/components/layout/page-bg-provider";
 
 // ---------------------------------------------------------------------------
 // Large-title index layout — animated entrance per row.
@@ -85,6 +85,22 @@ const wordVariants: Variants = {
   },
 };
 
+// ── Brand color helpers ────────────────────────────────────────────────────
+// Mirrors the same utilities in work-list.tsx. Handles both fractional
+// (0.88) and percentage (98.5%) OKLCH lightness notation.
+
+function parseOklch(value: string): [number, number, number] | null {
+  const m = value.match(/oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)\s*\)/);
+  if (!m) return null;
+  const L = parseFloat(m[1]);
+  return [m[2] === "%" ? L / 100 : L, parseFloat(m[3]), parseFloat(m[4])];
+}
+
+function isLightColor(oklch: string): boolean {
+  const parsed = parseOklch(oklch);
+  return parsed ? parsed[0] >= 0.55 : true;
+}
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface CaseStudiesProps {
@@ -98,13 +114,15 @@ interface StudyRowProps {
   dimmed: boolean;
   /** True when this specific row is hovered */
   active: boolean;
+  /** Brand color for this study (light or dark variant, pre-selected by parent) */
+  brandColor: string;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
 
 // ── StudyRow ───────────────────────────────────────────────────────────────
 
-function StudyRow({ study, index, dimmed, active, onMouseEnter, onMouseLeave }: StudyRowProps) {
+function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMouseLeave }: StudyRowProps) {
   const reduced = useReducedMotion() ?? false;
 
   return (
@@ -129,26 +147,17 @@ function StudyRow({ study, index, dimmed, active, onMouseEnter, onMouseLeave }: 
       <Link
         href={`/work/${study.id}`}
         aria-labelledby={`study-title-${study.id}`}
-        className="relative block pt-6 pb-10 md:pb-14 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+        className="relative block p-6 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
       >
-        {/* Background image — only visible when this row is active */}
+        {/* Brand color tint — fades in on hover */}
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none transition-opacity duration-700 ease-[--ease-expo]"
-          style={{ opacity: active ? 1 : 0 }}
-        >
-          <Image
-            src={study.coverImage}
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover grayscale"
-            style={{ opacity: 0.06 }}
-            priority={index < 2}
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-background/60 via-transparent to-background/60" />
-          <div className="absolute inset-0 bg-linear-to-b from-background/40 via-transparent to-background/40" />
-        </div>
+          style={{
+            opacity: active ? 1 : 0,
+            backgroundColor: `color-mix(in oklch, ${brandColor} 85%, transparent)`,
+          }}
+        />
 
         {/* ── Title ── */}
         <div className="relative overflow-hidden pb-[0.12em]">
@@ -181,7 +190,7 @@ function StudyRow({ study, index, dimmed, active, onMouseEnter, onMouseLeave }: 
           >
             {study.tags.map((tag) => (
               <li key={tag}>
-                <Badge variant="secondary">{tag}</Badge>
+                <Badge size="sm" variant="secondary">{tag}</Badge>
               </li>
             ))}
           </motion.ul>
@@ -203,11 +212,17 @@ function StudyRow({ study, index, dimmed, active, onMouseEnter, onMouseLeave }: 
 export function CaseStudies({ studies }: CaseStudiesProps) {
   const featured = studies.filter((s) => s.featured);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { isDark } = usePageBgContext();
+
+  const getBrandColor = (study: CaseStudy) =>
+    isDark
+      ? (study.brandDark ?? "oklch(0.20 0.01 0)")
+      : (study.brandLight ?? "oklch(0.88 0.01 0)");
 
   return (
     <section
       id="work"
-      className="relative z-10 bg-(--page-bg)/90 backdrop-blur px-4 xl:px-8 pt-[12vh] pb-[20vh]"
+      className="relative py-4 z-10 bg-(--page-bg)/90 backdrop-blur"
     >
       {/* Section heading */}
       <motion.div
@@ -215,7 +230,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
         whileInView="visible"
         viewport={{ once: true, amount: 0.5 }}
         variants={sectionVariants}
-        className="mb-12 md:mb-16"
+        className="m-6"
       >
         <div className="flex flex-row gap-2">
           {["Featured", "work"].map((word, i) => (
@@ -232,7 +247,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
       </motion.div>
 
       {/* Entry list */}
-      <div className="mx-4">
+      <div className="my-4">
         {featured.map((study, i) => (
           <StudyRow
             key={study.id}
@@ -240,6 +255,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             index={i}
             dimmed={hoveredId !== null && hoveredId !== study.id}
             active={hoveredId === study.id}
+            brandColor={getBrandColor(study)}
             onMouseEnter={() => setHoveredId(study.id)}
             onMouseLeave={() => setHoveredId(null)}
           />
