@@ -155,7 +155,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
           className="absolute inset-0 pointer-events-none transition-opacity duration-700 ease-[--ease-expo]"
           style={{
             opacity: active ? 1 : 0,
-            backgroundColor: `color-mix(in oklch, ${brandColor} 85%, transparent)`,
+            background: `radial-gradient(ellipse 80% 60% at 50% 100%, color-mix(in oklch, ${brandColor} 90%, transparent), transparent)`,
           }}
         />
 
@@ -197,7 +197,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
 
           <motion.p
             variants={metaItemVariants(reduced)}
-            className="text-sm text-muted-foreground leading-relaxed sm:ml-auto sm:text-right max-w-[40ch]"
+            className="text-sm lg:text-base text-muted-foreground text-pretty leading-relaxed sm:ml-auto sm:text-right max-w-[40ch]"
           >
             {study.description}
           </motion.p>
