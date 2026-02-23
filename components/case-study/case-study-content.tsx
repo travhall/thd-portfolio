@@ -38,7 +38,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
   // Picks dark/light variant from context, falls back to null (theme default).
   const { isDark } = usePageBgContext();
   const brandColor = isDark
-    ? (study.brandDark  ?? null)
+    ? (study.brandDark ?? null)
     : (study.brandLight ?? null);
   usePageBg(brandColor);
 
@@ -109,7 +109,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
         >
           <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image
-              src={study.coverImage}
+              src={isDark && study.coverImageDark ? study.coverImageDark : study.coverImage}
               alt=""
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"

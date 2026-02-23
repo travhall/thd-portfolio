@@ -67,6 +67,7 @@ const caseStudies: CaseStudy[] = [
     fullDescription:
       "A production e-commerce platform purpose-built for a local skate shop, combining Square's catalog and payment APIs with Astro's SSR capabilities and Netlify's edge infrastructure to deliver a fast, reliable shopping experience.",
     coverImage: "/images/work-hero-img-elcamino.png",
+    coverImageDark: "/images/work-hero-img-elcamino-dark.png",
     year: "2026",
     tags: ["Astro", "TypeScript", "Tailwind CSS", "Square API", "Netlify"],
     client: "El Camino Skate Shop",
@@ -123,6 +124,7 @@ const caseStudies: CaseStudy[] = [
     fullDescription:
       "A full-stack web presence for Moxie Beauty Studio, a solo practice specializing in lash extensions, microblading, and brow services — designed and engineered from scratch to match the studio's refined, personal aesthetic.",
     coverImage: "/images/work-hero-img-moxie.png",
+    coverImageDark: "/images/work-hero-img-moxie-dark.png",
     year: "2026",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Motion", "Design Systems"],
     client: "Moxie Beauty Studio",
@@ -179,6 +181,7 @@ const caseStudies: CaseStudy[] = [
     fullDescription:
       "A personal portfolio site designed and engineered from scratch — used as a living testbed for modern front-end techniques including Tailwind CSS v4's @theme token system, scroll-linked animations, and a fully custom design system without a component library.",
     coverImage: "/images/work-hero-img-portfolio.png",
+    coverImageDark: "/images/work-hero-img-portfolio-dark.png",
     year: "2025",
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
     role: "Designer & Developer",
@@ -234,6 +237,7 @@ const caseStudies: CaseStudy[] = [
     fullDescription:
       "A ground-up redesign and front-end build for Buddyhead, one of the original voices of early 2000s music internet — bringing the publication into the modern web while preserving the irreverent, no-rules energy that made it iconic.",
     coverImage: "/images/work-hero-img-buddyhead.png",
+    coverImageDark: "/images/work-hero-img-buddyhead-dark.png",
     year: "2024",
     tags: ["Next.js", "WordPress", "TypeScript", "Tailwind CSS", "Design"],
     client: "Buddyhead",

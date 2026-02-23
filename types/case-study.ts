@@ -34,6 +34,9 @@ export interface CaseStudy {
   description: string;
   fullDescription: string;
   coverImage: string;
+  // Optional dark mode variant of the cover image.
+  // Falls back to coverImage if not provided.
+  coverImageDark?: string;
   year: string;
   tags: string[];
   client?: string;

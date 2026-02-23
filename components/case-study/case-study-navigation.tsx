@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiChevronRight, FiChevronLeft, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useState, useSyncExternalStore } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
+import { useTheme } from "next-themes";
 import type { CaseStudy } from "@/types/case-study";
 import { Button } from "../ui";
 
@@ -28,7 +29,16 @@ interface PreviewProps {
 }
 
 const PreviewContent = ({ study }: PreviewProps) => {
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   if (!study) return null;
+
+  const shouldShowDark =
+    mounted && (theme === "dark" || (theme === "system" && systemTheme === "dark"));
+  const coverSrc =
+    shouldShowDark && study.coverImageDark ? study.coverImageDark : study.coverImage;
 
   return (
     <motion.div
@@ -40,7 +50,7 @@ const PreviewContent = ({ study }: PreviewProps) => {
     >
       <div className="relative aspect-video max-w-[20rem] rounded-sm overflow-hidden mb-4 z-40">
         <Image
-          src={study.coverImage}
+          src={coverSrc}
           alt=""
           fill
           className="object-cover transition-transform duration-500"
