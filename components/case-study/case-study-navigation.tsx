@@ -36,7 +36,7 @@ const PreviewContent = ({ study }: PreviewProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="case-preview-card absolute bottom-16 -right-32 w-full max-w-[20rem]"
+      className="rounded-sm p-4 border border-border bg-(--page-bg)/50 backdrop-blur-xs absolute bottom-16 -right-32 w-full max-w-[20rem]"
     >
       <div className="relative aspect-video max-w-[20rem] rounded-sm overflow-hidden mb-4 z-40">
         <Image
@@ -94,11 +94,11 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
 
       <Button asChild variant="ghost" className="group">
         <Link href="/work">
-          <FiArrowLeft 
+          <FiArrowLeft
             size="lg"
             aria-hidden="true"
             className="transition-transform duration-200 group-hover:-translate-x-1"
-            />
+          />
           View all work
         </Link>
       </Button>

@@ -208,15 +208,15 @@ function useSemanticTokens() {
 }
 
 const spacingSteps = [
-  { rem: "0.25", cls: "w-1",  px: "4px"  },
-  { rem: "0.5",  cls: "w-2",  px: "8px"  },
-  { rem: "1",    cls: "w-4",  px: "16px" },
-  { rem: "1.5",  cls: "w-6",  px: "24px" },
-  { rem: "2",    cls: "w-8",  px: "32px" },
-  { rem: "3",    cls: "w-12", px: "48px" },
-  { rem: "4",    cls: "w-16", px: "64px" },
-  { rem: "5",    cls: "w-20", px: "80px" },
-  { rem: "6",    cls: "w-24", px: "96px" },
+  { rem: "0.25", cls: "w-1", px: "4px" },
+  { rem: "0.5", cls: "w-2", px: "8px" },
+  { rem: "1", cls: "w-4", px: "16px" },
+  { rem: "1.5", cls: "w-6", px: "24px" },
+  { rem: "2", cls: "w-8", px: "32px" },
+  { rem: "3", cls: "w-12", px: "48px" },
+  { rem: "4", cls: "w-16", px: "64px" },
+  { rem: "5", cls: "w-20", px: "80px" },
+  { rem: "6", cls: "w-24", px: "96px" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -320,65 +320,15 @@ export default function StyleGuide() {
         <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
           {semanticTokens.length === 0
             ? Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="space-y-1.5">
-                  <Skeleton className="h-10 w-full rounded-sm" />
-                  <Skeleton className="h-3 w-3/4" />
-                </div>
-              ))
+              <div key={i} className="space-y-1.5">
+                <Skeleton className="h-10 w-full rounded-sm" />
+                <Skeleton className="h-3 w-3/4" />
+              </div>
+            ))
             : semanticTokens.map(({ token, label }) => (
-                <Swatch key={token} bg={`var(${token})`} label={label} sub={token} />
-              ))
+              <Swatch key={token} bg={`var(${token})`} label={label} sub={token} />
+            ))
           }
-        </div>
-      </Section>
-
-      {/* ── Custom Component Classes ─────────────────────────────────── */}
-      <Section id="custom-components" title="Custom Component Classes">
-        <div className="space-y-10">
-
-          <ComponentExample title=".nav-trigger / .nav-menu">
-            <button className="nav-trigger px-4 py-2 rounded-sm text-sm font-medium">
-              Nav Trigger
-            </button>
-            <div className="nav-menu px-4 py-2 rounded-sm text-sm">
-              Nav Menu Surface
-            </div>
-          </ComponentExample>
-
-          <ComponentExample title=".card-case-study + .card-badge + .card-image">
-            <div className="card-case-study relative w-64 h-48 group cursor-pointer">
-              <div
-                className="card-image absolute inset-0"
-                style={{ background: "linear-gradient(135deg, var(--color-brand-1-400), var(--color-brand-1-700))" }}
-              />
-              <div className="absolute top-3 left-3">
-                <span className="card-badge">Featured</span>
-              </div>
-              <div className="absolute bottom-3 left-3 right-3">
-                <p className="text-sm font-medium text-foreground relative z-10">Hover to reveal</p>
-              </div>
-            </div>
-          </ComponentExample>
-
-          <ComponentExample title=".case-preview-card">
-            <div className="case-preview-card w-72 space-y-2">
-              <p className="case-section-label">Preview</p>
-              <p className="text-sm text-muted-foreground">
-                Frosted glass card surface used in case study detail pages.
-              </p>
-            </div>
-          </ComponentExample>
-
-          <ComponentExample title=".section-container">
-            <div className="w-full border border-dashed border-border rounded-sm">
-              <div className="section-container">
-                <p className="text-sm text-muted-foreground">
-                  max-w-7xl · px-4 xl:px-8 · py-12 md:py-16
-                </p>
-              </div>
-            </div>
-          </ComponentExample>
-
         </div>
       </Section>
 
@@ -390,9 +340,9 @@ export default function StyleGuide() {
             <p className="case-section-label">Easing curves</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                { name: "--ease-expo",   label: "Expo",   easing: [0.16, 1, 0.30, 1]      as [number,number,number,number] },
-                { name: "--ease-quart",  label: "Quart",  easing: [0.04, 0.62, 0.23, 0.98] as [number,number,number,number] },
-                { name: "--ease-in-out", label: "In-Out", easing: [0.4, 0, 0.2, 1]         as [number,number,number,number] },
+                { name: "--ease-expo", label: "Expo", easing: [0.16, 1, 0.30, 1] as [number, number, number, number] },
+                { name: "--ease-quart", label: "Quart", easing: [0.04, 0.62, 0.23, 0.98] as [number, number, number, number] },
+                { name: "--ease-in-out", label: "In-Out", easing: [0.4, 0, 0.2, 1] as [number, number, number, number] },
               ].map(({ name, label, easing }) => (
                 <EasingCard key={name} name={name} label={label} easing={easing} />
               ))}

@@ -143,10 +143,6 @@
     --toggle-active-text:  var(--color-brand-2-950);
   }
 
-  * {
-    @apply border-border;
-  }
-
   html,
   body {
     @apply text-foreground underline-offset-4;
@@ -246,39 +242,9 @@
     line-height: 1.1;
   }
 
-  /* --- Cards --- */
-  .card-case-study {
-    @apply relative rounded-sm overflow-hidden backdrop-blur-sm;
-    @apply bg-card border border-border;
-    transition: border-color var(--duration-base) var(--ease-expo);
-  }
-
-  .card-case-study:hover {
-    @apply border-border/60 backdrop-blur-xl;
-  }
-
-  .card-badge {
-    @apply bg-foreground/5 border border-foreground/10 text-[10px] uppercase tracking-widest py-1 px-3 rounded-sm;
-  }
-
-  .card-image {
-    @apply object-cover grayscale opacity-40;
-    transition:
-      opacity var(--duration-slow) var(--ease-expo),
-      filter var(--duration-slow) var(--ease-expo);
-  }
-
-  .group:hover .card-image {
-    @apply opacity-60 grayscale-0;
-  }
-
   /* --- Case study elements --- */
   .case-section-label {
     @apply text-[10px] font-bold uppercase tracking-widest text-muted-foreground;
-  }
-
-  .case-preview-card {
-    @apply bg-card/85 backdrop-blur-3xl rounded-sm p-4 border border-border;
   }
 }
 
