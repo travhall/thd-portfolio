@@ -13,7 +13,7 @@ export function Footer() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: MOTION_TOKENS.duration.slow, ease: MOTION_TOKENS.ease.expo }}
-      className="p-4 xl:p-8 relative"
+      className="p-4 xl:p-8 xl:py-16 relative"
     >
       <div className="text-sm text-muted-foreground flex flex-col-reverse md:flex-row gap-4 items-center justify-between">
 

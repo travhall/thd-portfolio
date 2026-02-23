@@ -92,7 +92,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       className="p-4 xl:p-8 mt-28 flex flex-row justify-between items-center gap-1"
     >
 
-      <Button asChild variant="ghost" className="group">
+      <Button asChild variant="default" size="lg" className="group">
         <Link href="/work">
           <FiArrowLeft
             size="lg"
