@@ -132,23 +132,26 @@ function StudySection({
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
       data-snap
-      className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh] overflow-hidden"
+      className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh]"
     >
       {/* ── Sticky Image — positioned half-off right side, scrolls naturally ── */}
-      <div className="hidden md:block absolute right-[-25vw] top-0 bottom-[-25vh] w-[55vw] pointer-events-none z-0">
-        <motion.div
-          style={{ opacity: imageOpacity, filter }}
-          className="sticky top-[100vh] lg:top-[50vh]  -translate-y-1/2 w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] border-border border shadow-lg"
-        >
-          <Image
-            src={src}
-            alt=""
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
-            className="object-cover"
-            priority={index === 0}
-          />
-        </motion.div>
+      <div className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? 'bottom-0' : 'bottom-[-100vh]'} w-[55vw] pointer-events-none z-0`}>
+        {/* A 100vh sticky flex container perfectly aligns its bottom limit with the viewport bottom, pushing the image up exactly as the section ends */}
+        <div className="sticky top-0 h-screen flex flex-col justify-center w-full">
+          <motion.div
+            style={{ opacity: imageOpacity, filter }}
+            className="w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] border-border border shadow-lg"
+          >
+            <Image
+              src={src}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
+              className="object-cover"
+              priority={index === 0}
+            />
+          </motion.div>
+        </div>
       </div>
 
       <div ref={contentRef} className="relative z-10 max-w-3xl ml-0 lg:ml-[5vw] xl:ml-[10vw] bg-(--page-bg)/80 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-xl">
@@ -317,7 +320,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
   };
 
   return (
-    <div>
+    <div className="overflow-x-clip min-h-screen">
       {/* ── Fixed header row — "work" label only ── */}
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 pointer-events-none">
         {/* Page label */}
