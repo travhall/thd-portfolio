@@ -105,7 +105,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
           style={{ y }}
-          className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
+          className="sticky top-2 z-0 aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
         >
           <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image

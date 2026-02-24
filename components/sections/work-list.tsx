@@ -11,7 +11,8 @@
 // ---------------------------------------------------------------------------
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,8 @@ function isLightPanel(oklch: string): boolean {
   return parsed ? parsed[0] >= 0.55 : true;
 }
 
+// ── CoverImagePanel Removed (moved inside StudySection) ─────────────────────
+
 // ── StudySection ────────────────────────────────────────────────────────────
 
 interface StudySectionProps {
@@ -43,6 +46,7 @@ interface StudySectionProps {
   index: number;
   total: number;
   brandColor: string;
+  isDark: boolean;
   onBecomeActive: (index: number, color: string) => void;
   onNavigate: (color: string) => void;
 }
@@ -52,6 +56,7 @@ function StudySection({
   index,
   total,
   brandColor,
+  isDark,
   onBecomeActive,
   onNavigate,
 }: StudySectionProps) {
@@ -59,12 +64,25 @@ function StudySection({
   const text = light ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
   const muted = light ? "text-[#1a1a1a]/55" : "text-[#f0f0f0]/55";
   const border = light ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
+  const src = isDark && study.coverImageDark ? study.coverImageDark : study.coverImage;
 
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(index === 0);
 
-  // Background: fires when section center crosses viewport midpoint
+  // Map the scroll progress of *this specific section* to opacity/blur.
+  // "start start" = top of section hits top of viewport (where it sticks)
+  // "end start" = bottom of section hits top of viewport (fully scrolled past)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const imageOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const imageBlurObj = useTransform(scrollYProgress, [0, 1], [0, 12]);
+
+  // Custom transform to map the number to a CSS filter string
+  const filter = useTransform(imageBlurObj, (v) => `blur(${v}px)`);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -114,9 +132,26 @@ function StudySection({
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
       data-snap
-      className="min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh]"
+      className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh] overflow-hidden"
     >
-      <div ref={contentRef} className="max-w-4xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
+      {/* ── Sticky Image — positioned half-off right side, scrolls naturally ── */}
+      <div className="hidden md:block absolute right-[-25vw] top-0 bottom-[-25vh] w-[55vw] pointer-events-none z-0">
+        <motion.div
+          style={{ opacity: imageOpacity, filter }}
+          className="sticky top-[100vh] lg:top-[50vh]  -translate-y-1/2 w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] border-border border shadow-lg"
+        >
+          <Image
+            src={src}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
+            className="object-cover"
+            priority={index === 0}
+          />
+        </motion.div>
+      </div>
+
+      <div ref={contentRef} className="relative z-10 max-w-3xl ml-0 lg:ml-[5vw] xl:ml-[10vw] bg-(--page-bg)/80 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-xl">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -147,7 +182,7 @@ function StudySection({
           <motion.h2
             id={`work-title-${study.id}`}
             className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
-            style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
+            style={{ fontSize: "clamp(5rem, 10vw, 6rem)" }}
             variants={itemVariants}
             initial="hidden"
             animate={animate}
@@ -348,6 +383,7 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
             index={index}
             total={studies.length}
             brandColor={getBrandColor(study)}
+            isDark={isDark}
             onBecomeActive={handleBecomeActive}
             onNavigate={setPageBg}
           />
