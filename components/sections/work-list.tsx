@@ -135,7 +135,7 @@ function StudySection({
             >
               <Image
                 src={src}
-                alt=""
+                alt={`${study.title} cover image`}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
                 className="object-cover border-border border shadow-lg"

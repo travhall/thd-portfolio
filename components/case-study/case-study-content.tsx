@@ -97,7 +97,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
           <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image
               src={getCoverImage(study, isDark)}
-              alt=""
+              alt={`${study.title} cover image`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
               className="object-cover"

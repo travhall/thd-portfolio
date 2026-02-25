@@ -9,6 +9,7 @@ import { SiteNav } from "@/components/layout/site-nav";
 import { Logo } from "@/components/layout/logo";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { cn } from "@/lib/utils";
+import { WebSiteJsonLd } from "@/components/seo/json-ld";
 
 const manropeSans = Manrope({
   variable: "--font-manrope",
@@ -44,7 +45,14 @@ export const metadata: Metadata = {
     siteName: "travishall.design",
     locale: "en_US",
     type: "website",
-    images: ["/images/og-default.jpg"],
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "travishall.design — selected design and development work by Travis Hall",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -78,6 +86,7 @@ export default function RootLayout({
           "antialiased relative min-h-screen font-sans"
         )}
       >
+        <WebSiteJsonLd />
         <ThemeProvider>
           <PageBgProvider>
             <a
