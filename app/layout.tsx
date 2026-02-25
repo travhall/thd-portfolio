@@ -10,6 +10,9 @@ import { Logo } from "@/components/layout/logo";
 import { getAllCaseStudies } from "@/data/case-studies";
 import { cn } from "@/lib/utils";
 import { WebSiteJsonLd } from "@/components/seo/json-ld";
+import { siteConfig } from "@/lib/site-config";
+
+const { siteName, url, descriptions, ogImage } = siteConfig;
 
 const manropeSans = Manrope({
   variable: "--font-manrope",
@@ -33,32 +36,32 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "travishall.design",
-    template: "%s | travishall.design",
+    default: siteName,
+    template: `%s | ${siteName}`,
   },
-  description: "Selected design and development work by Travis Hall",
-  metadataBase: new URL("https://travishall.design"),
+  description: descriptions.site,
+  metadataBase: new URL(url),
   openGraph: {
-    title: "travishall.design",
-    description: "Selected design and development work by Travis Hall",
-    url: "https://travishall.design",
-    siteName: "travishall.design",
+    title: siteName,
+    description: descriptions.site,
+    url,
+    siteName,
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/images/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "travishall.design — selected design and development work by Travis Hall",
+        url: ogImage.default,
+        width: ogImage.width,
+        height: ogImage.height,
+        alt: `${siteName} — ${descriptions.site}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "travishall.design",
-    description: "Selected design and development work by Travis Hall",
-    images: ["/images/og-default.jpg"],
+    title: siteName,
+    description: descriptions.site,
+    images: [ogImage.default],
   },
   robots: {
     index: true,

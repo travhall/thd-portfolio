@@ -3,8 +3,9 @@
 // a single <script type="application/ld+json"> tag into the document head.
 
 import type { CaseStudy } from "@/types/case-study";
+import { siteConfig } from "@/lib/site-config";
 
-const BASE_URL = "https://travishall.design";
+const { name, siteName, url, descriptions, social, jobTitle, knowsAbout } = siteConfig;
 
 // ── Primitive renderer ───────────────────────────────────────────────────────
 
@@ -27,13 +28,13 @@ export function WebSiteJsonLd() {
       schema={{
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "travishall.design",
-        url: BASE_URL,
-        description: "Selected design and development work by Travis Hall",
+        name: siteName,
+        url,
+        description: descriptions.site,
         author: {
           "@type": "Person",
-          name: "Travis Hall",
-          url: BASE_URL,
+          name,
+          url,
         },
       }}
     />
@@ -50,24 +51,12 @@ export function PersonJsonLd() {
       schema={{
         "@context": "https://schema.org",
         "@type": "Person",
-        name: "Travis Hall",
-        url: BASE_URL,
-        sameAs: [
-          "https://github.com/travhall",
-          "https://www.linkedin.com/in/travhall/",
-        ],
-        jobTitle: "Designer & Engineer",
-        description:
-          "Designer, engineer, and MFA-holder specializing in inclusive, human-centered digital experiences.",
-        knowsAbout: [
-          "Design Systems",
-          "Front-End Engineering",
-          "User Experience Design",
-          "TypeScript",
-          "React",
-          "Next.js",
-          "Tailwind CSS",
-        ],
+        name,
+        url,
+        sameAs: [social.github, social.linkedin],
+        jobTitle,
+        description: descriptions.professional,
+        knowsAbout,
       }}
     />
   );
@@ -82,8 +71,8 @@ interface CaseStudyJsonLdProps {
 }
 
 export function CaseStudyJsonLd({ study }: CaseStudyJsonLdProps) {
-  const studyUrl = `${BASE_URL}/work/${study.id}`;
-  const imageUrl = `${BASE_URL}${study.coverImage}`;
+  const studyUrl = `${url}/work/${study.id}`;
+  const imageUrl = `${url}${study.coverImage}`;
 
   return (
     <>
@@ -99,13 +88,13 @@ export function CaseStudyJsonLd({ study }: CaseStudyJsonLdProps) {
           ...(study.client ? { contributor: { "@type": "Organization", name: study.client } } : {}),
           author: {
             "@type": "Person",
-            name: "Travis Hall",
-            url: BASE_URL,
+            name,
+            url,
           },
           creator: {
             "@type": "Person",
-            name: "Travis Hall",
-            url: BASE_URL,
+            name,
+            url,
           },
         }}
       />
@@ -118,13 +107,13 @@ export function CaseStudyJsonLd({ study }: CaseStudyJsonLdProps) {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: BASE_URL,
+              item: url,
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Work",
-              item: `${BASE_URL}/work`,
+              item: `${url}/work`,
             },
             {
               "@type": "ListItem",

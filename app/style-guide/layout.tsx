@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Style Guide",
-  description: "Design system reference for travishall.design — typography, color palette, motion tokens, and component states.",
+  description: siteConfig.descriptions.styleGuide,
   robots: {
     index: false,
     follow: false,

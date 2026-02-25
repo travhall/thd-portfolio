@@ -5,6 +5,9 @@ import { MOTION_TOKENS } from "@/lib/tokens";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import Link from "next/link";
 import { Button } from "../ui";
+import { siteConfig } from "@/lib/site-config";
+
+const { name, social } = siteConfig;
 
 export function Footer() {
   return (
@@ -18,13 +21,13 @@ export function Footer() {
       <div className="text-sm text-muted-foreground flex flex-col-reverse md:flex-row gap-4 items-center justify-between">
 
         <p>
-          &copy; {new Date().getFullYear()} Travis Hall. All rights reserved.
+          &copy; {new Date().getFullYear()} {name}. All rights reserved.
         </p>
 
         <div className="flex flex-row items-center">
           <Button asChild variant="ghost">
             <Link
-              href="https://github.com/travhall"
+              href={social.github}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -34,7 +37,7 @@ export function Footer() {
           </Button>
           <Button asChild variant="ghost">
             <Link
-              href="https://www.linkedin.com/in/travhall/"
+              href={social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -43,8 +46,8 @@ export function Footer() {
             </Link>
           </Button>
           <Button asChild variant="ghost">
-            <a href="mailto:hello@travishall.design?subject=Hello%20from%20your%20portfolio">
-              hello@travishall.design <FiMail aria-hidden="true" />
+            <a href={`mailto:${social.email}?subject=Hello%20from%20your%20portfolio`}>
+              {social.email} <FiMail aria-hidden="true" />
               <span className="sr-only">(opens in your email client)</span>
             </a>
           </Button>

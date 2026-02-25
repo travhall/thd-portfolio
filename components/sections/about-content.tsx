@@ -7,6 +7,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { FiDownload, FiGithub, FiLinkedin, FiArrowRight } from "react-icons/fi";
+import { siteConfig } from "@/lib/site-config";
+
+const { social } = siteConfig;
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/layout/page-transition";
 import { usePageBg } from "@/hooks/use-page-bg";
@@ -279,7 +282,7 @@ export function AboutContent() {
                   >
                     <Button asChild variant="outline" className="rounded-full p-3">
                       <Link
-                        href="https://github.com/travhall"
+                        href={social.github}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -289,7 +292,7 @@ export function AboutContent() {
                     </Button>
                     <Button asChild variant="outline" className="rounded-full p-3">
                       <Link
-                        href="https://www.linkedin.com/in/travhall/"
+                        href={social.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

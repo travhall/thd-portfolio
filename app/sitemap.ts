@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getAllCaseStudies } from "@/data/case-studies";
+import { siteConfig } from "@/lib/site-config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const studies = getAllCaseStudies();
-  const baseUrl = "https://travishall.design";
+  const baseUrl = siteConfig.url;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
