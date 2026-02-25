@@ -154,7 +154,7 @@ function StudySection({
         </div>
       </div>
 
-      <div ref={contentRef} className="relative z-10 max-w-3xl ml-0 lg:ml-[5vw] xl:ml-[10vw] bg-(--page-bg)/80 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-xl">
+      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -185,7 +185,7 @@ function StudySection({
           <motion.h2
             id={`work-title-${study.id}`}
             className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
-            style={{ fontSize: "clamp(5rem, 10vw, 6rem)" }}
+            style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
             variants={itemVariants}
             initial="hidden"
             animate={animate}
