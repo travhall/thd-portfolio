@@ -138,23 +138,33 @@ function StudySection({
       <div className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? 'bottom-0' : 'bottom-[-100vh]'} w-[55vw] pointer-events-none z-0`}>
         {/* A 100vh sticky flex container perfectly aligns its bottom limit with the viewport bottom, pushing the image up exactly as the section ends */}
         <div className="sticky top-0 h-screen flex flex-col justify-center w-full">
+          {/* Outer div handles scroll-tied exit (opacity & blur) */}
           <motion.div
             style={{ opacity: imageOpacity, filter }}
-            className="w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] border-border border shadow-lg"
+            className="w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] relative"
           >
-            <Image
-              src={src}
-              alt=""
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
-              className="object-cover"
-              priority={index === 0}
-            />
+            {/* Inner div handles entrance animation (slide up & fade in) */}
+            <motion.div
+              className="absolute inset-0"
+              variants={itemVariants}
+              initial="hidden"
+              animate={animate}
+              custom={0.25} // Glides in slightly after the title (0.08) and description (0.16)
+            >
+              <Image
+                src={src}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
+                className="object-cover border-border border shadow-lg"
+                priority={index === 0}
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>
 
-      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
+      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl xl:max-w-4xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -255,6 +265,9 @@ interface WorkListProps {
 }
 
 export function WorkList({ studies: allStudies }: WorkListProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const studies = allStudies;
   const { setPageBg, isDark } = usePageBgContext();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -318,6 +331,13 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
       transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart },
     },
   };
+
+  if (!mounted) {
+    // Return a structural shell during SSR and initial client frame.
+    // This prevents IntersectionObservers and sticky tracks from evaluating
+    // wildly against a rapidly restoring scroll position (like a "Back" navigation).
+    return <div className="min-h-screen bg-transparent" />;
+  }
 
   return (
     <div className="overflow-x-clip min-h-screen">
