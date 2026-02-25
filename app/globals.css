@@ -134,7 +134,7 @@
 
     /* Hero blur overlay tokens (dark mode) */
     /* --hero-blur-bg:        var(--color-brand-1-600); */
-    --hero-blur-blend:     hue;
+    --hero-blur-blend:     color;
 
     /* Toggle component tokens (dark mode) */
     --toggle-hover-bg:     var(--color-brand-2-800);

@@ -265,24 +265,6 @@ export default function StyleGuide() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <p className="case-section-label">Custom typography classes</p>
-            <div className="space-y-6 p-6 rounded-sm border border-border bg-card">
-              <div><p className="case-section-label mb-2">.hero-label</p>
-                <p className="hero-label text-muted-foreground">Selected work · 2024</p></div>
-              <div><p className="case-section-label mb-2">.hero-heading</p>
-                <p className="hero-heading">Designing systems that scale.</p></div>
-              <div><p className="case-section-label mb-2">.about-heading</p>
-                <p className="about-heading">About</p></div>
-              <div><p className="case-section-label mb-2">.about-subheading</p>
-                <p className="about-subheading">Designer & developer</p></div>
-              <div><p className="case-section-label mb-2">.case-hero-heading</p>
-                <p className="case-hero-heading">Case Study</p></div>
-              <div><p className="case-section-label mb-2">.case-section-label</p>
-                <p className="case-section-label">Section label</p></div>
-            </div>
-          </div>
-
         </div>
       </Section>
 

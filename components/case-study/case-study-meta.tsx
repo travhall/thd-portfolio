@@ -13,9 +13,9 @@ export function CaseStudyMeta({ study }: CaseStudyMetaProps) {
   // Collect only the fields that are actually populated for this study.
   // Order reflects the natural reading sequence: when → who → what → how long.
   const entries: MetaEntry[] = [
-    study.year     && { label: "Year",     value: study.year },
-    study.client   && { label: "Client",   value: study.client },
-    study.role     && { label: "Role",     value: study.role },
+    study.year && { label: "Year", value: study.year },
+    study.client && { label: "Client", value: study.client },
+    study.role && { label: "Role", value: study.role },
     study.duration && { label: "Duration", value: study.duration },
   ].filter(Boolean) as MetaEntry[];
 

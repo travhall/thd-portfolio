@@ -19,5 +19,10 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   const studies = getAllCaseStudies();
 
-  return <WorkList studies={studies} />;
+  return (
+    <>
+      <WorkList studies={studies} />
+      <div className="h-dvh"></div>
+    </>
+  );
 }

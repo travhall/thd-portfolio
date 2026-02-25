@@ -132,7 +132,7 @@ function StudySection({
       ref={sectionRef}
       aria-labelledby={`work-title-${study.id}`}
       data-snap
-      className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16 mb-[25vh]"
+      className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16"
     >
       {/* ── Sticky Image — positioned half-off right side, scrolls naturally ── */}
       <div className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? 'bottom-0' : 'bottom-[-100vh]'} w-[55vw] pointer-events-none z-0`}>
@@ -173,37 +173,35 @@ function StudySection({
           animate={animate}
           custom={0}
         >
-          <span className="font-nohemi text-xs tabular-nums tracking-widest uppercase">
+          <span className="font-nohemi font-black text-xs tabular-nums tracking-widest uppercase">
             {study.year}
           </span>
           {study.role && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="text-xs">{study.role}</span>
+              <span className="text-xs font-bold">{study.role}</span>
             </>
           )}
           {study.client && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="text-xs">{study.client}</span>
+              <span className="text-xs font-bold">{study.client}</span>
             </>
           )}
         </motion.div>
 
         {/* Title */}
-        <div className="overflow-hidden pb-[0.12em]">
-          <motion.h2
-            id={`work-title-${study.id}`}
-            className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
-            style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
-            variants={itemVariants}
-            initial="hidden"
-            animate={animate}
-            custom={0.08}
-          >
-            {study.title}
-          </motion.h2>
-        </div>
+        <motion.h2
+          id={`work-title-${study.id}`}
+          className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
+          style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
+          variants={itemVariants}
+          initial="hidden"
+          animate={animate}
+          custom={0.08}
+        >
+          {study.title}
+        </motion.h2>
 
         {/* Description */}
         <motion.p
@@ -262,12 +260,10 @@ function StudySection({
 
 interface WorkListProps {
   studies: CaseStudy[];
+  className?: string;
 }
 
-export function WorkList({ studies: allStudies }: WorkListProps) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
+export function WorkList({ studies: allStudies, className }: WorkListProps) {
   const studies = allStudies;
   const { setPageBg, isDark } = usePageBgContext();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -332,15 +328,8 @@ export function WorkList({ studies: allStudies }: WorkListProps) {
     },
   };
 
-  if (!mounted) {
-    // Return a structural shell during SSR and initial client frame.
-    // This prevents IntersectionObservers and sticky tracks from evaluating
-    // wildly against a rapidly restoring scroll position (like a "Back" navigation).
-    return <div className="min-h-screen bg-transparent" />;
-  }
-
   return (
-    <div className="overflow-x-clip min-h-screen">
+    <div className={`overflow-x-clip min-h-screen ${className || ""}`}>
       {/* ── Fixed header row — "work" label only ── */}
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 pointer-events-none">
         {/* Page label */}
