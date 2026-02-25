@@ -41,6 +41,15 @@ function isLightPanel(oklch: string): boolean {
 
 // ── StudySection ────────────────────────────────────────────────────────────
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const, delay },
+  }),
+};
+
 interface StudySectionProps {
   study: CaseStudy;
   index: number;
@@ -79,10 +88,7 @@ function StudySection({
   });
 
   const imageOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const imageBlurObj = useTransform(scrollYProgress, [0, 1], [0, 12]);
-
-  // Custom transform to map the number to a CSS filter string
-  const filter = useTransform(imageBlurObj, (v) => `blur(${v}px)`);
+  const filter = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(12px)"]);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -115,15 +121,6 @@ function StudySection({
     obs.observe(el);
     return () => obs.disconnect();
   }, [revealed]);
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (delay: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const, delay },
-    }),
-  };
 
   const animate = revealed ? "visible" : "hidden";
 
@@ -263,8 +260,7 @@ interface WorkListProps {
   className?: string;
 }
 
-export function WorkList({ studies: allStudies, className }: WorkListProps) {
-  const studies = allStudies;
+export function WorkList({ studies, className }: WorkListProps) {
   const { setPageBg, isDark } = usePageBgContext();
   const [activeIndex, setActiveIndex] = useState(0);
 
