@@ -80,7 +80,6 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <PageBgProvider>
-          <>
             <a
               href="#main-content"
               className="skip-nav"
@@ -91,7 +90,6 @@ export default function RootLayout({
             <SiteNav studies={navStudies} />
             <main id="main-content" className="relative">{children}</main>
             <Footer />
-          </>
           </PageBgProvider>
         </ThemeProvider>
       </body>

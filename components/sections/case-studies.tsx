@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
 import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { Badge } from "@/components/ui/badge";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
+import { isLightColor } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Large-title index layout — animated entrance per row.
@@ -84,22 +85,6 @@ const wordVariants: Variants = {
     },
   },
 };
-
-// ── Brand color helpers ────────────────────────────────────────────────────
-// Mirrors the same utilities in work-list.tsx. Handles both fractional
-// (0.88) and percentage (98.5%) OKLCH lightness notation.
-
-function parseOklch(value: string): [number, number, number] | null {
-  const m = value.match(/oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)\s*\)/);
-  if (!m) return null;
-  const L = parseFloat(m[1]);
-  return [m[2] === "%" ? L / 100 : L, parseFloat(m[3]), parseFloat(m[4])];
-}
-
-function isLightColor(oklch: string): boolean {
-  const parsed = parseOklch(oklch);
-  return parsed ? parsed[0] >= 0.55 : true;
-}
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -214,10 +199,13 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const { isDark } = usePageBgContext();
 
-  const getBrandColor = (study: CaseStudy) =>
-    isDark
-      ? (study.brandDark ?? "oklch(0.20 0.01 0)")
-      : (study.brandLight ?? "oklch(0.88 0.01 0)");
+  const getBrandColor = useCallback(
+    (study: CaseStudy) =>
+      isDark
+        ? (study.brandDark ?? "oklch(0.20 0.01 0)")
+        : (study.brandLight ?? "oklch(0.88 0.01 0)"),
+    [isDark]
+  );
 
   return (
     <section

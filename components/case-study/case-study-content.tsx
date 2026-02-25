@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
+import { getCoverImage } from "@/lib/utils";
 import { LedeBlock } from "./sections/lede-section";
 import { TextBlock } from "./sections/text-section";
 import { ImageTextBlock } from "./sections/image-text-section";
@@ -12,17 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
 import { usePageBg } from "@/hooks/use-page-bg";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-
-// Scroll transform ranges for the hero section.
-// HERO_SCROLL_RANGE: the image fades and shifts as the user scrolls into the content (0–400px).
-// BLUR_SCROLL_RANGE: the frosted-glass overlay fades in slightly later (500–800px), after the
-// hero text has cleared, so both effects don't compete. The 400–500px gap is intentional — it
-// gives the hero fade a moment to settle before the blur overlay begins appearing.
-const HERO_SCROLL_RANGE = [0, 400];
-const HERO_OPACITY_OUTPUT = [1, 0.2];
-const HERO_Y_OUTPUT = [0, 8];
-const BLUR_SCROLL_RANGE = [500, 800];
-const BLUR_OPACITY_OUTPUT = [0, 1];
+import { HERO_SCROLL } from "@/lib/tokens";
 
 interface CaseStudyContentProps {
   study: CaseStudy;
@@ -42,13 +33,9 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
     : (study.brandLight ?? null);
   usePageBg(brandColor);
 
-  const y = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [0, 0] : HERO_Y_OUTPUT);
-  const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, shouldReduceMotion ? [1, 1] : HERO_OPACITY_OUTPUT);
-  const blurOpacity = useTransform(
-    scrollY,
-    BLUR_SCROLL_RANGE,
-    shouldReduceMotion ? [0, 0] : BLUR_OPACITY_OUTPUT,
-  );
+  const y = useTransform(scrollY, HERO_SCROLL.contentRange, shouldReduceMotion ? [0, 0] : HERO_SCROLL.contentY);
+  const opacity = useTransform(scrollY, HERO_SCROLL.contentRange, shouldReduceMotion ? [1, 1] : HERO_SCROLL.contentOpacity);
+  const blurOpacity = useTransform(scrollY, HERO_SCROLL.blurRange, shouldReduceMotion ? [0, 0] : HERO_SCROLL.blurOpacity);
 
   return (
     <MotionConfig reducedMotion={shouldReduceMotion ? "always" : "never"}>
@@ -109,7 +96,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
         >
           <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
             <Image
-              src={isDark && study.coverImageDark ? study.coverImageDark : study.coverImage}
+              src={getCoverImage(study, isDark)}
               alt=""
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"

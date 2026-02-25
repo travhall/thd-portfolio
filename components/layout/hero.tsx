@@ -1,40 +1,25 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useTheme } from "next-themes";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { MOTION_TOKENS } from "@/lib/tokens";
+import React from "react";
+import { MOTION_TOKENS, HERO_SCROLL } from "@/lib/tokens";
 import { usePageBg } from "@/hooks/use-page-bg";
-
-// Named constants for scroll transform ranges
-const HERO_SCROLL_RANGE = [0, 400];
-const HERO_OPACITY_OUTPUT = [1, 0.2];
-const HERO_Y_OUTPUT = [0, 8];
-const BLUR_SCROLL_RANGE = [500, 800];
-const BLUR_OPACITY_OUTPUT = [0, 1];
+import { usePageBgContext } from "@/components/layout/page-bg-provider";
 
 export function Hero() {
   const { scrollY } = useScroll();
-  const { theme, systemTheme } = useTheme();
-  // Track hydration to swap to the correct theme image after mount.
-  // The image renders immediately (light as default) — no blank flash.
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // isDark starts false on SSR — light image renders first, same as before.
+  // Avoids the mounted+useTheme pattern by reusing the provider's observer.
+  const { isDark } = usePageBgContext();
 
   // Reset page background to theme default when home page mounts.
   // Handles the case where the user navigates home from a brand-colored page.
   usePageBg(null);
 
-  const y = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_Y_OUTPUT);
-  const opacity = useTransform(scrollY, HERO_SCROLL_RANGE, HERO_OPACITY_OUTPUT);
-  const blurOpacity = useTransform(scrollY, BLUR_SCROLL_RANGE, BLUR_OPACITY_OUTPUT);
-
-  const shouldShowDark =
-    mounted && (theme === "dark" || (theme === "system" && systemTheme === "dark"));
+  const y = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentY);
+  const opacity = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentOpacity);
+  const blurOpacity = useTransform(scrollY, HERO_SCROLL.blurRange, HERO_SCROLL.blurOpacity);
 
   return (
     <>
@@ -75,7 +60,7 @@ export function Hero() {
           aria-hidden="true"
         >
           <Image
-            src={shouldShowDark ? "/images/hero-dark.jpg" : "/images/hero-light.jpg"}
+            src={isDark ? "/images/hero-dark.jpg" : "/images/hero-light.jpg"}
             alt=""
             fill
             className="object-cover"

@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiChevronRight, FiChevronLeft, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useState, useEffect, useSyncExternalStore } from "react";
-import { useTheme } from "next-themes";
+import { useState, useSyncExternalStore } from "react";
 import type { CaseStudy } from "@/types/case-study";
 import { Button } from "../ui";
+import { usePageBgContext } from "@/components/layout/page-bg-provider";
+import { getCoverImage } from "@/lib/utils";
 
 // SSR-safe media query hook — avoids the undefined→boolean flash that occurs
 // when initializing with useState + useEffect, since useSyncExternalStore
@@ -29,16 +30,11 @@ interface PreviewProps {
 }
 
 const PreviewContent = ({ study }: PreviewProps) => {
-  const { theme, systemTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const { isDark } = usePageBgContext();
 
   if (!study) return null;
 
-  const shouldShowDark =
-    mounted && (theme === "dark" || (theme === "system" && systemTheme === "dark"));
-  const coverSrc =
-    shouldShowDark && study.coverImageDark ? study.coverImageDark : study.coverImage;
+  const coverSrc = getCoverImage(study, isDark);
 
   return (
     <motion.div

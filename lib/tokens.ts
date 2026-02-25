@@ -22,3 +22,17 @@ export const MOTION_TOKENS = {
     inOut: [0.4, 0, 0.2, 1],
   },
 } as const;
+
+// ── Hero scroll transform ranges ────────────────────────────────────────────
+// Used by both Hero (home) and CaseStudyContent to drive the scroll-linked
+// image parallax and blur overlay. Defined once here to keep the two in sync.
+
+export const HERO_SCROLL = {
+  /** Content (text + image) fades and drifts as user scrolls in */
+  contentRange:   [0, 400] as [number, number],
+  contentOpacity: [1, 0.2] as [number, number],
+  contentY:       [0, 8]   as [number, number],
+  /** Blur overlay fades in after the hero has mostly cleared */
+  blurRange:   [500, 800] as [number, number],
+  blurOpacity: [0, 1]     as [number, number],
+} as const;

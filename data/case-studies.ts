@@ -113,8 +113,8 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Warm concrete — raw, urban, skate culture without being cliché
-    brandLight: "oklch(96% 0.008 70)",
-    brandDark:  "oklch(22% 0.035 120)",
+    brandLight: "oklch(0.96 0.008 70)",
+    brandDark:  "oklch(0.22 0.035 120)",
   },
   {
     id: "moxie-beauty-studio",
@@ -170,8 +170,8 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Warm blush rose — refined, personal, beauty-adjacent without being pink
-    brandLight: "oklch(97.12% 0.0074 29.23)",
-    brandDark:  "oklch(9.47% 0.0834 29.23)",
+    brandLight: "oklch(0.9712 0.0074 29.23)",
+    brandDark:  "oklch(0.0947 0.0834 29.23)",
   },
   {
     id: "travishall-dot-design",
@@ -283,10 +283,8 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Punk publication — near-black warm ground, high contrast
-    // brandLight: "oklch(0.8318 0.2237 134.77)",
-    // brandDark:  "oklch(0.5256 0.1997 3.98)",
-    brandLight: "oklch(97% 0.001 106.424)",
-    brandDark:  "oklch(21.6% 0.006 56.043)",
+    brandLight: "oklch(0.97 0.001 106.424)",
+    brandDark:  "oklch(0.216 0.006 56.043)",
   },
 ];
 
