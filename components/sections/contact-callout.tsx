@@ -1,11 +1,13 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import { FiArrowUpRight, FiMail } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
 import { MOTION_TOKENS } from "@/lib/tokens";
+import { usePageBgContext } from "@/components/layout/page-bg-provider";
 
 const { social } = siteConfig;
 
@@ -44,8 +46,27 @@ const itemVariants: Variants = {
 // ---------------------------------------------------------------------------
 
 export function ContactCallout() {
+  const { setPageBg } = usePageBgContext();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Reset the page background to the default theme color when this section
+  // scrolls to the viewport midpoint — mirroring the IO pattern in work-list.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setPageBg(null);
+      },
+      { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [setPageBg]);
+
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="contact-heading"
       className="min-h-[90vh] flex flex-col justify-center p-6 sm:p-10 xl:p-16"
     >

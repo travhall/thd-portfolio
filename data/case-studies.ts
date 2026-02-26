@@ -55,9 +55,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
-    // Cool blue-teal — systematic, precise, matches the design system subject matter
-    brandLight: "oklch(0.88 0.04 196)",
-    brandDark:  "oklch(0.20 0.06 196)",
+    // Wylie Dog Design System Brand Colors
+    brandLight: "oklch(0.94 0.006 223.95)",
+    brandDark:  "oklch(0.216 0.03 218.42)",
   },
   {
     id: "el-camino-skate-shop",
@@ -112,8 +112,8 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
-    // Warm concrete — raw, urban, skate culture without being cliché
-    brandLight: "oklch(0.96 0.008 70)",
+    // El Camino Brand Colors
+    brandLight: "oklch(0.87 0.015 70)",
     brandDark:  "oklch(0.22 0.035 120)",
   },
   {
@@ -169,9 +169,9 @@ const caseStudies: CaseStudy[] = [
       },
     ],
     featured: true,
-    // Warm blush rose — refined, personal, beauty-adjacent without being pink
-    brandLight: "oklch(0.9712 0.0074 29.23)",
-    brandDark:  "oklch(0.0947 0.0834 29.23)",
+    // Moxie Beauty Studio Brand Colors
+    brandLight: "oklch(0.8786 0.0174 29.23)",
+    brandDark:  "oklch(0.1727 0.07086338791683038 29.233880279627886)",
   },
   {
     id: "travishall-dot-design",
@@ -283,8 +283,8 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Punk publication — near-black warm ground, high contrast
-    brandLight: "oklch(0.97 0.001 106.424)",
-    brandDark:  "oklch(0.216 0.006 56.043)",
+    brandLight: "oklch(0.9504 0.04429868600861725 325.91943837401317)",
+    brandDark:  "oklch(0.2236 0.0760873277712695 142.49534504144387)",
   },
 ];
 
