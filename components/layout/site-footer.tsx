@@ -16,11 +16,11 @@ export function Footer() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: MOTION_TOKENS.duration.slow, ease: MOTION_TOKENS.ease.expo }}
-      className="p-4 xl:p-8 xl:py-16 relative"
+      className="p-8 relative"
     >
       <div className="text-sm text-muted-foreground flex flex-col-reverse md:flex-row gap-4 items-center justify-between">
 
-        <p>
+        <p className="my-6 lg:my-0">
           &copy; {new Date().getFullYear()} {name}. All rights reserved.
         </p>
 

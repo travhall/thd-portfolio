@@ -57,8 +57,8 @@ export function ContactCallout() {
         className="max-w-3xl"
       >
         {/* Label */}
-        <motion.p variants={itemVariants} className="hero-label mb-6">
-          get in touch
+        <motion.p variants={itemVariants} className="hero-label lowercase">
+          Get in touch
         </motion.p>
 
         {/* Heading — real h2 for document outline + aria-labelledby on section */}
