@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, MotionConfig, useReducedMotion } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
 import { getCoverImage } from "@/lib/utils";
 import { LedeBlock } from "./sections/lede-section";
@@ -11,9 +10,8 @@ import { ImageTextBlock } from "./sections/image-text-section";
 import { CaseStudyMeta } from "./case-study-meta";
 import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
-import { usePageBg } from "@/hooks/use-page-bg";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-import { HERO_SCROLL } from "@/lib/tokens";
+import { Hero } from "@/components/layout/hero";
 
 interface CaseStudyContentProps {
   study: CaseStudy;
@@ -23,38 +21,19 @@ interface CaseStudyContentProps {
 
 export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyContentProps) {
   const shouldReduceMotion = useReducedMotion();
-  const { scrollY } = useScroll();
-
-  // Declare this page's brand background color.
-  // Picks dark/light variant from context, falls back to null (theme default).
   const { isDark } = usePageBgContext();
   const brandColor = isDark
     ? (study.brandDark ?? null)
     : (study.brandLight ?? null);
-  usePageBg(brandColor);
-
-  const y = useTransform(scrollY, HERO_SCROLL.contentRange, shouldReduceMotion ? [0, 0] : HERO_SCROLL.contentY);
-  const opacity = useTransform(scrollY, HERO_SCROLL.contentRange, shouldReduceMotion ? [1, 1] : HERO_SCROLL.contentOpacity);
-  const blurOpacity = useTransform(scrollY, HERO_SCROLL.blurRange, shouldReduceMotion ? [0, 0] : HERO_SCROLL.blurOpacity);
 
   return (
     <MotionConfig reducedMotion={shouldReduceMotion ? "always" : "never"}>
       <div className="min-h-screen relative">
-        {/* Hero Blur Block */}
-        <motion.div
-          aria-hidden="true"
-          className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 pointer-events-none"
-          style={{
-            opacity: blurOpacity,
-            backgroundColor: "var(--hero-blur-bg)",
-            mixBlendMode: "var(--hero-blur-blend)" as React.CSSProperties["mixBlendMode"],
-          }}
-        />
-
-        {/* Hero Text Block */}
-        <motion.div
-          className="relative z-10 max-w-2xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh] space-y-6"
-          style={{ opacity }}
+        <Hero
+          imageSrc={getCoverImage(study, isDark)}
+          imageAlt={`${study.title} cover image`}
+          pageBg={brandColor}
+          imageDelay={0.3}
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -84,27 +63,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
               </motion.li>
             ))}
           </ul>
-        </motion.div>
-
-        {/* Hero Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-          style={{ y }}
-          className="sticky top-2 z-0 aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
-        >
-          <div className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted">
-            <Image
-              src={getCoverImage(study, isDark)}
-              alt={`${study.title} cover image`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        </motion.div>
+        </Hero>
 
         {/* Content Sections */}
         <div className="mt-24 bg-(--page-bg)/90 backdrop-blur-xl relative z-20 space-y-0">
