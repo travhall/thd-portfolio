@@ -1,5 +1,6 @@
 import { getAllCaseStudies } from "@/data/case-studies";
 import { WorkList } from "@/components/sections/work-list";
+import { ContactCallout } from "@/components/sections/contact-callout";
 import { siteConfig } from "@/lib/site-config";
 import type { Metadata } from "next";
 
@@ -38,7 +39,7 @@ export default function WorkPage() {
   return (
     <>
       <WorkList studies={studies} />
-      <div className="h-dvh"></div>
+      <ContactCallout />
     </>
   );
 }
