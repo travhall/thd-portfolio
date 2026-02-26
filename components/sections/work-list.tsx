@@ -20,7 +20,7 @@ import { FiArrowRight } from "react-icons/fi";
 import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-import { isLightColor, getCoverImage } from "@/lib/utils";
+import { isLightColor, getCoverImage, getBrandColor, getBrandContrastClasses } from "@/lib/utils";
 
 // ── CoverImagePanel Removed (moved inside StudySection) ─────────────────────
 
@@ -55,9 +55,7 @@ function StudySection({
   onNavigate,
 }: StudySectionProps) {
   const light = isLightColor(brandColor);
-  const text = light ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
-  const muted = light ? "text-[#1a1a1a]/55" : "text-[#f0f0f0]/55";
-  const border = light ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
+  const { text, muted, border } = getBrandContrastClasses(light);
   const src = getCoverImage(study, isDark);
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -249,18 +247,10 @@ export function WorkList({ studies, className }: WorkListProps) {
   const { setPageBg, isDark } = usePageBgContext();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const getBrandColor = useCallback(
-    (study: CaseStudy) =>
-      isDark
-        ? (study.brandDark ?? "oklch(0.20 0.01 0)")
-        : (study.brandLight ?? "oklch(0.88 0.01 0)"),
-    [isDark]
-  );
-
   // Set initial bg on mount
   useEffect(() => {
     if (studies.length === 0) return;
-    const raf = requestAnimationFrame(() => setPageBg(getBrandColor(studies[0])));
+    const raf = requestAnimationFrame(() => setPageBg(getBrandColor(studies[0], isDark)));
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -268,8 +258,8 @@ export function WorkList({ studies, className }: WorkListProps) {
   // Re-apply current panel's color when theme flips
   useEffect(() => {
     if (studies.length === 0) return;
-    setPageBg(getBrandColor(studies[activeIndex]));
-  }, [isDark, getBrandColor, setPageBg, studies, activeIndex]);
+    setPageBg(getBrandColor(studies[activeIndex], isDark));
+  }, [isDark, setPageBg, studies, activeIndex]);
 
   // Scoped scroll-snap: add class to <html> on mount, clean up on unmount.
   // CSS rules keyed on .work-page ensure snap only applies to this page.
@@ -289,10 +279,9 @@ export function WorkList({ studies, className }: WorkListProps) {
   );
 
   // Tracker colors — follows the active panel's light/dark
-  const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0]);
+  const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0], isDark);
   const trackerLight = isLightColor(activeBrandColor);
-  const trackerText = trackerLight ? "text-[#1a1a1a]" : "text-[#f0f0f0]";
-  const trackerBorder = trackerLight ? "border-[#1a1a1a]/30" : "border-[#f0f0f0]/30";
+  const { text: trackerText, border: trackerBorder } = getBrandContrastClasses(trackerLight);
 
   const [isHovered, setIsHovered] = useState(false);
   const hoverLabelVariants = {
@@ -349,8 +338,11 @@ export function WorkList({ studies, className }: WorkListProps) {
       <div
         className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
         aria-live="polite"
-        aria-label={`Case study ${activeIndex + 1} of ${studies.length}`}
       >
+        {/* Screen-reader text: announced on change, aria-label would be static */}
+        <span className="sr-only">
+          Case study {activeIndex + 1} of {studies.length}
+        </span>
         <AnimatePresence mode="wait">
           <motion.span
             key={activeIndex}
@@ -359,12 +351,13 @@ export function WorkList({ studies, className }: WorkListProps) {
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2 }}
             className="inline-block"
+            aria-hidden="true"
           >
             {String(activeIndex + 1).padStart(2, "0")}
           </motion.span>
         </AnimatePresence>
-        <span className="mx-1">/</span>
-        <span>{String(studies.length).padStart(2, "0")}</span>
+        <span className="mx-1" aria-hidden="true">/</span>
+        <span aria-hidden="true">{String(studies.length).padStart(2, "0")}</span>
       </div>
 
       {/* ── Sections — natural flow ── */}
@@ -375,7 +368,7 @@ export function WorkList({ studies, className }: WorkListProps) {
             study={study}
             index={index}
             total={studies.length}
-            brandColor={getBrandColor(study)}
+            brandColor={getBrandColor(study, isDark)}
             isDark={isDark}
             onBecomeActive={handleBecomeActive}
             onNavigate={setPageBg}

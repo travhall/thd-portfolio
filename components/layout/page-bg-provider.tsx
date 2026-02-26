@@ -24,13 +24,17 @@ interface PageBgContextValue {
   isDark: boolean;
 }
 
-const PageBgContext = createContext<PageBgContextValue>({
-  setPageBg: () => {},
-  isDark: false,
-});
+const PageBgContext = createContext<PageBgContextValue | null>(null);
 
-export function usePageBgContext() {
-  return useContext(PageBgContext);
+export function usePageBgContext(): PageBgContextValue {
+  const context = useContext(PageBgContext);
+  if (!context) {
+    throw new Error(
+      "usePageBgContext must be used within a <PageBgProvider>. " +
+      "Ensure the component is rendered inside the provider tree."
+    );
+  }
+  return context;
 }
 
 export function PageBgProvider({ children }: { children: ReactNode }) {

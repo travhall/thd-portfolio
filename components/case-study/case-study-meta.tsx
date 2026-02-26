@@ -12,12 +12,14 @@ interface CaseStudyMetaProps {
 export function CaseStudyMeta({ study }: CaseStudyMetaProps) {
   // Collect only the fields that are actually populated for this study.
   // Order reflects the natural reading sequence: when → who → what → how long.
-  const entries: MetaEntry[] = [
-    study.year && { label: "Year", value: study.year },
-    study.client && { label: "Client", value: study.client },
-    study.role && { label: "Role", value: study.role },
-    study.duration && { label: "Duration", value: study.duration },
-  ].filter(Boolean) as MetaEntry[];
+  const entries: MetaEntry[] = (
+    [
+      study.year     ? { label: "Year",     value: study.year }     : null,
+      study.client   ? { label: "Client",   value: study.client }   : null,
+      study.role     ? { label: "Role",     value: study.role }     : null,
+      study.duration ? { label: "Duration", value: study.duration } : null,
+    ] as Array<MetaEntry | null>
+  ).filter((entry): entry is MetaEntry => entry !== null);
 
   // Nothing to show — render nothing rather than an empty container.
   if (entries.length === 0) return null;

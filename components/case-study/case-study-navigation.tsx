@@ -74,6 +74,8 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     href={`/work/${study.id}`}
     onMouseEnter={() => onHover(study)}
     onMouseLeave={() => onHover(null)}
+    onFocus={() => onHover(study)}
+    onBlur={() => onHover(null)}
     aria-label={`${direction === "prev" ? "Previous" : "Next"} case study: ${study.title}`}
     className="group relative flex flex-col p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground text-2xl transition-colors"
   >

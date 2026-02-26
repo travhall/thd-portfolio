@@ -23,6 +23,7 @@ export function ImageTextBlock({ section }: { section: ImageTextSection }) {
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover"
+          loading="lazy"
         />
         {section.image.caption && (
           <div className="absolute bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2">

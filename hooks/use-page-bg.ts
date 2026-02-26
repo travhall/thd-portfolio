@@ -19,7 +19,7 @@
 import { useEffect } from "react";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
 
-export function usePageBg(color: string | null) {
+export function usePageBg(color: string | null): void {
   const { setPageBg } = usePageBgContext();
 
   useEffect(() => {
