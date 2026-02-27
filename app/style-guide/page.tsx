@@ -2,7 +2,29 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiPause, FiPlay } from "react-icons/fi";
+import {
+  FiPause,
+  FiPlay,
+  FiArrowLeft,
+  FiArrowRight,
+  FiArrowUpRight,
+  FiChevronLeft,
+  FiChevronRight,
+  FiMoreHorizontal,
+  FiDownload,
+  FiRefreshCw,
+  FiX,
+  FiCheck,
+  FiMoon,
+  FiSun,
+  FiMonitor,
+  FiCircle,
+  FiGithub,
+  FiLinkedin,
+  FiMail,
+  FiCopy,
+  FiSend,
+} from "react-icons/fi";
 import {
   Badge,
   Button,
@@ -143,6 +165,57 @@ function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string })
       <p className="text-xs font-medium text-foreground leading-none">{label}</p>
       {sub && <p className="text-[10px] text-muted-foreground font-mono leading-none truncate">{sub}</p>}
     </div>
+  );
+}
+
+function IconCard({ icon: Icon, name }: { icon: React.ElementType; name: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(name);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy icon name: ", err);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="relative flex flex-col items-center justify-center p-4 rounded-sm border border-border bg-card gap-3 hover:bg-secondary/50 transition-colors cursor-pointer group w-full outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
+      title={`Click to copy ${name}`}
+    >
+      <div className="relative h-5 w-5 flex items-center justify-center">
+        <AnimatePresence mode="wait" initial={false}>
+          {copied ? (
+            <motion.div
+              key="check"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <FiCheck className="w-5 h-5 text-primary" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="icon"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Icon className="w-5 h-5" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      <p className="text-[10px] text-muted-foreground font-mono leading-none text-center truncate w-full group-hover:text-foreground transition-colors">
+        {copied ? "Copied!" : name}
+      </p>
+    </button>
   );
 }
 
@@ -395,6 +468,55 @@ export default function StyleGuide() {
               </span>
             </div>
           ))}
+        </div>
+      </Section>
+
+      {/* ── Icons ────────────────────────────────────────────────────── */}
+      <Section id="icons" title="Icons">
+        <p className="text-sm text-muted-foreground -mt-4">
+          The site uses the Feather icon set via <code className="text-xs font-mono">react-icons/fi</code>.
+          Below are the icons currently in use across the portfolio.
+        </p>
+
+        <div className="space-y-10">
+          <div className="space-y-4">
+            <p className="case-section-label">Navigation & Direction</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              <IconCard icon={FiArrowLeft} name="FiArrowLeft" />
+              <IconCard icon={FiArrowRight} name="FiArrowRight" />
+              <IconCard icon={FiArrowUpRight} name="FiArrowUpRight" />
+              <IconCard icon={FiChevronLeft} name="FiChevronLeft" />
+              <IconCard icon={FiChevronRight} name="FiChevronRight" />
+              <IconCard icon={FiMoreHorizontal} name="FiMoreHorizontal" />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="case-section-label">Actions & State</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              <IconCard icon={FiDownload} name="FiDownload" />
+              <IconCard icon={FiRefreshCw} name="FiRefreshCw" />
+              <IconCard icon={FiCheck} name="FiCheck" />
+              <IconCard icon={FiX} name="FiX" />
+              <IconCard icon={FiCircle} name="FiCircle" />
+              <IconCard icon={FiPause} name="FiPause" />
+              <IconCard icon={FiPlay} name="FiPlay" />
+              <IconCard icon={FiCopy} name="FiCopy" />
+              <IconCard icon={FiSend} name="FiSend" />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="case-section-label">Social & Theme</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              <IconCard icon={FiGithub} name="FiGithub" />
+              <IconCard icon={FiLinkedin} name="FiLinkedin" />
+              <IconCard icon={FiMail} name="FiMail" />
+              <IconCard icon={FiSun} name="FiSun" />
+              <IconCard icon={FiMoon} name="FiMoon" />
+              <IconCard icon={FiMonitor} name="FiMonitor" />
+            </div>
+          </div>
         </div>
       </Section>
 
