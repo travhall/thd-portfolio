@@ -6,8 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MOTION_TOKENS } from "@/lib/tokens";
-import { FiDownload, FiGithub, FiLinkedin, FiArrowRight } from "react-icons/fi";
+import { FiDownload, FiGithub, FiLinkedin, FiArrowRight, FiMail } from "react-icons/fi";
 import { siteConfig } from "@/lib/site-config";
+import { EmailPopover } from "@/components/ui/email-popover";
 
 const { social } = siteConfig;
 import { Badge } from "@/components/ui/badge";
@@ -300,6 +301,15 @@ export function AboutContent() {
                         <span className="sr-only">LinkedIn (opens in new tab)</span>
                       </Link>
                     </Button>
+                    <EmailPopover
+                      triggerVariant="outline"
+                      triggerClassName="rounded-full p-3"
+                      subject="Hello from the about page"
+                      align="start"
+                    >
+                      <FiMail aria-hidden="true" />
+                      <span className="sr-only">(opens in your email client)</span>
+                    </EmailPopover>
                     <Button asChild variant="outline" className="rounded-full">
                       <Link
                         href="/Travis-Hall_CV.pdf"

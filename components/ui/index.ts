@@ -38,6 +38,7 @@ export {
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
+export { EmailPopover } from "./email-popover";
 export { Popover, PopoverContent, PopoverTrigger } from "./popover";
 export { Progress } from "./progress";
 export {

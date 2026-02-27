@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import { FiArrowUpRight, FiMail } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
+import { EmailPopover } from "@/components/ui/email-popover";
 import { siteConfig } from "@/lib/site-config";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
@@ -106,14 +107,16 @@ export function ContactCallout() {
           variants={itemVariants}
           className="not-italic flex flex-row flex-wrap gap-3"
         >
-          <Button asChild variant="default" size="lg" className="group">
-            <a
-              href={`mailto:${social.email}?subject=Let%27s%20work%20together`}
-            >
-              <FiMail aria-hidden="true" />
-              {social.email}
-            </a>
-          </Button>
+          <EmailPopover
+            triggerVariant="default"
+            triggerSize="lg"
+            triggerClassName="group"
+            subject="Let's work together"
+            align="start"
+          >
+            <FiMail aria-hidden="true" />
+            {social.email}
+          </EmailPopover>
 
           <Button asChild variant="outline" size="lg" className="group">
             <Link

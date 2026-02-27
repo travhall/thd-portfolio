@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import Link from "next/link";
-import { Button } from "../ui";
+import { Button, EmailPopover } from "../ui";
 import { siteConfig } from "@/lib/site-config";
 
 const { name, social } = siteConfig;
@@ -45,12 +45,15 @@ export function Footer() {
               <span className="sr-only">LinkedIn (opens in new tab)</span>
             </Link>
           </Button>
-          <Button asChild variant="ghost">
-            <a href={`mailto:${social.email}?subject=Hello%20from%20your%20portfolio`}>
-              {social.email} <FiMail aria-hidden="true" />
-              <span className="sr-only">(opens in your email client)</span>
-            </a>
-          </Button>
+          <EmailPopover
+            triggerVariant="ghost"
+            subject="Hello from your portfolio"
+            align="end"
+            side="top"
+          >
+            {social.email} <FiMail aria-hidden="true" />
+            <span className="sr-only">(opens in your email client)</span>
+          </EmailPopover>
         </div>
 
       </div>
