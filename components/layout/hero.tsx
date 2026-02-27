@@ -94,14 +94,17 @@ export function Hero({
       />
 
       {/* Hero Image
-          Two-layer approach keeps entrance animation and scroll parallax
-          on separate elements so their y transforms don't conflict.
+          Three-layer structure keeps entrance animation, clipping, and parallax
+          on separate elements so transforms don't conflict.
           - Outer sticky div: entrance slide (y: 32 → 0), no scroll y
-          - Inner div: clipping boundary (border + overflow-hidden)
+          - Card div: visual boundary (border, rounded, overflow-hidden), clips parallax
           - Parallax div: scroll-driven y drift, clipped inside the card
-          - Overlay: starts opaque to hide image, fades out with imageDelay.
-            Uses --page-bg so the color always matches the visible page bg
-            (including brand colors on case study pages). */}
+          - Overlay: sibling to the card (NOT inside it), so it covers the full
+            container area — including the card border — from the very first paint.
+            CSS opacity defaults to 1, so the block is hidden even before Framer
+            Motion initializes. Fades out in sync with the entrance slide to reveal
+            the card and image simultaneously. Uses --page-bg so the color always
+            matches the visible page bg (including brand colors on case study pages). */}
       <motion.div
         initial={{ y: 32 }}
         animate={{ y: 0 }}
@@ -110,7 +113,7 @@ export function Hero({
       >
         {/* Visual card boundary — clips the parallax movement */}
         <div className="absolute inset-0 rounded-sm border-2 border-border overflow-hidden">
-          {/* Scroll parallax — contained within the card border */}
+          {/* Scroll parallax — contained within the card */}
           <motion.div style={{ y }} className="absolute inset-0">
             <Image
               src={resolvedSrc}
@@ -121,18 +124,27 @@ export function Hero({
               priority
             />
           </motion.div>
-          {/* LCP overlay — starts opaque, animates out in sync with the
-              entrance slide above. The <img> stays at opacity:1 throughout
-              so the browser counts it as the LCP candidate from first paint. */}
-          <motion.div
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{ backgroundColor: "var(--page-bg)" }}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 0 }}
-            transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}
-          />
         </div>
+        {/* LCP overlay — sibling to the card div, so it covers the full container
+            including the card border. CSS opacity defaults to 1 so it's opaque from
+            the very first paint, regardless of when Framer Motion initializes.
+            The <img> stays at opacity:1 throughout so the browser counts it as the
+            LCP candidate from first paint. */}
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-0 rounded-sm pointer-events-none"
+          style={{
+            backgroundColor: "var(--page-bg)",
+            // Mirror the page-bg-transition timing so the overlay stays in sync
+            // with the body background during cross-page color transitions.
+            // Without this, --page-bg updates instantly on the overlay while the
+            // body transitions over 0.5s, making the overlay rectangle visible.
+            transition: "background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}
+        />
       </motion.div>
     </>
   );
