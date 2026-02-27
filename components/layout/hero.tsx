@@ -93,32 +93,41 @@ export function Hero({
         }}
       />
 
-      {/* Hero Image */}
+      {/* Hero Image
+          Two-layer approach keeps entrance animation and scroll parallax
+          on separate elements so their y transforms don't conflict.
+          - Outer sticky div: entrance slide (y: 32 → 0), no scroll y
+          - Inner div: clipping boundary (border + overflow-hidden)
+          - Parallax div: scroll-driven y drift, clipped inside the card
+          - Overlay: starts opaque to hide image, fades out with imageDelay.
+            Uses --page-bg so the color always matches the visible page bg
+            (including brand colors on case study pages). */}
       <motion.div
         initial={{ y: 32 }}
         animate={{ y: 0 }}
         transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}
-        style={{ y }}
-        className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] flex items-end m-4"
+        className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] m-4"
       >
-        <div
-          className="absolute inset-0 z-0 rounded-sm border-2 border-border overflow-hidden bg-muted"
-          aria-hidden="true"
-        >
-          <Image
-            src={resolvedSrc}
-            alt={imageAlt}
-            fill
-            sizes={HERO_SIZES}
-            className="object-cover"
-            priority
-          />
-          {/* Decorative fade-in overlay — starts opaque and animates out to
-              reveal the image. The <img> stays at opacity:1 throughout so the
-              browser counts it as the LCP element from the very first paint. */}
+        {/* Visual card boundary — clips the parallax movement */}
+        <div className="absolute inset-0 rounded-sm border-2 border-border overflow-hidden">
+          {/* Scroll parallax — contained within the card border */}
+          <motion.div style={{ y }} className="absolute inset-0">
+            <Image
+              src={resolvedSrc}
+              alt={imageAlt}
+              fill
+              sizes={HERO_SIZES}
+              className="object-cover"
+              priority
+            />
+          </motion.div>
+          {/* LCP overlay — starts opaque, animates out in sync with the
+              entrance slide above. The <img> stays at opacity:1 throughout
+              so the browser counts it as the LCP candidate from first paint. */}
           <motion.div
             aria-hidden="true"
-            className="absolute inset-0 bg-background pointer-events-none"
+            className="absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: "var(--page-bg)" }}
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}

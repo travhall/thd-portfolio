@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <div>
-      <Hero />
+      <Hero imageDelay={0.4} />
       <CaseStudies studies={featuredStudies} />
     </div>
   );
