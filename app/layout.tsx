@@ -23,7 +23,7 @@ const manropeSans = Manrope({
 const nohemi = localFont({
   src: "../public/fonts/Nohemi-VF.woff2",
   variable: "--font-nohemi",
-  display: "swap",
+  display: "optional",
 });
 
 export const viewport: Viewport = {
