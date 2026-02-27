@@ -123,13 +123,31 @@ function EasingCard({
   easing: [number, number, number, number];
 }) {
   const [playing, setPlaying] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(name);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy easing token: ", err);
+    }
+  };
+
   return (
-    <div className="p-4 rounded-sm border border-border bg-card space-y-3">
+    <div className="p-4 rounded-sm border border-border bg-card space-y-3 relative overflow-hidden group">
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium">{label}</p>
+        <button
+          onClick={handleCopy}
+          className="text-left outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-xs"
+          title={`Click to copy ${name}`}
+        >
+          <p className="text-sm font-medium group-hover:text-primary transition-colors">
+            {copied ? "Copied!" : label}
+          </p>
           <p className="text-[10px] text-muted-foreground font-mono">{name}</p>
-        </div>
+        </button>
         <button
           onClick={() => setPlaying((v) => !v)}
           className="w-7 h-7 flex items-center justify-center rounded-sm border border-border bg-background hover:bg-secondary transition-colors"
@@ -156,15 +174,49 @@ function EasingCard({
 }
 
 function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (!sub) return;
+    try {
+      await navigator.clipboard.writeText(sub);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy color token: ", err);
+    }
+  };
+
   return (
-    <div className="space-y-1.5 min-w-0">
+    <button
+      onClick={handleCopy}
+      className="group relative flex flex-col text-left space-y-1.5 min-w-0 outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-sm"
+      title={sub ? `Click to copy ${sub}` : undefined}
+    >
       <div
-        className="h-10 w-full rounded-sm border border-black/5 dark:border-white/5"
+        className="h-10 w-full rounded-sm border border-black/5 dark:border-white/5 transition-transform group-hover:scale-[1.04] group-active:scale-[0.98]"
         style={{ backgroundColor: bg }}
-      />
-      <p className="text-xs font-medium text-foreground leading-none">{label}</p>
-      {sub && <p className="text-[10px] text-muted-foreground font-mono leading-none truncate">{sub}</p>}
-    </div>
+      >
+        <AnimatePresence>
+          {copied && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center bg-black/20 dark:bg-white/20 backdrop-blur-[2px] rounded-sm"
+            >
+              <FiCheck className="w-4 h-4 text-white dark:text-black" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      <p className="text-xs font-medium text-foreground leading-none">{copied ? "Copied!" : label}</p>
+      {sub && (
+        <p className="text-[10px] text-muted-foreground font-mono leading-none truncate w-full group-hover:text-primary transition-colors">
+          {sub}
+        </p>
+      )}
+    </button>
   );
 }
 
@@ -411,13 +463,21 @@ export default function StyleGuide() {
                 { token: "--duration-fast", label: "Fast", ms: "200ms" },
                 { token: "--duration-base", label: "Base", ms: "400ms" },
                 { token: "--duration-slow", label: "Slow", ms: "600ms" },
-              ].map(({ token, label, ms }) => (
-                <div key={token} className="px-4 py-3 rounded-sm border border-border bg-card space-y-1 min-w-[120px]">
-                  <p className="text-sm font-medium">{label}</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">{token}</p>
-                  <p className="text-xs font-mono" style={{ color: "var(--color-accent)" }}>{ms}</p>
-                </div>
-              ))}
+              ].map(({ token, label, ms }) => {
+                // Inline copy state for simple cards
+                return (
+                  <button
+                    key={token}
+                    onClick={() => navigator.clipboard.writeText(token)}
+                    className="px-4 py-3 rounded-sm border border-border bg-card space-y-1 min-w-[120px] text-left hover:bg-secondary transition-colors group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
+                    title={`Click to copy ${token}`}
+                  >
+                    <p className="text-sm font-medium group-hover:text-primary transition-colors">{label}</p>
+                    <p className="text-[10px] text-muted-foreground font-mono">{token}</p>
+                    <p className="text-xs font-mono" style={{ color: "var(--color-accent)" }}>{ms}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -427,30 +487,24 @@ export default function StyleGuide() {
       {/* ── Border Radius ────────────────────────────────────────────── */}
       <Section id="radius" title="Border Radius">
         <div className="flex flex-wrap items-end gap-8">
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-none" />
-            <p className="text-xs text-muted-foreground font-mono">none</p>
-          </div>
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-sm" />
-            <p className="text-xs text-muted-foreground font-mono">sm</p>
-          </div>
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-md" />
-            <p className="text-xs text-muted-foreground font-mono">md</p>
-          </div>
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-lg" />
-            <p className="text-xs text-muted-foreground font-mono">lg</p>
-          </div>
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-xl" />
-            <p className="text-xs text-muted-foreground font-mono">xl</p>
-          </div>
-          <div className="space-y-2 text-center">
-            <div className="bg-primary h-14 w-14 rounded-full" />
-            <p className="text-xs text-muted-foreground font-mono">full</p>
-          </div>
+          {[
+            { label: "none", cls: "rounded-none" },
+            { label: "sm", cls: "rounded-sm" },
+            { label: "md", cls: "rounded-md" },
+            { label: "lg", cls: "rounded-lg" },
+            { label: "xl", cls: "rounded-xl" },
+            { label: "full", cls: "rounded-full" },
+          ].map(({ label, cls }) => (
+            <button
+              key={label}
+              onClick={() => navigator.clipboard.writeText(cls)}
+              className="space-y-2 text-center group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-sm p-1"
+              title={`Click to copy ${cls}`}
+            >
+              <div className={`bg-primary h-14 w-14 ${cls} transition-transform group-hover:scale-110 group-active:scale-95`} />
+              <p className="text-xs text-muted-foreground font-mono group-hover:text-primary transition-colors">{label}</p>
+            </button>
+          ))}
         </div>
       </Section>
 
@@ -458,15 +512,20 @@ export default function StyleGuide() {
       <Section id="spacing" title="Spacing Scale">
         <div className="space-y-3">
           {spacingSteps.map(({ rem, cls, px }) => (
-            <div key={cls} className="flex items-center gap-4">
+            <button
+              key={cls}
+              onClick={() => navigator.clipboard.writeText(cls)}
+              className="flex items-center gap-4 w-full text-left group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-xs"
+              title={`Click to copy ${cls}`}
+            >
               <div
-                className="bg-primary h-5 rounded-sm shrink-0"
+                className="bg-primary h-5 rounded-xs shrink-0 transition-transform group-hover:scale-x-105 origin-left"
                 style={{ width: px }}
               />
-              <span className="text-xs text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-mono group-hover:text-primary transition-colors">
                 {rem}rem · {cls} · {px}
               </span>
-            </div>
+            </button>
           ))}
         </div>
       </Section>
