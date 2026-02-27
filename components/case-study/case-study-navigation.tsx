@@ -8,7 +8,7 @@ import { useState, useSyncExternalStore } from "react";
 import type { CaseStudy } from "@/types/case-study";
 import { Button } from "../ui";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-import { getCoverImage } from "@/lib/utils";
+import { getCoverImage, cn } from "@/lib/utils";
 
 // SSR-safe media query hook — avoids the undefined→boolean flash that occurs
 // when initializing with useState + useEffect, since useSyncExternalStore
@@ -63,6 +63,8 @@ const PreviewContent = ({ study }: PreviewProps) => {
   );
 };
 
+// ── Desktop: icon-only button with hover preview ──────────────────────────────
+
 interface NavButtonProps {
   study: CaseStudy;
   direction: "prev" | "next";
@@ -83,6 +85,38 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
   </Link>
 );
 
+// ── Mobile: labeled block showing direction + title ───────────────────────────
+
+interface MobileNavItemProps {
+  study: CaseStudy;
+  direction: "prev" | "next";
+}
+
+const MobileNavItem = ({ study, direction }: MobileNavItemProps) => {
+  const isPrev = direction === "prev";
+  return (
+    <Link
+      href={`/work/${study.id}`}
+      aria-label={`${isPrev ? "Previous" : "Next"} case study: ${study.title}`}
+      className={cn(
+        "group flex flex-col gap-1 p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground transition-colors hover:bg-foreground/15",
+        !isPrev && "items-end"
+      )}
+    >
+      <span className="text-xs text-muted-foreground flex items-center gap-1">
+        {isPrev && <FiChevronLeft aria-hidden="true" />}
+        {isPrev ? "Previous" : "Next"}
+        {!isPrev && <FiChevronRight aria-hidden="true" />}
+      </span>
+      <span className="text-sm font-medium line-clamp-1">
+        {study.title}
+      </span>
+    </Link>
+  );
+};
+
+// ── Main navigation component ─────────────────────────────────────────────────
+
 interface NavigationProps {
   prevStudy?: CaseStudy;
   nextStudy?: CaseStudy;
@@ -97,10 +131,10 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="p-4 xl:p-8 mt-28 flex flex-row justify-between items-center gap-1"
+      className="p-4 xl:p-8 mt-28 flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center lg:gap-1"
     >
-
-      <Button asChild variant="default" size="lg" className="group">
+      {/* View all work — always visible */}
+      <Button asChild variant="default" size="lg" className="group w-fit">
         <Link href="/work">
           <FiArrowLeft
             size="lg"
@@ -111,13 +145,15 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
         </Link>
       </Button>
 
+      {/* Desktop: hover preview container */}
       {isDesktop && (
         <div className="preview-container w-full relative">
           <PreviewContent study={hoveredStudy} />
         </div>
       )}
 
-      <div className="flex gap-1">
+      {/* Desktop: icon-only prev/next buttons with hover preview */}
+      <div className="hidden lg:flex gap-1">
         {prevStudy && (
           <NavButton
             study={prevStudy}
@@ -132,6 +168,16 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
             onHover={setHoveredStudy}
           />
         )}
+      </div>
+
+      {/* Mobile: labeled prev/next blocks with study title */}
+      <div className="grid grid-cols-2 gap-2 lg:hidden">
+        {prevStudy
+          ? <MobileNavItem study={prevStudy} direction="prev" />
+          : <div />}
+        {nextStudy
+          ? <MobileNavItem study={nextStudy} direction="next" />
+          : <div />}
       </div>
     </motion.div>
   );
