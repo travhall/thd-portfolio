@@ -312,7 +312,7 @@ export function WorkList({ studies, className }: WorkListProps) {
             <Link
               href="/"
               aria-label="Work — return to index"
-              className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring rounded-sm"
+              className="block focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
             >
               <div className="overflow-hidden relative h-[1.2em]">
                 <AnimatePresence mode="wait">

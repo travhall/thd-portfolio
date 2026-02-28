@@ -79,7 +79,7 @@ const NavButton = ({ study, direction, onHover }: NavButtonProps) => (
     onFocus={() => onHover(study)}
     onBlur={() => onHover(null)}
     aria-label={`${direction === "prev" ? "Previous" : "Next"} case study: ${study.title}`}
-    className="group relative flex flex-col p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground text-2xl transition-colors"
+    className="group relative flex flex-col p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground text-2xl transition-colors focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
   >
     {direction === "prev" ? <FiChevronLeft aria-hidden="true" /> : <FiChevronRight aria-hidden="true" />}
   </Link>
@@ -99,7 +99,7 @@ const MobileNavItem = ({ study, direction }: MobileNavItemProps) => {
       href={`/work/${study.id}`}
       aria-label={`${isPrev ? "Previous" : "Next"} case study: ${study.title}`}
       className={cn(
-        "group flex flex-col gap-1 p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground transition-colors hover:bg-foreground/15",
+        "group flex flex-col gap-1 p-4 rounded-sm bg-foreground/10 backdrop-blur text-foreground transition-colors hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
         !isPrev && "items-end"
       )}
     >

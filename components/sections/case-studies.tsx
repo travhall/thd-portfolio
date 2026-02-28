@@ -132,7 +132,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
       <Link
         href={`/work/${study.id}`}
         aria-labelledby={`study-title-${study.id}`}
-        className="relative block p-6 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+        className="relative block p-6 overflow-hidden focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
       >
         {/* Brand color tint — fades in on hover */}
         <div
