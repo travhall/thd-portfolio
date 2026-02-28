@@ -144,7 +144,7 @@ function StudySection({
         </div>
       </div>
 
-      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl xl:max-w-4xl ml-0 lg:ml-[5vw] xl:ml-[10vw]">
+      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl xl:max-w-4xl lg:ml-[5vw] xl:ml-[10vw]">
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -284,6 +284,30 @@ export function WorkList({ studies, className }: WorkListProps) {
   const { text: trackerText, border: trackerBorder } = getBrandContrastClasses(trackerLight);
 
   const [isHovered, setIsHovered] = useState(false);
+  const [trackerVisible, setTrackerVisible] = useState(true);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Hide tracker when user scrolls past the last study into the contact callout.
+  // rootMargin "-50% 0px 0px 0px" makes the effective root the bottom half of the
+  // viewport. The IO only fires on enter/exit of that zone; when not intersecting,
+  // boundingClientRect.top tells us which side the sentinel exited from:
+  //   below midpoint → we're back in the work list → show tracker
+  //   above midpoint → contact section has taken over → hide tracker
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setTrackerVisible(entry.boundingClientRect.top >= window.innerHeight / 2);
+        }
+      },
+      { rootMargin: "-50% 0px 0px 0px", threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const hoverLabelVariants = {
     initial: { y: 20, opacity: 0 },
     animate: {
@@ -335,30 +359,41 @@ export function WorkList({ studies, className }: WorkListProps) {
 
       {/* ── Tracker pill — sits below the nav menu button ── */}
       {/* Nav is at top-4 right-4 xl:top-8 xl:right-8 with ~40px height */}
-      <div
-        className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
-        aria-live="polite"
-      >
-        {/* Screen-reader text: announced on change, aria-label would be static */}
-        <span className="sr-only">
-          Case study {activeIndex + 1} of {studies.length}
-        </span>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={activeIndex}
-            initial={{ opacity: 0, y: 6 }}
+      {/* initial={false} skips the entrance animation on page load; subsequent
+          re-mounts (scroll back up) do animate in via initial/animate props */}
+      <AnimatePresence initial={false}>
+        {trackerVisible && (
+          <motion.div
+            key="tracker"
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.2 }}
-            className="inline-block"
-            aria-hidden="true"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
+            aria-live="polite"
           >
-            {String(activeIndex + 1).padStart(2, "0")}
-          </motion.span>
-        </AnimatePresence>
-        <span className="mx-1" aria-hidden="true">/</span>
-        <span aria-hidden="true">{String(studies.length).padStart(2, "0")}</span>
-      </div>
+            {/* Screen-reader text: announced on change, aria-label would be static */}
+            <span className="sr-only">
+              Case study {activeIndex + 1} of {studies.length}
+            </span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={activeIndex}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="inline-block"
+                aria-hidden="true"
+              >
+                {String(activeIndex + 1).padStart(2, "0")}
+              </motion.span>
+            </AnimatePresence>
+            <span className="mx-1" aria-hidden="true">/</span>
+            <span aria-hidden="true">{String(studies.length).padStart(2, "0")}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Sections — natural flow ── */}
       <div>
@@ -374,6 +409,8 @@ export function WorkList({ studies, className }: WorkListProps) {
             onNavigate={setPageBg}
           />
         ))}
+        {/* Sentinel — observed to hide the tracker when the contact callout takes over */}
+        <div ref={sentinelRef} className="h-px w-full" aria-hidden="true" />
       </div>
     </div>
   );

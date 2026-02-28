@@ -208,13 +208,16 @@ export function SiteNav({ studies }: SiteNavProps) {
     return () => document.removeEventListener("mousedown", handleMouseDown);
   }, [isOpen]);
 
-  // Close when the user scrolls — scrolling signals intent to engage with
-  // page content, so the menu should get out of the way.
-  // passive:true lets the browser optimize scroll handling since we never
-  // call preventDefault here.
+  // Close when the user scrolls past a threshold — guards against accidental
+  // closes from trackpad micro-movements or grip adjustments on mobile.
+  // startY is captured when the menu opens; 150px covers one deliberate scroll
+  // gesture while ignoring incidental input.
   useEffect(() => {
     if (!isOpen) return;
-    const handleScroll = () => setIsOpen(false);
+    const startY = window.scrollY;
+    const handleScroll = () => {
+      if (Math.abs(window.scrollY - startY) >= 150) setIsOpen(false);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isOpen]);

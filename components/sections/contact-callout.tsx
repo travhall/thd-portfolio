@@ -76,10 +76,10 @@ export function ContactCallout() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-15%" }}
-        className="max-w-3xl"
+        className="max-w-3xl lg:ml-[5vw] xl:ml-[10vw]"
       >
         {/* Label */}
-        <motion.p variants={itemVariants} className="hero-label lowercase">
+        <motion.p variants={itemVariants} className="hero-label lowercase mb-2">
           Get in touch
         </motion.p>
 
