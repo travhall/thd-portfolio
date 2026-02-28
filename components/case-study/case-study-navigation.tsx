@@ -131,7 +131,7 @@ export function CaseStudyNavigation({ prevStudy, nextStudy }: NavigationProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7 }}
-      className="p-4 xl:p-8 mt-28 flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center lg:gap-1"
+      className="p-4 xl:p-8 mt-28 mb-7 flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center lg:gap-1"
     >
       {/* View all work — always visible */}
       <Button asChild variant="default" size="lg" className="group w-fit">

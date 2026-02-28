@@ -106,7 +106,7 @@ function MenuItem({ href, children, isActive, onClick, reduced }: MenuItemProps)
         aria-current={isActive ? "page" : undefined}
         className={cn(
           "block py-1 px-2 rounded-sm text-card-foreground hover:text-card relative z-10 transition-colors duration-200",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+          "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
           isActive ? "font-bold underline decoration underline-offset-4" : ""
         )}
       >
@@ -208,6 +208,17 @@ export function SiteNav({ studies }: SiteNavProps) {
     return () => document.removeEventListener("mousedown", handleMouseDown);
   }, [isOpen]);
 
+  // Close when the user scrolls — scrolling signals intent to engage with
+  // page content, so the menu should get out of the way.
+  // passive:true lets the browser optimize scroll handling since we never
+  // call preventDefault here.
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleScroll = () => setIsOpen(false);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
+
   // Focus the first interactive item once the open animation completes.
   // Called via onAnimationComplete on the motion.nav — avoids a fragile setTimeout.
   const handleMenuAnimationComplete = useCallback((definition: string) => {
@@ -293,7 +304,7 @@ export function SiteNav({ studies }: SiteNavProps) {
       >
         <motion.div className="p-4 space-y-3">
           <div className="space-y-4">
-            <div className="overflow-hidden">
+            <div>
               <motion.div variants={itemVariants}>
                 <MenuItem href="/" isActive={pathname === "/"} onClick={handleClose} reduced={reduced}>
                   Index
@@ -302,7 +313,7 @@ export function SiteNav({ studies }: SiteNavProps) {
             </div>
 
             <div role="group" aria-labelledby="nav-work-label" className="space-y-3">
-              <div className="overflow-hidden px-2">
+              <div className="px-2">
                 <motion.div variants={itemVariants}>
                   <span
                     id="nav-work-label"
@@ -314,7 +325,7 @@ export function SiteNav({ studies }: SiteNavProps) {
               </div>
               <div className="space-y-1">
                 {studies.slice(0, 5).map((study) => (
-                  <div key={study.id} className="overflow-hidden">
+                  <div key={study.id}>
                     <motion.div variants={itemVariants}>
                       <MenuItem
                         href={`/work/${study.id}`}
@@ -328,7 +339,7 @@ export function SiteNav({ studies }: SiteNavProps) {
                   </div>
                 ))}
                 {studies.length > 5 && (
-                  <div className="overflow-hidden">
+                  <div>
                     <motion.div variants={itemVariants}>
                       <MenuItem href="/work" isActive={pathname === "/work"} onClick={handleClose} reduced={reduced}>
                         All Case Studies
@@ -341,7 +352,7 @@ export function SiteNav({ studies }: SiteNavProps) {
           </div>
 
           <div className="pt-4 border-t border-foreground/10">
-            <div className="overflow-hidden">
+            <div>
               <motion.div variants={itemVariants}>
                 <MenuItem href="/about" isActive={pathname === "/about"} onClick={handleClose} reduced={reduced}>
                   About
@@ -350,7 +361,7 @@ export function SiteNav({ studies }: SiteNavProps) {
             </div>
           </div>
           <div className="pt-4 border-t border-foreground/10">
-            <div className="overflow-hidden">
+            <div>
               <motion.div variants={itemVariants}>
                 <ModeToggle />
               </motion.div>
