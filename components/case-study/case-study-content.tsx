@@ -10,6 +10,7 @@ import { ImageTextBlock } from "./sections/image-text-section";
 import { CaseStudyMeta } from "./case-study-meta";
 import { Badge } from "@/components/ui/badge";
 import { CaseStudyNavigation } from "./case-study-navigation";
+import { RotatingScrollIndicator } from "./rotating-scroll-indicator";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
 import { Hero } from "@/components/layout/hero";
 
@@ -29,6 +30,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
   return (
     <MotionConfig reducedMotion={shouldReduceMotion ? "always" : "never"}>
       <div className="min-h-screen relative">
+        <RotatingScrollIndicator />
         <Hero
           imageSrc={getCoverImage(study, isDark)}
           imageAlt={`${study.title} cover image`}
