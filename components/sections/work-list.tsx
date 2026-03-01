@@ -12,7 +12,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -284,6 +284,7 @@ export function WorkList({ studies, className }: WorkListProps) {
   const { text: trackerText, border: trackerBorder } = getBrandContrastClasses(trackerLight);
 
   const [isHovered, setIsHovered] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
   const [trackerVisible, setTrackerVisible] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -328,21 +329,21 @@ export function WorkList({ studies, className }: WorkListProps) {
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 pointer-events-none">
         {/* Page label */}
         <div className="overflow-hidden inline-block pointer-events-auto">
-          <h1
-            className="hero-label pb-1"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
+          <h1 className="hero-label pb-1">
             <Link
               href="/"
-              aria-label="Work — return to index"
+              aria-label={isHovered ? "Return to index" : "Work"}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              onFocus={() => setIsHovered(true)}
+              onBlur={() => setIsHovered(false)}
               className="block focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
             >
-              <div className="overflow-hidden relative h-[1.2em]">
+              <div className="overflow-hidden relative h-[1.2em]" aria-hidden="true">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={isHovered ? "return" : "work"}
-                    variants={hoverLabelVariants}
+                    variants={shouldReduceMotion ? undefined : hoverLabelVariants}
                     initial="initial"
                     animate="animate"
                     exit="exit"

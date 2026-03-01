@@ -207,12 +207,14 @@ export function AboutContent() {
               <motion.h1
                 variants={labelVariants}
                 className="hero-label pb-2 inline-block"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
               >
                 <Link
                   href="/"
                   aria-label={isHovered ? "Return to index" : "About"}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  onFocus={() => setIsHovered(true)}
+                  onBlur={() => setIsHovered(false)}
                   className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
                 >
                   <div className="overflow-hidden relative h-[1.2em]" aria-hidden="true">

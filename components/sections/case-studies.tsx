@@ -7,7 +7,6 @@ import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { Badge } from "@/components/ui/badge";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-import { isLightColor } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Large-title index layout — animated entrance per row.
@@ -103,11 +102,13 @@ interface StudyRowProps {
   brandColor: string;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  onFocus: () => void;
+  onBlur: () => void;
 }
 
 // ── StudyRow ───────────────────────────────────────────────────────────────
 
-function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMouseLeave }: StudyRowProps) {
+function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMouseLeave, onFocus, onBlur }: StudyRowProps) {
   const reduced = useReducedMotion() ?? false;
 
   return (
@@ -132,6 +133,8 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
       <Link
         href={`/work/${study.id}`}
         aria-labelledby={`study-title-${study.id}`}
+        onFocus={onFocus}
+        onBlur={onBlur}
         className="relative block p-6 overflow-hidden focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
       >
         {/* Brand color tint — fades in on hover */}
@@ -246,6 +249,8 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             brandColor={getBrandColor(study)}
             onMouseEnter={() => setHoveredId(study.id)}
             onMouseLeave={() => setHoveredId(null)}
+            onFocus={() => setHoveredId(study.id)}
+            onBlur={() => setHoveredId(null)}
           />
         ))}
         {/* Closing rule */}
