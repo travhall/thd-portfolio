@@ -20,22 +20,27 @@ export function RotatingScrollIndicator() {
             {/* Rotating text ring */}
             <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center"
+                transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                className="relative w-32 h-32 md:w-36 md:h-36 flex items-center justify-center"
             >
-                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+                <svg viewBox="0 0 132 132" className="w-full h-full overflow-visible">
                     <defs>
                         <path
                             id="circlePath"
-                            d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
+                            d="M 66, 66 m -45, 0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0"
                         />
                     </defs>
                     <text
-                        className="text-[9px] font-bold uppercase tracking-[0.3em] fill-foreground/40"
+                        className="text-[8px] font-bold uppercase tracking-[0.4em] fill-foreground/60 transition-colors duration-500"
                         style={{ fontFamily: 'var(--font-display)' }}
                     >
-                        <textPath xlinkHref="#circlePath" startOffset="0%">
-                            Explore the story • Explore the story •
+                        <textPath
+                            xlinkHref="#circlePath"
+                            startOffset="0%"
+                            textLength="278"
+                            lengthAdjust="spacing"
+                        >
+                            Scroll to explore • Scroll to explore •{' '}
                         </textPath>
                     </text>
                 </svg>
