@@ -207,7 +207,6 @@ function StudySection({
             <li key={tag}>
               <Badge
                 variant="outline"
-                className={`bg-transparent hover:bg-transparent ${text} ${border}`}
               >
                 {tag}
               </Badge>
@@ -269,11 +268,15 @@ export function WorkList({ studies, className }: WorkListProps) {
     return () => html.classList.remove("work-page");
   }, []);
 
-  // Called by each section's IO when it becomes the centered panel
+  // Called by each section's IO when it becomes the centered panel.
+  // Also re-shows the tracker on scroll-up: the study IO fires when the section
+  // midpoint crosses center, which is ~50vh before the sentinel would cross —
+  // so this is the earlier, correct signal for "user is back in the work list".
   const handleBecomeActive = useCallback(
     (index: number, color: string) => {
       setActiveIndex(index);
       setPageBg(color);
+      setTrackerVisible(true);
     },
     [setPageBg]
   );

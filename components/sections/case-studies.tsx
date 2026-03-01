@@ -178,7 +178,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
           >
             {study.tags.map((tag) => (
               <li key={tag}>
-                <Badge size="sm" variant="outline">{tag}</Badge>
+                <Badge size="sm" variant="default">{tag}</Badge>
               </li>
             ))}
           </motion.ul>

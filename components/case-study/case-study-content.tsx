@@ -61,7 +61,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
               >
-                <Badge variant="secondary">{tag}</Badge>
+                <Badge variant="default">{tag}</Badge>
               </motion.li>
             ))}
           </ul>
