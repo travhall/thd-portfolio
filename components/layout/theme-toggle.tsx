@@ -30,6 +30,7 @@ export function ModeToggle() {
       onValueChange={handleValueChange}
       size="sm"
       className="gap-1"
+      aria-label="Color theme"
     >
       <ToggleGroupItem value="light" aria-label="Light mode">
         <FiSun />

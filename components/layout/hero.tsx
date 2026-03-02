@@ -112,9 +112,9 @@ export function Hero({
         className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] m-4"
       >
         {/* Visual card boundary — clips the parallax movement */}
-        <div className="absolute inset-0 rounded-sm border-2 border-border overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
           {/* Scroll parallax — contained within the card */}
-          <motion.div style={{ y }} className="absolute inset-0">
+          <motion.div style={{ y }} className="absolute inset-0 rounded-sm border-2 border-border">
             <Image
               src={resolvedSrc}
               alt={imageAlt}

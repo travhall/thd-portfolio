@@ -5,11 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FiPause,
   FiPlay,
+  FiArrowDown,
   FiArrowLeft,
   FiArrowRight,
+  FiArrowUp,
   FiArrowUpRight,
+  FiChevronDown,
   FiChevronLeft,
   FiChevronRight,
+  FiChevronUp,
   FiMoreHorizontal,
   FiDownload,
   FiRefreshCw,
@@ -541,11 +545,15 @@ export default function StyleGuide() {
           <div className="space-y-4">
             <p className="case-section-label">Navigation & Direction</p>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              <IconCard icon={FiArrowDown} name="FiArrowDown" />
               <IconCard icon={FiArrowLeft} name="FiArrowLeft" />
               <IconCard icon={FiArrowRight} name="FiArrowRight" />
+              <IconCard icon={FiArrowUp} name="FiArrowUp" />
               <IconCard icon={FiArrowUpRight} name="FiArrowUpRight" />
+              <IconCard icon={FiChevronDown} name="FiChevronDown" />
               <IconCard icon={FiChevronLeft} name="FiChevronLeft" />
               <IconCard icon={FiChevronRight} name="FiChevronRight" />
+              <IconCard icon={FiChevronUp} name="FiChevronUp" />
               <IconCard icon={FiMoreHorizontal} name="FiMoreHorizontal" />
             </div>
           </div>

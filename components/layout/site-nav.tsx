@@ -166,7 +166,7 @@ export function SiteNav({ studies }: SiteNavProps) {
         if (!menu) return;
         const focusable = Array.from(
           menu.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])'
           )
         ).filter((el) => !el.closest('[inert]') && !el.closest('[aria-hidden="true"]'));
 
