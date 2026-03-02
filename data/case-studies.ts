@@ -13,6 +13,7 @@ const caseStudies: CaseStudy[] = [
     tags: ["Design Systems", "React", "TypeScript", "Tailwind CSS", "Storybook"],
     role: "Design System Architect & Lead Engineer",
     duration: "Ongoing",
+    ctaLabel: "Learn the system",
     sections: [
       {
         type: "lede",
@@ -73,6 +74,7 @@ const caseStudies: CaseStudy[] = [
     client: "El Camino Skate Shop",
     role: "Lead Engineer & Designer",
     duration: "Ongoing",
+    ctaLabel: "Gleam the cube",
     links: [
       { href: "https://elcaminoskateshop.com", label: "Visit El Camino" },
     ],
@@ -130,6 +132,7 @@ const caseStudies: CaseStudy[] = [
     client: "Moxie Beauty Studio",
     role: "Designer & Engineer",
     duration: "Ongoing",
+    ctaLabel: "Lash maxxing",
     links: [
       { href: "https://moxiebeautystudio.com", label: "Visit Moxie" },
     ],
@@ -186,6 +189,7 @@ const caseStudies: CaseStudy[] = [
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
     role: "Designer & Developer",
     duration: "Ongoing",
+    ctaLabel: "It's like the Spider-Man meme",
     links: [
       { href: "https://travishall.design", label: "You're looking at it" },
     ],
@@ -243,6 +247,7 @@ const caseStudies: CaseStudy[] = [
     client: "Buddyhead",
     role: "Designer & Front-End Engineer",
     duration: "Ongoing",
+    ctaLabel: "Haha, oh hell yeah",
     links: [
       { href: "https://buddyhead.com", label: "Visit Buddyhead" },
     ],
@@ -283,8 +288,8 @@ const caseStudies: CaseStudy[] = [
     ],
     featured: true,
     // Punk publication — near-black warm ground, high contrast
-    brandLight: "oklch(0.9504 0.04429868600861725 325.91943837401317)",
-    brandDark:  "oklch(0.2236 0.0760873277712695 142.49534504144387)",
+    brandLight: "oklch(0.9057 0.0384 0)",
+    brandDark:  "oklch(0.1676 0.0356 152)",
   },
 ];
 

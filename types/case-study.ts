@@ -45,6 +45,9 @@ export interface CaseStudy {
   // Optional links surfaced in the lede — e.g. live site, repo, Figma prototype.
   // Only renders if at least one entry is present.
   links?: CaseStudyLink[];
+  // Label for the hero scroll-to-content CTA.
+  // Defaults to "Read the case study" if omitted.
+  ctaLabel?: string;
   sections: (LedeSection | TextSection | ImageTextSection)[];
   featured: boolean;
   // Brand colors for the /work panel layout.

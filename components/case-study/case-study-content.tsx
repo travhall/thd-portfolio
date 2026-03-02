@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion, MotionConfig, useReducedMotion } from "framer-motion";
+import { FiArrowDown } from "react-icons/fi";
 import type { CaseStudy } from "@/types/case-study";
 import { getCoverImage } from "@/lib/utils";
 import { LedeBlock } from "./sections/lede-section";
@@ -23,6 +24,13 @@ interface CaseStudyContentProps {
 export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyContentProps) {
   const shouldReduceMotion = useReducedMotion();
   const { isDark } = usePageBgContext();
+
+  const handleCtaClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById("case-study-content")?.scrollIntoView({
+      behavior: shouldReduceMotion ? "instant" : "smooth",
+    });
+  };
   const brandColor = isDark
     ? (study.brandDark ?? null)
     : (study.brandLight ?? null);
@@ -65,10 +73,21 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
               </motion.li>
             ))}
           </ul>
+          <motion.a
+            href="#case-study-content"
+            onClick={handleCtaClick}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 + study.tags.length * 0.1 + 0.15 }}
+            className="inline-flex items-center gap-2 self-start rounded-full border border-foreground/25 px-4 py-1.5 mt-4 text-sm text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+          >
+            {study.ctaLabel ?? "Read the case study"}
+            <FiArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+          </motion.a>
         </Hero>
 
         {/* Content Sections */}
-        <div className="mt-24 bg-(--page-bg)/90 backdrop-blur-xl relative z-20 space-y-0">
+        <div id="case-study-content" className="mt-24 bg-(--page-bg)/90 backdrop-blur-xl relative z-20 space-y-0">
           {study.sections.map((section, index) => (
             <div key={index} className="section-container border-b border-border/5 last:border-none">
               {section.type === "lede" && (
