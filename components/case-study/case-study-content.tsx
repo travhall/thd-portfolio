@@ -79,7 +79,7 @@ export function CaseStudyContent({ study, prevStudy, nextStudy }: CaseStudyConte
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 + study.tags.length * 0.1 + 0.15 }}
-            className="inline-flex items-center gap-2 self-start rounded-full border border-foreground/25 px-4 py-1.5 mt-4 text-sm text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="inline-flex items-center gap-2 self-start rounded-full border border-foreground/25 px-5 py-2.5 mt-4 text-sm text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             {study.ctaLabel ?? "Read the case study"}
             <FiArrowDown className="h-3.5 w-3.5" aria-hidden="true" />

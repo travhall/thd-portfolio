@@ -13,7 +13,7 @@ const caseStudies: CaseStudy[] = [
     tags: ["Design Systems", "React", "TypeScript", "Tailwind CSS", "Storybook"],
     role: "Design System Architect & Lead Engineer",
     duration: "Ongoing",
-    ctaLabel: "Learn the system",
+    ctaLabel: "Who's a good dog?",
     sections: [
       {
         type: "lede",
@@ -189,7 +189,7 @@ const caseStudies: CaseStudy[] = [
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
     role: "Designer & Developer",
     duration: "Ongoing",
-    ctaLabel: "It's like the Spider-Man meme",
+    ctaLabel: "Wait, what? Where am I?",
     links: [
       { href: "https://travishall.design", label: "You're looking at it" },
     ],
