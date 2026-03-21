@@ -87,7 +87,7 @@ export function ContactCallout() {
         <motion.h2
           id="contact-heading"
           variants={itemVariants}
-          className="about-heading mb-5"
+          className="about-heading font-black mb-5"
         >
           Let&rsquo;s work together.
         </motion.h2>

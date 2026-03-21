@@ -12,7 +12,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useReducedMotion, useMotionValue, animate as animateValue } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -70,8 +70,32 @@ function StudySection({
     offset: ["start start", "end start"],
   });
 
-  const imageOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const filter = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(12px)"]);
+  // imageOpacity: single MotionValue driven by two independent effects.
+  // Entrance: animateValue fades it 0→1 when revealed (no subscription chain).
+  // Exit: scrollYProgress subscription overwrites it as the section scrolls out.
+  // Keeping these two paths independent avoids the stale-derived-MotionValue bug
+  // that was causing slides 4-5 to stay at opacity 0.
+  const imageOpacity = useMotionValue(index === 0 ? 1 : 0);
+
+  // filterMV: 'none' while active (avoids blur(0px) GPU layer), blur on exit.
+  const filterMV = useMotionValue('none');
+
+  // Exit — fires only while scrolling past (v > 0), so entrance animation runs uninterrupted.
+  useEffect(() => {
+    return scrollYProgress.on("change", (v) => {
+      if (v <= 0) { filterMV.set('none'); return; }
+      filterMV.set(v <= 0.5 ? 'none' : `blur(${Math.min((v - 0.5) / 0.5 * 12, 12)}px)`);
+      imageOpacity.set(v <= 0.5 ? 1 : Math.max(0, 1 - (v - 0.5) / 0.5));
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Entrance — directly animate imageOpacity; no intermediate MotionValue.
+  useEffect(() => {
+    if (!revealed) return;
+    animateValue(imageOpacity, 1, { duration: 0.6, delay: 0.25, ease: [0.25, 0.1, 0.25, 1] });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealed]);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -107,6 +131,14 @@ function StudySection({
 
   const animate = revealed ? "visible" : "hidden";
 
+  // Image entrance: slide-up only (no opacity — opacity is handled by imageOpacity MotionValue above).
+  // Using variants for y keeps the entrance in sync with the text content stagger without
+  // introducing a nested opacity that would conflict with the scroll-driven exit opacity.
+  const imageSlideVariants = {
+    hidden: { y: 20 },
+    visible: { y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const, delay: 0.25 } },
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -118,28 +150,22 @@ function StudySection({
       <div className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? 'bottom-0' : 'bottom-[-100vh]'} w-[55vw] pointer-events-none z-0`}>
         {/* A 100vh sticky flex container perfectly aligns its bottom limit with the viewport bottom, pushing the image up exactly as the section ends */}
         <div className="sticky top-0 h-screen flex flex-col justify-center w-full">
-          {/* Outer div handles scroll-tied exit (opacity & blur) */}
+          {/* Single element: opacity from combined MotionValue, y from variants (no nested opacity conflict) */}
           <motion.div
-            style={{ opacity: imageOpacity, filter }}
+            style={{ opacity: imageOpacity, filter: filterMV }}
+            variants={imageSlideVariants}
+            initial="hidden"
+            animate={animate}
             className="w-full aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] relative"
           >
-            {/* Inner div handles entrance animation (slide up & fade in) */}
-            <motion.div
-              className="absolute inset-0"
-              variants={itemVariants}
-              initial="hidden"
-              animate={animate}
-              custom={0.25} // Glides in slightly after the title (0.08) and description (0.16)
-            >
-              <Image
-                src={src}
-                alt={`${study.title} cover image`}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
-                className="object-cover border-border border shadow-lg"
-                priority={index === 0}
-              />
-            </motion.div>
+            <Image
+              src={src}
+              alt={`${study.title} cover image`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 84vw, 64vw"
+              className="object-cover border-border border shadow-lg"
+              priority={index === 0}
+            />
           </motion.div>
         </div>
       </div>
