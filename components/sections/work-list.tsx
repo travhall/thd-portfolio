@@ -142,6 +142,7 @@ function StudySection({
   return (
     <section
       ref={sectionRef}
+      id={`work-section-${index}`}
       aria-labelledby={`work-title-${study.id}`}
       data-snap
       className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16"
@@ -261,6 +262,131 @@ function StudySection({
   );
 }
 
+// ── WorkDotNav ───────────────────────────────────────────────────────────────
+
+interface WorkDotNavProps {
+  studies: CaseStudy[];
+  activeIndex: number;
+  trackerLight: boolean;
+  visible: boolean;
+}
+
+function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const { text: dotColorClass, border: trackerBorder } = getBrandContrastClasses(trackerLight);
+
+  const handleClick = (index: number) => {
+    document.getElementById(`work-section-${index}`)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const dotStyle = (i: number): React.CSSProperties => ({
+    width:  i === activeIndex ? 10 : 7,
+    height: i === activeIndex ? 10 : 7,
+    borderRadius: "50%",
+    backgroundColor: "currentColor",
+    opacity: i === activeIndex ? 1 : 0.35,
+    transition: shouldReduceMotion
+      ? "none"
+      : "width 0.3s ease, height 0.3s ease, opacity 0.3s ease",
+  });
+
+  const navMotionProps = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit:    { opacity: 0, y: 8 },
+    transition: { duration: 0.3 },
+  };
+
+  // Desktop buttons: compact padding, negative-margin hit-area expansion
+  const desktopButtons = studies.map((study, i) => (
+    <button
+      key={study.id}
+      onClick={() => handleClick(i)}
+      aria-label={`${study.title}, slide ${i + 1} of ${studies.length}`}
+      aria-current={i === activeIndex ? true : undefined}
+      className="p-2 -m-2 rounded-full focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 cursor-pointer"
+    >
+      <span className="block" style={dotStyle(i)} />
+    </button>
+  ));
+
+  // Mobile buttons: full 44px touch target, no negative margin needed
+  const mobileButtons = studies.map((study, i) => (
+    <button
+      key={study.id}
+      onClick={() => handleClick(i)}
+      aria-label={`${study.title}, slide ${i + 1} of ${studies.length}`}
+      aria-current={i === activeIndex ? true : undefined}
+      className="w-11 h-11 flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 cursor-pointer"
+    >
+      <span className="block" style={{ ...dotStyle(i), width: i === activeIndex ? 12 : 8, height: i === activeIndex ? 12 : 8 }} />
+    </button>
+  ));
+
+  return (
+    <>
+      {/* Screen-reader live region */}
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {visible ? `Slide ${activeIndex + 1} of ${studies.length}` : ""}
+      </span>
+
+      {/* Mobile — fixed bottom-right, 44px touch targets */}
+      <AnimatePresence initial={false}>
+        {visible && (
+          <motion.nav
+            key="dot-nav-mobile"
+            {...navMotionProps}
+            aria-label="Navigate case studies"
+            className={`md:hidden fixed bottom-6 right-4 z-40 flex items-center transition-colors duration-500 ${dotColorClass}`}
+          >
+            {mobileButtons}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop — dots locked up with the restored tracker pill */}
+      <AnimatePresence initial={false}>
+        {visible && (
+          <motion.div
+            key="dot-nav-desktop"
+            {...navMotionProps}
+            exit={{ opacity: 0, y: -8 }}
+            className="hidden md:flex items-center gap-3 fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40"
+          >
+            {/* Dots */}
+            <nav
+              aria-label="Navigate case studies"
+              className={`flex items-center gap-1 transition-colors duration-500 ${dotColorClass}`}
+            >
+              {desktopButtons}
+            </nav>
+            {/* Tracker pill — original design restored */}
+            <div
+              className={`bg-(--page-bg)/50 backdrop-blur-xs font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${dotColorClass} ${trackerBorder}`}
+              aria-hidden="true"
+            >
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-block"
+                >
+                  {String(activeIndex + 1).padStart(2, "0")}
+                </motion.span>
+              </AnimatePresence>
+              <span className="mx-1" aria-hidden="true">/</span>
+              <span>{String(studies.length).padStart(2, "0")}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 // ── WorkList ────────────────────────────────────────────────────────────────
 
 interface WorkListProps {
@@ -307,10 +433,9 @@ export function WorkList({ studies, className }: WorkListProps) {
     [setPageBg]
   );
 
-  // Tracker colors — follows the active panel's light/dark
+  // Dot nav color — follows the active panel
   const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0], isDark);
   const trackerLight = isLightColor(activeBrandColor);
-  const { text: trackerText, border: trackerBorder } = getBrandContrastClasses(trackerLight);
 
   const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
@@ -355,9 +480,9 @@ export function WorkList({ studies, className }: WorkListProps) {
   return (
     <div className={`overflow-x-clip min-h-screen ${className || ""}`}>
       {/* ── Fixed header row — "work" label only ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 xl:px-16 pt-7 pb-4 pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 z-50 pl-4 xl:pl-8 pt-4 xl:pt-8 pb-4 pointer-events-none">
         {/* Page label */}
-        <div className="overflow-hidden inline-block pointer-events-auto">
+        <div className="overflow-hidden inline-block pointer-events-auto my-3">
           <h1 className="hero-label pb-1">
             <Link
               href="/"
@@ -387,43 +512,13 @@ export function WorkList({ studies, className }: WorkListProps) {
         </div>
       </header>
 
-      {/* ── Tracker pill — sits below the nav menu button ── */}
-      {/* Nav is at top-4 right-4 xl:top-8 xl:right-8 with ~40px height */}
-      {/* initial={false} skips the entrance animation on page load; subsequent
-          re-mounts (scroll back up) do animate in via initial/animate props */}
-      <AnimatePresence initial={false}>
-        {trackerVisible && (
-          <motion.div
-            key="tracker"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className={`bg-(--page-bg)/50 backdrop-blur-xs fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40 pointer-events-none font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${trackerText} ${trackerBorder}`}
-            aria-live="polite"
-          >
-            {/* Screen-reader text: announced on change, aria-label would be static */}
-            <span className="sr-only">
-              Case study {activeIndex + 1} of {studies.length}
-            </span>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={activeIndex}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.2 }}
-                className="inline-block"
-                aria-hidden="true"
-              >
-                {String(activeIndex + 1).padStart(2, "0")}
-              </motion.span>
-            </AnimatePresence>
-            <span className="mx-1" aria-hidden="true">/</span>
-            <span aria-hidden="true">{String(studies.length).padStart(2, "0")}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── Dot nav — replaces tracker pill, adds mobile bottom nav ── */}
+      <WorkDotNav
+        studies={studies}
+        activeIndex={activeIndex}
+        trackerLight={trackerLight}
+        visible={trackerVisible}
+      />
 
       {/* ── Sections — natural flow ── */}
       <div>
