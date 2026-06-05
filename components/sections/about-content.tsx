@@ -257,7 +257,7 @@ export function AboutContent() {
                 {/* Bio + links */}
                 <div className="space-y-8">
                   <motion.p variants={fadeUpVariants} className="about-heading">
-                    Hi, I&rsquo;m Travis — I make things people use.
+                    Hi, I&rsquo;m Travis &amp; I make things people use.
                   </motion.p>
 
                   <motion.div

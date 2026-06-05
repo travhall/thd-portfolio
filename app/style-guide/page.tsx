@@ -94,7 +94,7 @@ function Section({
   return (
     <section id={id} className="space-y-8">
       <div className="flex items-center gap-4">
-        <h2 className="font-nohemi text-2xl font-bold shrink-0">{title}</h2>
+        <h2 className="font-display text-2xl font-bold shrink-0">{title}</h2>
         <div className="flex-1 h-px bg-border" />
       </div>
       {children}
@@ -157,7 +157,11 @@ function EasingCard({
           className="w-7 h-7 flex items-center justify-center rounded-sm border border-border bg-background hover:bg-secondary transition-colors"
           aria-label={playing ? "Pause" : "Play"}
         >
-          {playing ? <FiPause className="w-3 h-3" /> : <FiPlay className="w-3 h-3" />}
+          {playing ? (
+            <FiPause className="w-3 h-3" />
+          ) : (
+            <FiPlay className="w-3 h-3" />
+          )}
         </button>
       </div>
       <div className="h-1 w-full bg-border rounded-full overflow-hidden">
@@ -168,7 +172,12 @@ function EasingCard({
               className="h-full bg-primary rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 1.2, ease: easing, repeat: Infinity, repeatDelay: 0.6 }}
+              transition={{
+                duration: 1.2,
+                ease: easing,
+                repeat: Infinity,
+                repeatDelay: 0.6,
+              }}
             />
           )}
         </AnimatePresence>
@@ -177,7 +186,15 @@ function EasingCard({
   );
 }
 
-function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string }) {
+function Swatch({
+  bg,
+  label,
+  sub,
+}: {
+  bg: string;
+  label: string;
+  sub?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -214,7 +231,9 @@ function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string })
           )}
         </AnimatePresence>
       </div>
-      <p className="text-xs font-medium text-foreground leading-none">{copied ? "Copied!" : label}</p>
+      <p className="text-xs font-medium text-foreground leading-none">
+        {copied ? "Copied!" : label}
+      </p>
       {sub && (
         <p className="text-[10px] text-muted-foreground font-mono leading-none truncate w-full group-hover:text-primary transition-colors">
           {sub}
@@ -224,7 +243,13 @@ function Swatch({ bg, label, sub }: { bg: string; label: string; sub?: string })
   );
 }
 
-function IconCard({ icon: Icon, name }: { icon: React.ElementType; name: string }) {
+function IconCard({
+  icon: Icon,
+  name,
+}: {
+  icon: React.ElementType;
+  name: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -280,7 +305,19 @@ function IconCard({ icon: Icon, name }: { icon: React.ElementType; name: string 
 /* Swatches reference CSS vars directly; no value duplication here.    */
 /* ------------------------------------------------------------------ */
 
-const SCALE_STEPS = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const;
+const SCALE_STEPS = [
+  "50",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "950",
+] as const;
 
 const palettes = [
   { key: "brand-1", label: "Brand 1 — Blue-teal (h195)" },
@@ -312,7 +349,10 @@ function useSemanticTokens() {
               !seen.has(prop)
             ) {
               seen.add(prop);
-              result.push({ token: prop, label: prop.replace(/^--color-/, "") });
+              result.push({
+                token: prop,
+                label: prop.replace(/^--color-/, ""),
+              });
             }
           }
         }
@@ -365,35 +405,44 @@ export default function StyleGuide() {
       >
         <h1 className="about-heading">Style Guide</h1>
         <p className="text-muted-foreground max-w-md">
-          Design tokens, typography, components, and custom CSS class documentation.
+          Design tokens, typography, components, and custom CSS class
+          documentation.
         </p>
       </motion.div>
 
       {/* ── Typography ──────────────────────────────────────────────── */}
       <Section id="typography" title="Typography">
         <div className="space-y-10">
-
           <div className="space-y-4">
-            <p className="case-section-label">Nohemi — Display</p>
-            <p className="font-nohemi text-7xl font-black leading-none">Aa</p>
+            <p className="case-section-label">Landour — Display</p>
+            <p className="font-display text-7xl font-black leading-none">Aa</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 pt-2">
-              <p className="font-nohemi text-5xl font-bold">Display Bold</p>
-              <p className="font-nohemi text-4xl font-semibold">Display Semibold</p>
-              <p className="font-nohemi text-3xl font-medium">Display Medium</p>
-              <p className="font-nohemi text-2xl font-light">Display Light</p>
+              <p className="font-display text-5xl font-bold">Display Bold</p>
+              <p className="font-display text-4xl font-semibold">
+                Display Semibold
+              </p>
+              <p className="font-display text-3xl font-medium">Display Medium</p>
+              <p className="font-display text-2xl font-light">Display Light</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <p className="case-section-label">Manrope — Body</p>
             <div className="max-w-2xl space-y-3">
-              <p className="text-xl">Large — The quick brown fox jumps over the lazy dog.</p>
-              <p className="text-base">Base — The quick brown fox jumps over the lazy dog.</p>
-              <p className="text-sm">Small — The quick brown fox jumps over the lazy dog.</p>
-              <p className="text-xs text-muted-foreground">XS / muted — The quick brown fox jumps over the lazy dog.</p>
+              <p className="text-xl">
+                Large — The quick brown fox jumps over the lazy dog.
+              </p>
+              <p className="text-base">
+                Base — The quick brown fox jumps over the lazy dog.
+              </p>
+              <p className="text-sm">
+                Small — The quick brown fox jumps over the lazy dog.
+              </p>
+              <p className="text-xs text-muted-foreground">
+                XS / muted — The quick brown fox jumps over the lazy dog.
+              </p>
             </div>
           </div>
-
         </div>
       </Section>
 
@@ -424,9 +473,11 @@ export default function StyleGuide() {
       {/* ── Semantic Tokens ──────────────────────────────────────────── */}
       <Section id="tokens" title="Semantic Tokens">
         <p className="text-sm text-muted-foreground -mt-4">
-          These resolve differently per mode — use the theme toggle in the nav to verify.
-          Tokens are read live from the stylesheet; adding a <code className="text-xs font-mono">--color-*</code> property
-          to <code className="text-xs font-mono">globals.css</code> will appear here automatically.
+          These resolve differently per mode — use the theme toggle in the nav
+          to verify. Tokens are read live from the stylesheet; adding a{" "}
+          <code className="text-xs font-mono">--color-*</code> property to{" "}
+          <code className="text-xs font-mono">globals.css</code> will appear
+          here automatically.
         </p>
         <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
           {semanticTokens.length === 0
@@ -437,25 +488,50 @@ export default function StyleGuide() {
               </div>
             ))
             : semanticTokens.map(({ token, label }) => (
-              <Swatch key={token} bg={`var(${token})`} label={label} sub={token} />
-            ))
-          }
+              <Swatch
+                key={token}
+                bg={`var(${token})`}
+                label={label}
+                sub={token}
+              />
+            ))}
         </div>
       </Section>
 
       {/* ── Motion ───────────────────────────────────────────────────── */}
       <Section id="motion" title="Motion">
         <div className="space-y-6">
-
           <div className="space-y-4">
             <p className="case-section-label">Easing curves</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                { name: "--ease-expo", label: "Expo", easing: [0.16, 1, 0.30, 1] as [number, number, number, number] },
-                { name: "--ease-quart", label: "Quart", easing: [0.04, 0.62, 0.23, 0.98] as [number, number, number, number] },
-                { name: "--ease-in-out", label: "In-Out", easing: [0.4, 0, 0.2, 1] as [number, number, number, number] },
+                {
+                  name: "--ease-expo",
+                  label: "Expo",
+                  easing: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                },
+                {
+                  name: "--ease-quart",
+                  label: "Quart",
+                  easing: [0.04, 0.62, 0.23, 0.98] as [
+                    number,
+                    number,
+                    number,
+                    number,
+                  ],
+                },
+                {
+                  name: "--ease-in-out",
+                  label: "In-Out",
+                  easing: [0.4, 0, 0.2, 1] as [number, number, number, number],
+                },
               ].map(({ name, label, easing }) => (
-                <EasingCard key={name} name={name} label={label} easing={easing} />
+                <EasingCard
+                  key={name}
+                  name={name}
+                  label={label}
+                  easing={easing}
+                />
               ))}
             </div>
           </div>
@@ -473,18 +549,26 @@ export default function StyleGuide() {
                   <button
                     key={token}
                     onClick={() => navigator.clipboard.writeText(token)}
-                    className="px-4 py-3 rounded-sm border border-border bg-card space-y-1 min-w-[120px] text-left hover:bg-secondary transition-colors group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
+                    className="px-4 py-3 rounded-sm border border-border bg-card space-y-1 min-w-30 text-left hover:bg-secondary transition-colors group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
                     title={`Click to copy ${token}`}
                   >
-                    <p className="text-sm font-medium group-hover:text-primary transition-colors">{label}</p>
-                    <p className="text-[10px] text-muted-foreground font-mono">{token}</p>
-                    <p className="text-xs font-mono" style={{ color: "var(--color-accent)" }}>{ms}</p>
+                    <p className="text-sm font-medium group-hover:text-primary transition-colors">
+                      {label}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground font-mono">
+                      {token}
+                    </p>
+                    <p
+                      className="text-xs font-mono"
+                      style={{ color: "var(--color-accent)" }}
+                    >
+                      {ms}
+                    </p>
                   </button>
                 );
               })}
             </div>
           </div>
-
         </div>
       </Section>
 
@@ -505,8 +589,12 @@ export default function StyleGuide() {
               className="space-y-2 text-center group outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-sm p-1"
               title={`Click to copy ${cls}`}
             >
-              <div className={`bg-primary h-14 w-14 ${cls} transition-transform group-hover:scale-110 group-active:scale-95`} />
-              <p className="text-xs text-muted-foreground font-mono group-hover:text-primary transition-colors">{label}</p>
+              <div
+                className={`bg-primary h-14 w-14 ${cls} transition-transform group-hover:scale-110 group-active:scale-95`}
+              />
+              <p className="text-xs text-muted-foreground font-mono group-hover:text-primary transition-colors">
+                {label}
+              </p>
             </button>
           ))}
         </div>
@@ -537,8 +625,9 @@ export default function StyleGuide() {
       {/* ── Icons ────────────────────────────────────────────────────── */}
       <Section id="icons" title="Icons">
         <p className="text-sm text-muted-foreground -mt-4">
-          The site uses the Feather icon set via <code className="text-xs font-mono">react-icons/fi</code>.
-          Below are the icons currently in use across the portfolio.
+          The site uses the Feather icon set via{" "}
+          <code className="text-xs font-mono">react-icons/fi</code>. Below are
+          the icons currently in use across the portfolio.
         </p>
 
         <div className="space-y-10">
@@ -590,7 +679,6 @@ export default function StyleGuide() {
       {/* ── UI Components ────────────────────────────────────────────── */}
       <Section id="components" title="UI Components">
         <div className="space-y-10">
-
           <ComponentExample title="Button — variants">
             <Button variant="default">Default</Button>
             <Button variant="secondary">Secondary</Button>
@@ -601,9 +689,15 @@ export default function StyleGuide() {
           </ComponentExample>
 
           <ComponentExample title="Button — sizes">
-            <Button size="sm" variant="default">Small</Button>
-            <Button size="default" variant="default">Default</Button>
-            <Button size="lg" variant="default">Large</Button>
+            <Button size="sm" variant="default">
+              Small
+            </Button>
+            <Button size="default" variant="default">
+              Default
+            </Button>
+            <Button size="lg" variant="default">
+              Large
+            </Button>
           </ComponentExample>
 
           <ComponentExample title="Badge Default">
@@ -636,7 +730,9 @@ export default function StyleGuide() {
               </CardContent>
               <CardFooter className="gap-2">
                 <Button size="sm">Save</Button>
-                <Button size="sm" variant="ghost">Cancel</Button>
+                <Button size="sm" variant="ghost">
+                  Cancel
+                </Button>
               </CardFooter>
             </Card>
           </ComponentExample>
@@ -644,7 +740,11 @@ export default function StyleGuide() {
           <ComponentExample title="Input + Label">
             <div className="w-72 space-y-2">
               <Label htmlFor="demo-input">Email address</Label>
-              <Input id="demo-input" type="email" placeholder="you@example.com" />
+              <Input
+                id="demo-input"
+                type="email"
+                placeholder="you@example.com"
+              />
             </div>
           </ComponentExample>
 
@@ -687,7 +787,9 @@ export default function StyleGuide() {
                 <DropdownMenuItem>Edit</DropdownMenuItem>
                 <DropdownMenuItem>Duplicate</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive">
+                  Delete
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </ComponentExample>
@@ -713,7 +815,9 @@ export default function StyleGuide() {
                   <SheetTitle>Sheet Title</SheetTitle>
                   <SheetDescription>Sheet description text.</SheetDescription>
                 </SheetHeader>
-                <div className="py-4 text-sm text-muted-foreground">Sheet body content.</div>
+                <div className="py-4 text-sm text-muted-foreground">
+                  Sheet body content.
+                </div>
                 <SheetFooter>
                   <Button>Save Changes</Button>
                 </SheetFooter>
@@ -729,9 +833,13 @@ export default function StyleGuide() {
               <DrawerContent>
                 <DrawerHeader>
                   <DrawerTitle>Drawer Title</DrawerTitle>
-                  <DrawerDescription>Drawer description text.</DrawerDescription>
+                  <DrawerDescription>
+                    Drawer description text.
+                  </DrawerDescription>
                 </DrawerHeader>
-                <div className="p-4 text-sm text-muted-foreground">Drawer body content.</div>
+                <div className="p-4 text-sm text-muted-foreground">
+                  Drawer body content.
+                </div>
                 <DrawerFooter>
                   <DrawerClose asChild>
                     <Button>Close</Button>
@@ -744,18 +852,28 @@ export default function StyleGuide() {
           <ComponentExample title="Pagination">
             <Pagination>
               <PaginationContent>
-                <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
-                <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationEllipsis /></PaginationItem>
-                <PaginationItem><PaginationNext href="#" /></PaginationItem>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" isActive>
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
               </PaginationContent>
             </Pagination>
           </ComponentExample>
-
         </div>
       </Section>
-
     </div>
   );
 }

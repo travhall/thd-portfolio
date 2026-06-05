@@ -12,7 +12,14 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useReducedMotion, useMotionValue, animate as animateValue } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useReducedMotion,
+  useMotionValue,
+  animate as animateValue,
+} from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +27,12 @@ import { FiArrowRight } from "react-icons/fi";
 import type { CaseStudy } from "@/types/case-study";
 import { MOTION_TOKENS } from "@/lib/tokens";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
-import { isLightColor, getCoverImage, getBrandColor, getBrandContrastClasses } from "@/lib/utils";
+import {
+  isLightColor,
+  getCoverImage,
+  getBrandColor,
+  getBrandContrastClasses,
+} from "@/lib/utils";
 
 // ── CoverImagePanel Removed (moved inside StudySection) ─────────────────────
 
@@ -78,23 +90,32 @@ function StudySection({
   const imageOpacity = useMotionValue(index === 0 ? 1 : 0);
 
   // filterMV: 'none' while active (avoids blur(0px) GPU layer), blur on exit.
-  const filterMV = useMotionValue('none');
+  const filterMV = useMotionValue("none");
 
   // Exit — fires only while scrolling past (v > 0), so entrance animation runs uninterrupted.
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
-      if (v <= 0) { filterMV.set('none'); return; }
-      filterMV.set(v <= 0.5 ? 'none' : `blur(${Math.min((v - 0.5) / 0.5 * 12, 12)}px)`);
+      if (v <= 0) {
+        filterMV.set("none");
+        return;
+      }
+      filterMV.set(
+        v <= 0.5 ? "none" : `blur(${Math.min(((v - 0.5) / 0.5) * 12, 12)}px)`,
+      );
       imageOpacity.set(v <= 0.5 ? 1 : Math.max(0, 1 - (v - 0.5) / 0.5));
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Entrance — directly animate imageOpacity; no intermediate MotionValue.
   useEffect(() => {
     if (!revealed) return;
-    animateValue(imageOpacity, 1, { duration: 0.6, delay: 0.25, ease: [0.25, 0.1, 0.25, 1] });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    animateValue(imageOpacity, 1, {
+      duration: 0.6,
+      delay: 0.25,
+      ease: [0.25, 0.1, 0.25, 1],
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revealed]);
   useEffect(() => {
     const el = sectionRef.current;
@@ -103,7 +124,7 @@ function StudySection({
       ([entry]) => {
         if (entry.isIntersecting) onBecomeActive(index, brandColor);
       },
-      { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
+      { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -123,7 +144,7 @@ function StudySection({
           o.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -136,7 +157,14 @@ function StudySection({
   // introducing a nested opacity that would conflict with the scroll-driven exit opacity.
   const imageSlideVariants = {
     hidden: { y: 20 },
-    visible: { y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const, delay: 0.25 } },
+    visible: {
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1] as const,
+        delay: 0.25,
+      },
+    },
   };
 
   return (
@@ -148,7 +176,9 @@ function StudySection({
       className="relative min-h-svh w-full flex flex-col justify-center p-6 sm:p-10 xl:p-16"
     >
       {/* ── Sticky Image — positioned half-off right side, scrolls naturally ── */}
-      <div className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? 'bottom-0' : 'bottom-[-100vh]'} w-[55vw] pointer-events-none z-0`}>
+      <div
+        className={`hidden md:block absolute right-[-25vw] top-0 ${index === total - 1 ? "bottom-0" : "bottom-[-100vh]"} w-[55vw] pointer-events-none z-0`}
+      >
         {/* A 100vh sticky flex container perfectly aligns its bottom limit with the viewport bottom, pushing the image up exactly as the section ends */}
         <div className="sticky top-0 h-screen flex flex-col justify-center w-full">
           {/* Single element: opacity from combined MotionValue, y from variants (no nested opacity conflict) */}
@@ -171,7 +201,10 @@ function StudySection({
         </div>
       </div>
 
-      <div ref={contentRef} className="relative z-10 max-w-lg lg:max-w-3xl xl:max-w-4xl lg:ml-[5vw] xl:ml-[10vw]">
+      <div
+        ref={contentRef}
+        className="relative z-10 max-w-lg lg:max-w-3xl xl:max-w-4xl lg:ml-[5vw] xl:ml-[10vw]"
+      >
         {/* Meta row */}
         <motion.div
           className={`flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 ${muted}`}
@@ -180,7 +213,7 @@ function StudySection({
           animate={animate}
           custom={0}
         >
-          <span className="font-nohemi font-black text-xs tabular-nums tracking-widest uppercase">
+          <span className="font-display font-black text-xs tabular-nums tracking-widest uppercase">
             {study.year}
           </span>
           {study.role && (
@@ -200,7 +233,7 @@ function StudySection({
         {/* Title */}
         <motion.h2
           id={`work-title-${study.id}`}
-          className={`font-nohemi font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
+          className={`font-display font-bold leading-[1.02] tracking-tight pb-4 text-balance ${text}`}
           style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
           variants={itemVariants}
           initial="hidden"
@@ -232,11 +265,7 @@ function StudySection({
         >
           {study.tags.map((tag) => (
             <li key={tag}>
-              <Badge
-                variant="outline"
-              >
-                {tag}
-              </Badge>
+              <Badge variant="outline">{tag}</Badge>
             </li>
           ))}
         </motion.ul>
@@ -250,9 +279,15 @@ function StudySection({
           custom={0.28}
         >
           <Button size="lg" asChild className="group">
-            <Link href={`/work/${study.id}`} onClick={() => onNavigate(brandColor)}>
+            <Link
+              href={`/work/${study.id}`}
+              onClick={() => onNavigate(brandColor)}
+            >
               View case study
-              <FiArrowRight aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1" />
+              <FiArrowRight
+                aria-hidden="true"
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              />
               <span className="sr-only">: {study.title}</span>
             </Link>
           </Button>
@@ -271,16 +306,24 @@ interface WorkDotNavProps {
   visible: boolean;
 }
 
-function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavProps) {
+function WorkDotNav({
+  studies,
+  activeIndex,
+  trackerLight,
+  visible,
+}: WorkDotNavProps) {
   const shouldReduceMotion = useReducedMotion();
-  const { text: dotColorClass, border: trackerBorder } = getBrandContrastClasses(trackerLight);
+  const { text: dotColorClass, border: trackerBorder } =
+    getBrandContrastClasses(trackerLight);
 
   const handleClick = (index: number) => {
-    document.getElementById(`work-section-${index}`)?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById(`work-section-${index}`)
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   const dotStyle = (i: number): React.CSSProperties => ({
-    width:  i === activeIndex ? 10 : 7,
+    width: i === activeIndex ? 10 : 7,
     height: i === activeIndex ? 10 : 7,
     borderRadius: "50%",
     backgroundColor: "currentColor",
@@ -293,7 +336,7 @@ function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavP
   const navMotionProps = {
     initial: { opacity: 0, y: 8 },
     animate: { opacity: 1, y: 0 },
-    exit:    { opacity: 0, y: 8 },
+    exit: { opacity: 0, y: 8 },
     transition: { duration: 0.3 },
   };
 
@@ -319,7 +362,14 @@ function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavP
       aria-current={i === activeIndex ? true : undefined}
       className="w-11 h-11 flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 cursor-pointer"
     >
-      <span className="block" style={{ ...dotStyle(i), width: i === activeIndex ? 12 : 8, height: i === activeIndex ? 12 : 8 }} />
+      <span
+        className="block"
+        style={{
+          ...dotStyle(i),
+          width: i === activeIndex ? 12 : 8,
+          height: i === activeIndex ? 12 : 8,
+        }}
+      />
     </button>
   ));
 
@@ -337,7 +387,7 @@ function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavP
             key="dot-nav-mobile"
             {...navMotionProps}
             aria-label="Navigate case studies"
-            className={`md:hidden fixed bottom-6 right-4 z-40 flex items-center transition-colors duration-500 ${dotColorClass}`}
+            className={`fixed bottom-6 right-4 z-40 flex items-center transition-colors duration-500 ${dotColorClass}`}
           >
             {mobileButtons}
           </motion.nav>
@@ -351,18 +401,18 @@ function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavP
             key="dot-nav-desktop"
             {...navMotionProps}
             exit={{ opacity: 0, y: -8 }}
-            className="hidden md:flex items-center gap-3 fixed top-[64px] right-4 xl:top-24 xl:right-7 z-40"
+            className="flex items-center gap-3 fixed top-16 right-4 xl:top-24 xl:right-7 z-40"
           >
-            {/* Dots */}
+            {/* Dots
             <nav
               aria-label="Navigate case studies"
               className={`flex items-center gap-1 transition-colors duration-500 ${dotColorClass}`}
             >
               {desktopButtons}
-            </nav>
+            </nav> */}
             {/* Tracker pill — original design restored */}
             <div
-              className={`bg-(--page-bg)/50 backdrop-blur-xs font-nohemi text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${dotColorClass} ${trackerBorder}`}
+              className={`bg-(--page-bg)/50 backdrop-blur-xs font-display text-xs tabular-nums tracking-[0.2em] border rounded-full px-3 py-1 transition-colors duration-500 ${dotColorClass} ${trackerBorder}`}
               aria-hidden="true"
             >
               <AnimatePresence mode="wait">
@@ -377,7 +427,9 @@ function WorkDotNav({ studies, activeIndex, trackerLight, visible }: WorkDotNavP
                   {String(activeIndex + 1).padStart(2, "0")}
                 </motion.span>
               </AnimatePresence>
-              <span className="mx-1" aria-hidden="true">/</span>
+              <span className="mx-1" aria-hidden="true">
+                /
+              </span>
               <span>{String(studies.length).padStart(2, "0")}</span>
             </div>
           </motion.div>
@@ -401,7 +453,9 @@ export function WorkList({ studies, className }: WorkListProps) {
   // Set initial bg on mount
   useEffect(() => {
     if (studies.length === 0) return;
-    const raf = requestAnimationFrame(() => setPageBg(getBrandColor(studies[0], isDark)));
+    const raf = requestAnimationFrame(() =>
+      setPageBg(getBrandColor(studies[0], isDark)),
+    );
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -430,11 +484,14 @@ export function WorkList({ studies, className }: WorkListProps) {
       setPageBg(color);
       setTrackerVisible(true);
     },
-    [setPageBg]
+    [setPageBg],
   );
 
   // Dot nav color — follows the active panel
-  const activeBrandColor = getBrandColor(studies[activeIndex] ?? studies[0], isDark);
+  const activeBrandColor = getBrandColor(
+    studies[activeIndex] ?? studies[0],
+    isDark,
+  );
   const trackerLight = isLightColor(activeBrandColor);
 
   const [isHovered, setIsHovered] = useState(false);
@@ -454,10 +511,12 @@ export function WorkList({ studies, className }: WorkListProps) {
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
-          setTrackerVisible(entry.boundingClientRect.top >= window.innerHeight / 2);
+          setTrackerVisible(
+            entry.boundingClientRect.top >= window.innerHeight / 2,
+          );
         }
       },
-      { rootMargin: "-50% 0px 0px 0px", threshold: 0 }
+      { rootMargin: "-50% 0px 0px 0px", threshold: 0 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -468,12 +527,18 @@ export function WorkList({ studies, className }: WorkListProps) {
     animate: {
       y: 0,
       opacity: 1,
-      transition: { duration: MOTION_TOKENS.duration.base, ease: MOTION_TOKENS.ease.quart },
+      transition: {
+        duration: MOTION_TOKENS.duration.base,
+        ease: MOTION_TOKENS.ease.quart,
+      },
     },
     exit: {
       y: -20,
       opacity: 0,
-      transition: { duration: MOTION_TOKENS.duration.fast, ease: MOTION_TOKENS.ease.quart },
+      transition: {
+        duration: MOTION_TOKENS.duration.fast,
+        ease: MOTION_TOKENS.ease.quart,
+      },
     },
   };
 
@@ -493,11 +558,16 @@ export function WorkList({ studies, className }: WorkListProps) {
               onBlur={() => setIsHovered(false)}
               className="block focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
             >
-              <div className="overflow-hidden relative h-[1.2em]" aria-hidden="true">
+              <div
+                className="overflow-hidden relative h-[1.2em]"
+                aria-hidden="true"
+              >
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={isHovered ? "return" : "work"}
-                    variants={shouldReduceMotion ? undefined : hoverLabelVariants}
+                    variants={
+                      shouldReduceMotion ? undefined : hoverLabelVariants
+                    }
                     initial="initial"
                     animate="animate"
                     exit="exit"

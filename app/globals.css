@@ -10,88 +10,90 @@
 @theme {
   /* --- Fonts --- */
   --font-sans: var(--font-manrope);
-  --font-display: var(--font-nohemi);
+  --font-display: var(--font-landour);
+
+  /* cSpell:ignore landour */
 
   /* --- Dark mode strategy --- */
   --dark-mode: selector;
 
   /* --- Palette: Brand 1 (blue-teal) --- */
-  --color-brand-1-50:  oklch(0.99 0.010 195.9);
-  --color-brand-1-100: oklch(0.97 0.020 195.9);
-  --color-brand-1-200: oklch(0.92 0.040 195.9);
-  --color-brand-1-300: oklch(0.83 0.070 195.9);
-  --color-brand-1-400: oklch(0.69 0.100 195.9);
-  --color-brand-1-500: oklch(0.57 0.110 195.9);
-  --color-brand-1-600: oklch(0.48 0.090 195.9);
-  --color-brand-1-700: oklch(0.38 0.070 195.9);
-  --color-brand-1-800: oklch(0.29 0.050 195.9);
-  --color-brand-1-900: oklch(0.23 0.040 195.9);
-  --color-brand-1-950: oklch(0.18 0.030 195.9);
+  --color-brand-1-50: oklch(0.99 0.01 195.9);
+  --color-brand-1-100: oklch(0.97 0.02 195.9);
+  --color-brand-1-200: oklch(0.92 0.04 195.9);
+  --color-brand-1-300: oklch(0.83 0.07 195.9);
+  --color-brand-1-400: oklch(0.69 0.1 195.9);
+  --color-brand-1-500: oklch(0.57 0.11 195.9);
+  --color-brand-1-600: oklch(0.48 0.09 195.9);
+  --color-brand-1-700: oklch(0.38 0.07 195.9);
+  --color-brand-1-800: oklch(0.29 0.05 195.9);
+  --color-brand-1-900: oklch(0.23 0.04 195.9);
+  --color-brand-1-950: oklch(0.18 0.03 195.9);
 
   /* --- Palette: Brand 2 (amber) --- */
   /* Chroma ramps smoothly 0.010→0.185 then descends; no jump at 500. */
-  --color-brand-2-50:  oklch(0.99 0.010 80);
-  --color-brand-2-100: oklch(0.97 0.030 80);
+  --color-brand-2-50: oklch(0.99 0.01 80);
+  --color-brand-2-100: oklch(0.97 0.03 80);
   --color-brand-2-200: oklch(0.93 0.065 80);
   --color-brand-2-300: oklch(0.87 0.115 80);
-  --color-brand-2-400: oklch(0.79 0.160 80);
+  --color-brand-2-400: oklch(0.79 0.16 80);
   --color-brand-2-500: oklch(0.72 0.185 80);
-  --color-brand-2-600: oklch(0.60 0.160 80);
+  --color-brand-2-600: oklch(0.6 0.16 80);
   --color-brand-2-700: oklch(0.48 0.125 80);
-  --color-brand-2-800: oklch(0.36 0.090 80);
+  --color-brand-2-800: oklch(0.36 0.09 80);
   --color-brand-2-900: oklch(0.28 0.065 80);
   --color-brand-2-950: oklch(0.21 0.045 80);
 
   /* --- Palette: Brand 3 (sage/neutral) --- */
-  --color-brand-3-50:  oklch(0.99 0.005 127);
-  --color-brand-3-100: oklch(0.97 0.010 127);
+  --color-brand-3-50: oklch(0.99 0.005 127);
+  --color-brand-3-100: oklch(0.97 0.01 127);
   --color-brand-3-200: oklch(0.92 0.015 127);
-  --color-brand-3-300: oklch(0.84 0.020 127);
-  --color-brand-3-400: oklch(0.71 0.030 127);
-  --color-brand-3-500: oklch(0.53 0.030 127);
+  --color-brand-3-300: oklch(0.84 0.02 127);
+  --color-brand-3-400: oklch(0.71 0.03 127);
+  --color-brand-3-500: oklch(0.53 0.03 127);
   --color-brand-3-600: oklch(0.44 0.025 127);
-  --color-brand-3-700: oklch(0.35 0.020 127);
+  --color-brand-3-700: oklch(0.35 0.02 127);
   --color-brand-3-800: oklch(0.27 0.015 127);
-  --color-brand-3-900: oklch(0.22 0.010 127);
-  --color-brand-3-950: oklch(0.17 0.010 127);
+  --color-brand-3-900: oklch(0.22 0.01 127);
+  --color-brand-3-950: oklch(0.17 0.01 127);
 
   /* --- Semantic colors (light mode defaults) --- */
-  --color-background:           var(--color-brand-3-100);
-  --color-foreground:           var(--color-brand-1-950);
-  --color-card:                 var(--color-brand-3-50);
-  --color-card-foreground:      var(--color-brand-3-950);
-  --color-popover:              var(--color-brand-3-100);
-  --color-popover-foreground:   var(--color-brand-1-950);
-  --color-primary:              var(--color-brand-1-600);
-  --color-primary-foreground:   var(--color-brand-3-100);
-  --color-secondary:            var(--color-brand-2-600);
+  --color-background: var(--color-brand-3-100);
+  --color-foreground: var(--color-brand-1-950);
+  --color-card: var(--color-brand-3-50);
+  --color-card-foreground: var(--color-brand-3-950);
+  --color-popover: var(--color-brand-3-100);
+  --color-popover-foreground: var(--color-brand-1-950);
+  --color-primary: var(--color-brand-1-600);
+  --color-primary-foreground: var(--color-brand-3-100);
+  --color-secondary: var(--color-brand-2-600);
   --color-secondary-foreground: var(--color-brand-2-50);
-  --color-muted:                var(--color-brand-3-100);
-  --color-muted-foreground:     var(--color-brand-3-600);
-  --color-accent:               var(--color-brand-2-600);
-  --color-accent-foreground:    oklch(0.98 0.005 80);
-  --color-destructive:          oklch(0.42 0.18 25);
+  --color-muted: var(--color-brand-3-100);
+  --color-muted-foreground: var(--color-brand-3-600);
+  --color-accent: var(--color-brand-2-600);
+  --color-accent-foreground: oklch(0.98 0.005 80);
+  --color-destructive: oklch(0.42 0.18 25);
   --color-destructive-foreground: var(--color-brand-3-100);
-  --color-border:               var(--color-brand-3-200);
-  --color-input:                var(--color-brand-3-200);
-  --color-ring:                 var(--color-brand-1-700);
+  --color-border: var(--color-brand-3-200);
+  --color-input: var(--color-brand-3-200);
+  --color-ring: var(--color-brand-1-700);
 
   /* --- Hero blur overlay tokens (light mode) --- */
-  --hero-blur-bg:        var(--page-bg);
-  --hero-blur-blend:     screen;
+  --hero-blur-bg: var(--page-bg);
+  --hero-blur-blend: screen;
 
   /* --- Toggle component tokens (light mode) --- */
-  --toggle-hover-bg:     var(--color-brand-2-200);
-  --toggle-hover-text:   var(--color-brand-2-950);
-  --toggle-active-bg:    var(--color-brand-2-600);
-  --toggle-active-text:  var(--color-brand-2-100);
+  --toggle-hover-bg: var(--color-brand-2-200);
+  --toggle-hover-text: var(--color-brand-2-950);
+  --toggle-active-bg: var(--color-brand-2-600);
+  --toggle-active-text: var(--color-brand-2-100);
 
   /* --- Custom blur step (32px — between Tailwind xl/2xl) --- */
   --blur-3xl: 32px;
 
   /* --- Easing --- */
-  --ease-expo:   cubic-bezier(0.16, 1, 0.30, 1);
-  --ease-quart:  cubic-bezier(0.04, 0.62, 0.23, 0.98);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart: cubic-bezier(0.04, 0.62, 0.23, 0.98);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Duration --- */
@@ -112,35 +114,35 @@
 
   .dark {
     --page-bg: var(--color-background);
-    --color-background:           var(--color-brand-3-950);
-    --color-foreground:           var(--color-brand-1-50);
-    --color-card:                 var(--color-brand-3-900);
-    --color-card-foreground:      var(--color-brand-1-50);
-    --color-popover:              var(--color-brand-3-900);
-    --color-popover-foreground:   var(--color-brand-1-50);
-    --color-primary:              var(--color-brand-1-400);
-    --color-primary-foreground:   var(--color-brand-3-950);
-    --color-secondary:            var(--color-brand-2-400);
+    --color-background: var(--color-brand-3-950);
+    --color-foreground: var(--color-brand-1-50);
+    --color-card: var(--color-brand-3-900);
+    --color-card-foreground: var(--color-brand-1-50);
+    --color-popover: var(--color-brand-3-900);
+    --color-popover-foreground: var(--color-brand-1-50);
+    --color-primary: var(--color-brand-1-400);
+    --color-primary-foreground: var(--color-brand-3-950);
+    --color-secondary: var(--color-brand-2-400);
     --color-secondary-foreground: var(--color-brand-3-950);
-    --color-muted:                var(--color-brand-3-900);
-    --color-muted-foreground:     var(--color-brand-3-400);
-    --color-accent:               var(--color-brand-2-400);
-    --color-accent-foreground:    var(--color-brand-1-950);
-    --color-destructive:          oklch(0.54 0.18 25);
+    --color-muted: var(--color-brand-3-900);
+    --color-muted-foreground: var(--color-brand-3-400);
+    --color-accent: var(--color-brand-2-400);
+    --color-accent-foreground: var(--color-brand-1-950);
+    --color-destructive: oklch(0.54 0.18 25);
     --color-destructive-foreground: oklch(0.98 0.01 0);
-    --color-border:               var(--color-brand-3-800);
-    --color-input:                var(--color-brand-3-800);
-    --color-ring:                 var(--color-brand-1-400);
+    --color-border: var(--color-brand-3-800);
+    --color-input: var(--color-brand-3-800);
+    --color-ring: var(--color-brand-1-400);
 
     /* Hero blur overlay tokens (dark mode) */
     /* --hero-blur-bg:        var(--color-brand-1-600); */
-    --hero-blur-blend:     color;
+    --hero-blur-blend: color;
 
     /* Toggle component tokens (dark mode) */
-    --toggle-hover-bg:     var(--color-brand-2-800);
-    --toggle-hover-text:   var(--color-brand-2-50);
-    --toggle-active-bg:    var(--color-brand-2-400);
-    --toggle-active-text:  var(--color-brand-2-950);
+    --toggle-hover-bg: var(--color-brand-2-800);
+    --toggle-hover-text: var(--color-brand-2-50);
+    --toggle-active-bg: var(--color-brand-2-400);
+    --toggle-active-text: var(--color-brand-2-950);
   }
 
   html,
@@ -151,18 +153,29 @@
 
   /* Only animate background-color when a brand color is actively set.
      The provider adds/removes this class via JS, so the transition never
-     fires on initial page paint — only on deliberate navigations. */
+     fires on initial page paint — only on deliberate navigation. */
   html.page-bg-transition,
   html.page-bg-transition body {
     transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Scroll snap — work page only (toggled by WorkList mount/unmount) */
+  /* Scroll snap — work page (toggled by WorkList mount/unmount) */
   html.work-page {
     scroll-snap-type: y proximity;
   }
 
   html.work-page section[data-snap] {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    scroll-margin-top: 0px;
+  }
+
+  /* Scroll snap — home page (toggled by FeaturedProject mount/unmount) */
+  html.home-page {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-page section[data-snap] {
     scroll-snap-align: start;
     scroll-snap-stop: normal;
     scroll-margin-top: 0px;
@@ -180,7 +193,6 @@
    patterns that are genuinely shared across pages belong here.
    ============================================================ */
 @layer components {
-
   /* --- Skip navigation --- */
   .skip-nav {
     @apply fixed top-0 left-0 z-9999 px-4 py-2 bg-background text-foreground font-medium text-sm rounded-br-sm;
@@ -228,7 +240,7 @@
 
   .about-heading {
     font-family: var(--font-display);
-    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-balance leading-[1.2];
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-balance leading-[1.2];
   }
 
   .about-subheading {
@@ -262,7 +274,7 @@
   }
 
   /* Disable snap entirely for reduced-motion users — snapping changes
-     scroll behaviour even when scroll-behavior is instant. */
+     scroll behavior even when scroll-behavior is instant. */
   html.work-page {
     scroll-snap-type: none;
   }

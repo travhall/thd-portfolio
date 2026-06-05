@@ -38,7 +38,7 @@ export async function generateMetadata(
       type: "article",
       images: [
         {
-          url: study.coverImage,
+          url: `${url}${study.coverImage}`,
           width: 1200,
           height: 630,
           alt: `${study.title} — case study by ${name}`,
@@ -49,7 +49,7 @@ export async function generateMetadata(
       card: "summary_large_image" as const,
       title: `${study.title} | ${siteName}`,
       description: study.description,
-      images: [study.coverImage],
+      images: [`${url}${study.coverImage}`],
     },
   };
 }

@@ -20,9 +20,9 @@ const manropeSans = Manrope({
   display: "swap",
 });
 
-const nohemi = localFont({
-  src: "../public/fonts/Nohemi-VF.woff2",
-  variable: "--font-nohemi",
+const landour = localFont({
+  src: "../public/fonts/Landour-VF.woff2",
+  variable: "--font-landour",
   display: "optional",
 });
 
@@ -81,14 +81,12 @@ export default function RootLayout({
   const navStudies = allStudies.map(({ id, title }) => ({ id, title }));
 
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body
-        className={cn(
-          manropeSans.variable,
-          nohemi.variable,
-          "antialiased relative min-h-screen font-sans"
-        )}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(manropeSans.variable, landour.variable, "scroll-smooth")}
+    >
+      <body className="antialiased relative min-h-screen font-sans">
         <WebSiteJsonLd />
         <ThemeProvider>
           <PageBgProvider>

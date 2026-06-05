@@ -152,7 +152,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
           <motion.h3
             id={`study-title-${study.id}`}
             variants={titleVariants(reduced)}
-            className="font-nohemi font-medium leading-[1.05] tracking-tight text-balance text-muted-foreground md:pl-16"
+            className="font-display font-medium leading-[1.05] tracking-tight text-balance text-muted-foreground md:pl-16"
             style={{ fontSize: "clamp(2.5rem, 7.5vw, 5rem)" }}
           >
             {study.title}
@@ -166,7 +166,7 @@ function StudyRow({ study, index, dimmed, active, brandColor, onMouseEnter, onMo
         >
           <motion.span
             variants={metaItemVariants(reduced)}
-            className="font-nohemi text-xs text-muted-foreground tabular-nums tracking-widest shrink-0"
+            className="font-display text-xs text-muted-foreground tabular-nums tracking-widest shrink-0"
           >
             {study.year}
           </motion.span>
@@ -228,7 +228,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             <div key={i} className="overflow-hidden">
               <motion.h2
                 variants={wordVariants}
-                className="font-nohemi text-xl md:text-2xl lg:text-3xl font-light"
+                className="font-display text-xl md:text-2xl lg:text-3xl font-light"
               >
                 {word}
               </motion.h2>

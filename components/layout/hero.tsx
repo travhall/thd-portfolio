@@ -61,13 +61,12 @@ export function Hero({
 
   const y = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentY);
   const opacity = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentOpacity);
-  const blurOpacity = useTransform(scrollY, HERO_SCROLL.blurRange, HERO_SCROLL.blurOpacity);
 
   return (
     <>
       {/* Content */}
       <motion.div
-        className="relative z-10 max-w-2xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh] space-y-6"
+        className="relative z-10 max-w-3xl p-4 md:p-6 lg:p-8 mt-[48vh] mb-[24vh] lg:my-[24vh] space-y-6"
         style={{ opacity }}
       >
         {children ?? (
@@ -81,17 +80,6 @@ export function Hero({
           </motion.h1>
         )}
       </motion.div>
-
-      {/* Hero Blur Block — decorative scroll-driven overlay */}
-      <motion.div
-        aria-hidden="true"
-        className="absolute backdrop-blur-md h-full w-full top-0 left-0 z-10 pointer-events-none"
-        style={{
-          opacity: blurOpacity,
-          backgroundColor: "var(--hero-blur-bg)",
-          mixBlendMode: "var(--hero-blur-blend)" as React.CSSProperties["mixBlendMode"],
-        }}
-      />
 
       {/* Hero Image
           Three-layer structure keeps entrance animation, clipping, and parallax

@@ -53,7 +53,7 @@ const PreviewContent = ({ study }: PreviewProps) => {
         />
         <div className="absolute inset-0 bg-background opacity-0 group-hover:opacity-90 transition-opacity" aria-hidden="true" />
       </div>
-      <h3 className="font-nohemi text-lg font-medium transition-colors">
+      <h3 className="font-display text-lg font-medium transition-colors">
         {study.title}
       </h3>
       <p className="text-sm text-muted-foreground line-clamp-2">
