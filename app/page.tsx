@@ -1,5 +1,10 @@
 import { Hero } from "@/components/layout/hero";
-import { FeaturedProject, WorkCta } from "@/components/sections/featured-project";
+import {
+  FeaturedProject,
+  WorkCta,
+} from "@/components/sections/featured-project";
+// import { WorkList } from "@/components/sections/work-list";
+import { CaseStudies } from "@/components/sections/case-studies";
 import { getFeaturedCaseStudies } from "@/data/case-studies";
 import { siteConfig } from "@/lib/site-config";
 import type { Metadata } from "next";
@@ -9,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const [showcase] = getFeaturedCaseStudies();
+  const featuredStudies = getFeaturedCaseStudies();
 
   return (
     <div>
@@ -19,7 +24,7 @@ export default function Home() {
         aria-hidden="true"
         className="relative z-10 min-h-[70vh] backdrop-blur-sm bg-background/10 border-y border-border"
       />
-      {showcase && <FeaturedProject study={showcase} />}
+      <CaseStudies studies={featuredStudies} />
       <WorkCta />
     </div>
   );

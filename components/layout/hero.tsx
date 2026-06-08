@@ -21,7 +21,13 @@
 //                 home page heading so <Hero /> works with no props
 // ---------------------------------------------------------------------------
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useVelocity,
+  useSpring,
+} from "framer-motion";
 import Image from "next/image";
 import React from "react";
 import { MOTION_TOKENS, HERO_SCROLL } from "@/lib/tokens";
@@ -59,8 +65,30 @@ export function Hero({
   const resolvedSrc =
     imageSrc ?? (isDark ? "/images/hero-dark.jpg" : "/images/hero-light.jpg");
 
-  const y = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentY);
-  const opacity = useTransform(scrollY, HERO_SCROLL.contentRange, HERO_SCROLL.contentOpacity);
+  const y = useTransform(
+    scrollY,
+    HERO_SCROLL.contentRange,
+    HERO_SCROLL.contentY,
+  );
+  const opacity = useTransform(
+    scrollY,
+    HERO_SCROLL.contentRange,
+    HERO_SCROLL.contentOpacity,
+  );
+
+  // Elastic stretch — image scaleY responds to scroll velocity so it feels
+  // gooey/liquid as it slides under the glass panel.
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    stiffness: 500,
+    damping: 50,
+    restDelta: 0.001,
+  });
+  const imageScaleY = useTransform(
+    smoothVelocity,
+    [-2500, 0, 2500],
+    [1.44, 1, 1.44],
+  );
 
   return (
     <>
@@ -96,13 +124,19 @@ export function Hero({
       <motion.div
         initial={{ y: 32 }}
         animate={{ y: 0 }}
-        transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}
+        transition={{
+          duration: MOTION_TOKENS.duration.slow,
+          delay: imageDelay,
+        }}
         className="sticky top-2 z-0 aspect-3/4 md:aspect-video sm:w-[96vw] md:w-[84vw] lg:w-[72vw] xl:w-[64vw] m-4"
       >
         {/* Visual card boundary — clips the parallax movement */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Scroll parallax — contained within the card */}
-          <motion.div style={{ y }} className="absolute inset-0 rounded-sm border-2 border-border">
+          <motion.div
+            style={{ y, scaleY: imageScaleY }}
+            className="absolute inset-0 rounded-sm border-2 border-border"
+          >
             <Image
               src={resolvedSrc}
               alt={imageAlt}
@@ -131,7 +165,10 @@ export function Hero({
           }}
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
-          transition={{ duration: MOTION_TOKENS.duration.slow, delay: imageDelay }}
+          transition={{
+            duration: MOTION_TOKENS.duration.slow,
+            delay: imageDelay,
+          }}
         />
       </motion.div>
     </>

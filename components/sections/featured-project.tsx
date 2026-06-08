@@ -1,15 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useScroll,
+  useVelocity,
+  useInView,
+} from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
 import { getCoverImage } from "@/lib/utils";
 import { usePageBgContext } from "@/components/layout/page-bg-provider";
 import { Button } from "@/components/ui/button";
 import { FiArrowRight } from "react-icons/fi";
 import { MOTION_TOKENS } from "@/lib/tokens";
+import {
+  GooeyImage,
+  type GooeyImageHandle,
+} from "@/components/effects/gooey-image";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -26,12 +38,40 @@ function Detail({ label, value }: { label: string; value: string }) {
   );
 }
 
+// ── Magnetic hover hook ───────────────────────────────────────────────────────
+
+function useMagneticHover(strength = 1) {
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springX = useSpring(rawX, {
+    stiffness: 180,
+    damping: 22,
+    restDelta: 0.001,
+  });
+  const springY = useSpring(rawY, {
+    stiffness: 180,
+    damping: 22,
+    restDelta: 0.001,
+  });
+
+  const onMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      rawX.set(((e.clientX - r.left) / r.width - 0.5) * 2 * strength);
+      rawY.set(((e.clientY - r.top) / r.height - 0.5) * 2 * strength);
+    },
+    [rawX, rawY, strength],
+  );
+
+  const onLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+  }, [rawX, rawY]);
+
+  return { springX, springY, rawX, rawY, onMove, onLeave };
+}
+
 // ── Mobile layout ─────────────────────────────────────────────────────────────
-//
-// Full-screen (100dvh). Image fills the viewport; tapping it opens a 60%
-// bottom-sheet overlay with a glass background. Scroll is locked while open.
-// layoutId="fp-image-mobile" wires the shared-element hook for the future
-// case-study transition — no visible effect today.
 
 function FeaturedProjectMobile({
   study,
@@ -55,10 +95,21 @@ function FeaturedProjectMobile({
       data-snap
       className="relative z-10 h-dvh overflow-hidden bg-(--page-bg)/90 backdrop-blur-xl"
     >
-      {/* Image card — inset-4 matches the hero image's m-4 floating-card treatment */}
+      {/* Image card — floats gently at rest */}
       <motion.div
         layoutId="fp-image-mobile"
         className="absolute inset-4 overflow-hidden rounded-sm border border-border"
+        animate={open ? { y: 0, scale: 1 } : { y: [0, -6, 0], scale: 1 }}
+        transition={
+          open
+            ? { duration: 0.4, ease: EASE }
+            : {
+                duration: 3.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatType: "loop",
+              }
+        }
         style={{ cursor: open ? "default" : "pointer" }}
         onClick={() => !open && setOpen(true)}
       >
@@ -72,8 +123,7 @@ function FeaturedProjectMobile({
         />
       </motion.div>
 
-      {/* Case content — bottom sheet, slides up from section floor
-          bottom-0 + y:"100%" hides exactly flush with overflow-hidden */}
+      {/* Case content — bottom sheet */}
       <motion.div
         className="absolute inset-x-4 bottom-0 rounded-t-sm border border-b-0 border-border bg-(--page-bg)/50 backdrop-blur-xl overflow-y-auto"
         style={{ height: "60%" }}
@@ -81,7 +131,6 @@ function FeaturedProjectMobile({
         animate={{ y: open ? "0%" : "100%" }}
         transition={{ duration: 0.5, ease: EASE }}
       >
-        {/* Close button */}
         <button
           type="button"
           aria-label="Collapse project"
@@ -90,7 +139,6 @@ function FeaturedProjectMobile({
         >
           &#215;
         </button>
-
         <div className="flex flex-col items-start gap-5 p-6 pt-8 min-h-full">
           <h2
             id="fp-title-mobile"
@@ -125,17 +173,11 @@ function FeaturedProjectMobile({
 
 // ── Desktop layout ────────────────────────────────────────────────────────────
 //
-// Two-layer structure:
-//   Stage (flex-centered in the section) — owns the image card + collapsed meta.
-//   Panel (absolute, section-level) — full-height glass sheet that slides in
-//     from the left on expand, independent of the stage dimensions.
-//
-// Separating the panel from the stage means it always spans 100dvh regardless
-// of the image's aspect-ratio, and the x-slide never conflicts with the image's
-// width transition.
-//
-// layoutId="fp-image-desktop" wires the shared-element hook for the future
-// case-study transition — no visible effect today.
+// Effects:
+//   Float        — stage drifts ±9 px (y) and ±5 px (x) on an organic path.
+//   Magnetic     — stage tilts toward the pointer in 3-D while collapsed.
+//   Gooey image  — WebGL two-image reveal wipe + silhouette morph + flowmap.
+//   Elastic      — section scroll velocity drives a scaleY stretch on the image.
 
 function FeaturedProjectDesktop({
   study,
@@ -145,81 +187,189 @@ function FeaturedProjectDesktop({
   src: string;
 }) {
   const [open, setOpen] = useState(false);
+  // Once the WebGL canvas is ready the static <Image> fallback fades out,
+  // eliminating the "doubled image" caused by simultaneous visible layers.
+  const [canvasReady, setCanvasReady] = useState(false);
+  // Suppress elastic scaleY during the 820ms expand/collapse transition so
+  // scroll-velocity deformation doesn't cause a visible snap.
+  const [transitioning, setTransitioning] = useState(false);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const gooeyRef = useRef<GooeyImageHandle>(null);
+  const lastMouse = useRef({ x: 0, y: 0 });
+
+  // In-view gate — don't float when section is off-screen / display:none
+  const inView = useInView(sectionRef, { amount: 0.3 });
+
+  // ── Magnetic hover ──────────────────────────────────────────────────────────
+  const { springX, springY, rawX, rawY, onMove, onLeave } = useMagneticHover(1);
+  const rotateY = useTransform(springX, [-1, 1], [-5, 5]);
+  const rotateX = useTransform(springY, [-1, 1], [3.5, -3.5]);
+
+  useEffect(() => {
+    if (open) {
+      rawX.set(0);
+      rawY.set(0);
+      gooeyRef.current?.setHover(false);
+    }
+    // Suppress scaleY deformation for the full expand/collapse transition
+    setTransitioning(true);
+    const t = setTimeout(() => setTransitioning(false), 870);
+    return () => clearTimeout(t);
+  }, [open, rawX, rawY]);
+
+  // ── Section scroll velocity → elastic image stretch ─────────────────────────
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start start"],
+  });
+  const rawVelocity = useVelocity(scrollYProgress);
+  const smoothVelocity = useSpring(rawVelocity, {
+    stiffness: 400,
+    damping: 40,
+  });
+  const imageScaleY = useTransform(smoothVelocity, [-4, 0, 4], [1.07, 1, 1.07]);
+
+  // ── Gooey mouse handler — feeds the WebGL Flowmap ───────────────────────────
+  const handleImageMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (open) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const normX = (e.clientX - rect.left) / rect.width;
+      const normY = 1.0 - (e.clientY - rect.top) / rect.height; // flip y for GL
+
+      // Pass raw pixel deltas — GooeyImage scales them to a safe flowmap range
+      const dx = e.clientX - lastMouse.current.x;
+      const dy = e.clientY - lastMouse.current.y;
+      lastMouse.current = { x: e.clientX, y: e.clientY };
+
+      gooeyRef.current?.updateMouse(normX, normY, dx, dy);
+    },
+    [open],
+  );
 
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="fp-title-desktop"
       data-snap
       className="relative z-10 h-dvh overflow-hidden bg-(--page-bg)/90 backdrop-blur-xl flex items-center"
     >
-      {/* ── Stage: image card + collapsed meta (flex-centered) ─────────────── */}
-      <div
-        className="relative w-full transition-[height] duration-820 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{
-          ["--ih" as string]: "clamp(360px, 38vw, 600px)",
-          height: open ? "var(--ih)" : "calc(var(--ih) + 158px)",
-        }}
-      >
-        {/* Image — right-anchored, grows leftward on expand */}
+      {/* Perspective wrapper */}
+      <div className="w-full" style={{ perspective: "1200px" }}>
+        {/* Stage: float + magnetic tilt */}
         <motion.div
-          layoutId="fp-image-desktop"
-          className="absolute top-0 right-8 overflow-hidden border border-border transition-[width] duration-820 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className="relative w-full"
           style={{
-            width: open ? "69%" : "22.5%",
-            height: "var(--ih)",
-            cursor: open ? "default" : "pointer",
+            ["--ih" as string]: "clamp(360px, 38vw, 600px)",
+            height: open ? "var(--ih)" : "calc(var(--ih) + 68px)",
+            transition: "height 820ms cubic-bezier(0.22,1,0.36,1)",
+            rotateX,
+            rotateY,
           }}
-          onClick={() => !open && setOpen(true)}
+          animate={
+            inView && !open
+              ? { x: [0, -5, 2, -4, 0], y: [0, -9, -5, -7, 0] }
+              : { x: 0, y: 0 }
+          }
+          transition={
+            inView && !open
+              ? {
+                  duration: 7.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatType: "loop",
+                  times: [0, 0.27, 0.55, 0.78, 1],
+                }
+              : { duration: 0.6, ease: EASE }
+          }
+          onMouseMove={!open ? onMove : undefined}
+          onMouseLeave={!open ? onLeave : undefined}
         >
-          <Image
-            src={src}
-            alt=""
-            fill
-            sizes="(min-width: 768px) 69vw, 22vw"
-            className="object-cover object-top"
-            priority
-          />
-        </motion.div>
+          {/* Image card ─────────────────────────────────────────────────
+              No overflow:hidden on the outer div -- canvas overflow:visible
+              is needed for the CSS drop-shadow to follow the gooey shape.
+              The inner div clips only the static <Image> fallback, which
+              fades out once the WebGL canvas is ready (canvasReady).      */}
+          <motion.div
+            className="absolute top-0 right-16"
+            style={{
+              width: open ? "69%" : "28%",
+              height: "var(--ih)",
+              cursor: open ? "default" : "pointer",
+              // Hold scaleY at 1 during expand/collapse; resume spring after.
+              scaleY: open || transitioning ? 1 : imageScaleY,
+              transition: "width 820ms cubic-bezier(0.22,1,0.36,1)",
+            }}
+            onMouseMove={handleImageMouseMove}
+            onMouseEnter={() => {
+              if (!open) gooeyRef.current?.setHover(true);
+            }}
+            onMouseLeave={() => {
+              if (!open) gooeyRef.current?.setHover(false);
+            }}
+            onClick={() => !open && setOpen(true)}
+          >
+            {/* Static fallback — clipped to card shape.
+                The border stays visible; only the <Image> fades once
+                the WebGL canvas is ready (canvasReady).                  */}
+            <div className="absolute inset-0 overflow-hidden rounded-sm border border-border">
+              <Image
+                src={src}
+                alt=""
+                fill
+                sizes="(min-width: 768px) 69vw, 28vw"
+                className="object-cover object-top"
+                priority
+                style={{
+                  opacity: canvasReady ? 0 : 1,
+                  transition: "opacity 0.5s ease",
+                }}
+              />
+            </div>
 
-        {/* Collapsed meta — below image, fades out when panel opens */}
-        <motion.div
-          className="absolute right-8 pt-4.5"
-          style={{
-            top: "var(--ih)",
-            width: "22.5%",
-            pointerEvents: open ? "none" : "auto",
-            cursor: "pointer",
-          }}
-          animate={{ opacity: open ? 0 : 1 }}
-          transition={{ duration: 0.4, ease: EASE }}
-          onClick={() => !open && setOpen(true)}
-          aria-hidden={open}
-        >
-          <div className="flex justify-between items-baseline gap-3">
-            <h3 className="text-base font-medium tracking-tight">
-              {study.title}
-            </h3>
-            <span className="text-sm font-medium tabular-nums">
-              {study.year}
-            </span>
-          </div>
-          <p className="mt-2 text-sm leading-snug text-muted-foreground line-clamp-2">
-            {study.description}
-          </p>
-          <div className="flex flex-wrap gap-2 mt-4">
-            {study.tags.slice(0, 4).map((t) => (
-              <span
-                key={t}
-                className="inline-flex items-center h-5.75 px-3 rounded-full border border-foreground/20 bg-background/80 backdrop-blur-sm text-[11px] text-muted-foreground whitespace-nowrap"
-              >
-                {t}
+            {/* WebGL layer — two-image reveal (base + hover).
+                The silhouette alpha mask renders the card shape; no
+                bleed needed since the cursor dent pulls inward.          */}
+            <GooeyImage
+              ref={gooeyRef}
+              src={study.coverImage}
+              hoverSrc={study.coverImageDark ?? study.coverImage}
+              strength={0.08}
+              dissipation={0.96}
+              falloff={0.35}
+              intensity={0.4}
+              onReady={() => setCanvasReady(true)}
+            />
+          </motion.div>
+
+          {/* Collapsed meta — fades out on expand */}
+          <motion.div
+            className="absolute right-16 pt-4"
+            style={{
+              top: "var(--ih)",
+              width: "28%",
+              pointerEvents: open ? "none" : "auto",
+              cursor: "pointer",
+            }}
+            animate={{ opacity: open ? 0 : 1 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            onClick={() => !open && setOpen(true)}
+            aria-hidden={open}
+          >
+            <div className="flex justify-between items-baseline gap-3">
+              <h3 className="text-base font-medium tracking-tight">
+                {study.title}
+              </h3>
+              <span className="text-sm font-medium tabular-nums">
+                {study.year}
               </span>
-            ))}
-          </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* ── Close button — section-level so it anchors to viewport top-right ── */}
+      {/* Close button — section-level */}
       <motion.button
         type="button"
         aria-label="Collapse project"
@@ -232,7 +382,7 @@ function FeaturedProjectDesktop({
         &#215;
       </motion.button>
 
-      {/* ── Case content panel — full section height, slides in from left ───── */}
+      {/* Case content panel — slides in from left */}
       <motion.div
         className="absolute left-0 inset-y-0 w-[45%] lg:w-[42%] flex items-center bg-(--page-bg)/60 backdrop-blur-md"
         style={{ pointerEvents: open ? "auto" : "none" }}
@@ -283,8 +433,6 @@ export function FeaturedProject({ study }: FeaturedProjectProps) {
   const { isDark } = usePageBgContext();
   const src = getCoverImage(study, isDark);
 
-  // Scoped scroll-snap: add class to <html> on mount, clean up on unmount.
-  // CSS rules keyed on .home-page ensure snap only applies to this page.
   useEffect(() => {
     const html = document.documentElement;
     html.classList.add("home-page");
@@ -293,11 +441,9 @@ export function FeaturedProject({ study }: FeaturedProjectProps) {
 
   return (
     <>
-      {/* Mobile: full-screen bottom-sheet */}
       <div className="block md:hidden">
         <FeaturedProjectMobile study={study} src={src} />
       </div>
-      {/* Desktop: horizontal accordion */}
       <div className="hidden md:block">
         <FeaturedProjectDesktop study={study} src={src} />
       </div>
@@ -335,7 +481,7 @@ export function WorkCta() {
               All case studies
               <FiArrowRight
                 aria-hidden="true"
-                className="flex-none transition-transform duration-500 group-hover:translate-x-3"
+                className="transition-transform duration-500 group-hover:translate-x-3"
                 style={{ fontSize: "0.5em" }}
               />
             </span>
